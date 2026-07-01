@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>主题探究教师工作台 Prototype</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --surface-warm: var(--surface);
+      --fg: #111111;
+      --fg-2: var(--fg);
+      --muted: #6b6b6b;
+      --meta: var(--muted);
+      --border: #e5e5e5;
+      --border-soft: var(--border);
+      --accent: #2f6feb;
+      --accent-on: #ffffff;
+      --accent-hover: color-mix(in oklab, var(--accent), black 8%);
+      --accent-active: color-mix(in oklab, var(--accent), black 14%);
+      --success: #17a34a;
+      --warn: #eab308;
+      --danger: #dc2626;
+      --font-display: "Inter", -apple-system, system-ui, sans-serif;
+      --font-body: "Inter", -apple-system, system-ui, sans-serif;
+      --font-mono: ui-monospace, "JetBrains Mono", monospace;
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 48px;
+      --text-4xl: 64px;
+      --leading-body: 1.5;
+      --leading-tight: 1.2;
+      --tracking-display: -0.01em;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-20: 80px;
+      --section-y-desktop: 80px;
+      --section-y-tablet: 48px;
+      --section-y-phone: 32px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised: 0 2px 8px color-mix(in oklab, var(--fg), transparent 92%);
+      --focus-ring: 0 0 0 3px color-mix(in oklab, var(--accent), transparent 70%);
+      --motion-fast: 150ms;
+      --motion-base: 200ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+      --container-max: 1200px;
+      --container-gutter-desktop: 24px;
+      --container-gutter-tablet: 16px;
+      --container-gutter-phone: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--bg); color: var(--fg); font-family: var(--font-body); }
+    body { margin: 0; min-height: 100vh; line-height: var(--leading-body); }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    :focus-visible { outline: 0; box-shadow: var(--focus-ring); }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+      padding: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-weight: 600;
+      letter-spacing: var(--tracking-display);
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: var(--accent-on);
+      font-weight: 600;
+    }
+
+    .nav-list { display: grid; gap: var(--space-1); }
+    .nav-btn {
+      border: 0;
+      width: 100%;
+      background: transparent;
+      color: var(--fg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      text-align: left;
+      transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+    }
+    .nav-btn:hover { background: color-mix(in oklab, var(--border), transparent 55%); }
+    .nav-btn.active {
+      background: color-mix(in oklab, var(--accent), transparent 90%);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      height: 64px;
+      background: color-mix(in oklab, var(--bg), var(--surface) 78%);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--container-gutter-desktop);
+    }
+
+    .mobile-menu { display: none; }
+    .search {
+      min-width: min(440px, 45vw);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: 10px 12px;
+      color: var(--fg);
+    }
+
+    .main { min-width: 0; }
+    .content {
+      width: min(100%, var(--container-max));
+      margin: 0 auto;
+      padding: var(--space-6) var(--container-gutter-desktop) var(--space-20);
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .page-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-4);
+      align-items: start;
+      margin-bottom: var(--space-6);
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0;
+      margin-bottom: var(--space-2);
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      line-height: var(--leading-tight);
+      letter-spacing: var(--tracking-display);
+      margin: 0;
+    }
+    h1 { font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl)); }
+    h2 { font-size: var(--text-xl); }
+    h3 { font-size: var(--text-lg); }
+    p { margin: 0; color: var(--muted); }
+
+    .btn {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--fg);
+      padding: 10px 16px;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      transition: background var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
+    }
+    .btn:hover { background: color-mix(in oklab, var(--border), transparent 65%); text-decoration: none; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-on); }
+    .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn-small { min-height: 32px; padding: 6px 10px; font-size: var(--text-sm); }
+    .btn-danger { color: var(--danger); border-color: color-mix(in oklab, var(--danger), transparent 65%); }
+
+    .grid { display: grid; gap: var(--space-4); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-main { grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+      box-shadow: var(--elev-flat);
+    }
+
+    .card-head, .row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+    }
+
+    .stack { display: grid; gap: var(--space-4); }
+    .stack-sm { display: grid; gap: var(--space-2); }
+    .muted { color: var(--muted); }
+    .meta { color: var(--meta); font-size: var(--text-sm); }
+    .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: max-content;
+      border-radius: var(--radius-pill);
+      background: color-mix(in oklab, var(--border), transparent 55%);
+      color: var(--fg);
+      padding: 4px 9px;
+      font-size: var(--text-xs);
+      white-space: nowrap;
+    }
+    .badge-dot::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: var(--radius-pill);
+      background: currentColor;
+    }
+    .success { color: var(--success); }
+    .warn { color: var(--warn); }
+    .danger { color: var(--danger); }
+    .accent { color: var(--accent); }
+
+    .progress {
+      height: 8px;
+      border-radius: var(--radius-pill);
+      background: color-mix(in oklab, var(--border), transparent 45%);
+      overflow: hidden;
+    }
+    .progress > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+    }
+
+    .stat {
+      display: grid;
+      gap: var(--space-2);
+    }
+    .stat strong {
+      font-size: var(--text-2xl);
+      line-height: var(--leading-tight);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .table-wrap { overflow: auto; border: 1px solid var(--border); border-radius: var(--radius-md); }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; background: var(--surface); }
+    th, td { padding: 13px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: var(--text-sm); font-weight: 500; background: var(--bg); }
+    tr:last-child td { border-bottom: 0; }
+
+    .tabs, .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .chip {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: var(--fg);
+      padding: 7px 12px;
+      font-size: var(--text-sm);
+    }
+    .chip.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: color-mix(in oklab, var(--accent), transparent 92%);
+    }
+
+    .field { display: grid; gap: var(--space-2); }
+    .field label { font-weight: 600; font-size: var(--text-sm); }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--fg);
+      padding: 10px 12px;
+      min-height: 42px;
+    }
+    .field textarea { min-height: 104px; resize: vertical; }
+
+    .hero-workbench {
+      min-height: 260px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: var(--space-6);
+      align-items: stretch;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: var(--space-3);
+      overflow: auto;
+      padding-bottom: var(--space-2);
+    }
+    .timeline-step {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      background: var(--surface);
+      min-height: 120px;
+    }
+
+    .utterance-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: var(--space-3);
+      align-items: start;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      background: var(--surface);
+    }
+    .utterance-item.selected {
+      border-color: var(--accent);
+      background: color-mix(in oklab, var(--accent), transparent 96%);
+    }
+    .utterance-item input { width: 18px; height: 18px; margin-top: 3px; }
+
+    .canvas {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background:
+        linear-gradient(color-mix(in oklab, var(--border), transparent 65%) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in oklab, var(--border), transparent 65%) 1px, transparent 1px),
+        var(--surface);
+      background-size: 32px 32px;
+      overflow: hidden;
+    }
+    .node {
+      position: absolute;
+      min-width: 116px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: 10px 12px;
+      box-shadow: var(--elev-raised);
+      font-size: var(--text-sm);
+    }
+    .node.center {
+      left: 42%;
+      top: 42%;
+      background: var(--accent);
+      color: var(--accent-on);
+      border-color: var(--accent);
+    }
+    .node.generated {
+      border-color: var(--success);
+      color: var(--fg);
+    }
+    .connector {
+      position: absolute;
+      height: 1px;
+      background: var(--border);
+      transform-origin: left center;
+    }
+
+    .planner {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: var(--space-4);
+    }
+    .doc-nav {
+      display: grid;
+      gap: var(--space-2);
+      align-content: start;
+    }
+    .doc-section {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: var(--space-5);
+      display: grid;
+      gap: var(--space-4);
+    }
+    .rich-placeholder {
+      min-height: 92px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      padding: var(--space-4);
+      color: var(--muted);
+    }
+
+    .annotation {
+      border-left: 3px solid var(--accent);
+      padding-left: var(--space-3);
+      display: grid;
+      gap: var(--space-1);
+    }
+
+    .toast {
+      position: fixed;
+      right: var(--space-6);
+      bottom: var(--space-6);
+      z-index: 10;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: var(--space-4);
+      box-shadow: var(--elev-raised);
+      color: var(--fg);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard);
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      background: color-mix(in oklab, var(--fg), transparent 70%);
+    }
+    .drawer.open { display: grid; justify-items: end; }
+    .drawer-panel {
+      width: min(520px, 100%);
+      height: 100%;
+      background: var(--surface);
+      padding: var(--space-6);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: var(--space-5);
+      box-shadow: var(--elev-raised);
+    }
+
+    @media (max-width: 1180px) {
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-workbench, .grid-main { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 920px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar {
+        display: none;
+        position: fixed;
+        z-index: 30;
+        inset: 0 auto 0 0;
+        width: min(320px, 86vw);
+      }
+      .sidebar.open { display: flex; }
+      .mobile-menu { display: inline-flex; }
+      .topbar { padding: 0 var(--container-gutter-tablet); }
+      .content { padding-inline: var(--container-gutter-tablet); }
+      .page-head { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .planner { grid-template-columns: 1fr; }
+      .search { min-width: 0; width: 100%; }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        height: auto;
+        padding: var(--space-3) var(--container-gutter-phone);
+        display: grid;
+        grid-template-columns: auto 1fr;
+      }
+      .search { grid-column: 1 / -1; }
+      .content { padding: var(--space-5) var(--container-gutter-phone) var(--space-12); }
+      .grid-4 { grid-template-columns: 1fr; }
+      .card { padding: var(--space-4); }
+      .card-head, .row-between { align-items: flex-start; flex-direction: column; }
+      .utterance-item { grid-template-columns: auto minmax(0, 1fr); }
+      .utterance-item .badge { grid-column: 2; }
+      .canvas { min-height: 480px; }
+      .node { min-width: 96px; font-size: var(--text-xs); }
+      .node.center { left: 34%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="主导航">
+      <div class="brand">
+        <div class="brand-mark">探</div>
+        <div>
+          <div>主题探究工作台</div>
+          <div class="meta">中一班 · 2026 春</div>
+        </div>
+      </div>
+      <nav class="nav-list" id="nav">
+        <button class="nav-btn active" data-screen="dashboard">工作台 <span class="meta">1</span></button>
+        <button class="nav-btn" data-screen="themes">主题列表 <span class="meta">2</span></button>
+        <button class="nav-btn" data-screen="theme-detail">主题详情 <span class="meta">3</span></button>
+        <button class="nav-btn" data-screen="corpus">儿童语料库 <span class="meta">4</span></button>
+        <button class="nav-btn" data-screen="map">主题网络图 <span class="meta">5</span></button>
+        <button class="nav-btn" data-screen="plans">月/周计划 <span class="meta">6</span></button>
+        <button class="nav-btn" data-screen="lesson">教案编辑 <span class="meta">7</span></button>
+        <button class="nav-btn" data-screen="review">审阅批注 <span class="meta">8</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="btn mobile-menu" id="menuBtn" aria-label="打开导航">菜单</button>
+        <input class="search" type="search" placeholder="检索主题、儿童语料、计划或批注">
+        <div class="row-between">
+          <span class="badge badge-dot success">当前主题进行中</span>
+          <button class="btn btn-primary btn-small" data-open-drawer>新增语料</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="screen active" id="dashboard" data-od-id="screen-dashboard">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Teacher workspace</div>
+              <h1>把主题探究从素材沉淀推进到文档提交</h1>
+            </div>
+            <button class="btn btn-primary" data-screen-link="theme-detail">进入当前主题</button>
+          </div>
+
+          <div class="grid hero-workbench">
+            <div class="card stack">
+              <div class="card-head">
+                <div>
+                  <h2>泥塑里的家乡</h2>
+                  <p>周期：2026-03-04 至 2026-04-12 · 中一班</p>
+                </div>
+                <span class="badge badge-dot accent">进行中</span>
+              </div>
+              <div class="timeline">
+                <div class="timeline-step"><strong>素材补录</strong><p>新增 18 条儿童语料，照片 42 张</p></div>
+                <div class="timeline-step"><strong>整理打标</strong><p>对象标签 6 个，思维类型覆盖 5 类</p></div>
+                <div class="timeline-step"><strong>生成网络</strong><p>生成版已有 7 个子探究点</p></div>
+                <div class="timeline-step"><strong>计划撰写</strong><p>月计划草稿，周计划 2 份</p></div>
+                <div class="timeline-step"><strong>提交审阅</strong><p>1 份教案退回修改</p></div>
+              </div>
+            </div>
+            <div class="card stack">
+              <div class="card-head"><h2>本周待办</h2><span class="badge badge-dot warn">3 项</span></div>
+              <div class="stack-sm">
+                <button class="nav-btn" data-screen-link="corpus">整理“建筑”标签下的 6 条语料</button>
+                <button class="nav-btn" data-screen-link="plans">提交 3 月月计划草稿</button>
+                <button class="nav-btn" data-screen-link="review">处理教研主任批注 2 条</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-4" style="margin-top: var(--space-4);">
+            <div class="card stat"><span class="meta">儿童语料</span><strong>86</strong><div class="progress"><span style="width: 72%"></span></div></div>
+            <div class="card stat"><span class="meta">网络节点</span><strong>18</strong><div class="progress"><span style="width: 60%"></span></div></div>
+            <div class="card stat"><span class="meta">文档草稿</span><strong>4</strong><div class="progress"><span style="width: 44%"></span></div></div>
+            <div class="card stat"><span class="meta">待处理批注</span><strong>2</strong><div class="progress"><span style="width: 30%"></span></div></div>
+          </div>
+        </section>
+
+        <section class="screen" id="themes" data-od-id="screen-themes">
+          <div class="page-head">
+            <div><div class="eyebrow">Themes</div><h1>按学期管理主题活动</h1></div>
+            <button class="btn btn-primary">新建主题</button>
+          </div>
+          <div class="tabs" role="tablist">
+            <button class="chip active">全部</button><button class="chip">进行中</button><button class="chip">规划中</button><button class="chip">已结束</button>
+          </div>
+          <div class="grid grid-3" style="margin-top: var(--space-4);">
+            <article class="card stack">
+              <div class="row-between"><h2>泥塑里的家乡</h2><span class="badge badge-dot accent">进行中</span></div>
+              <p>从幼儿对泥土、建筑、家乡物件的讨论中生成探究网络。</p>
+              <div class="progress"><span style="width: 58%"></span></div>
+              <button class="btn" data-screen-link="theme-detail">查看主题详情</button>
+            </article>
+            <article class="card stack">
+              <div class="row-between"><h2>春天的种子</h2><span class="badge badge-dot success">已结束</span></div>
+              <p>生成版网络比预设版新增“照料责任”和“失败原因”两支。</p>
+              <div class="progress"><span style="width: 100%"></span></div>
+              <button class="btn">查看档案</button>
+            </article>
+            <article class="card stack">
+              <div class="row-between"><h2>桥从哪里来</h2><span class="badge">规划中</span></div>
+              <p>园所文化方向：水乡建筑。等待教师补充来源描述。</p>
+              <div class="progress"><span style="width: 18%"></span></div>
+              <button class="btn">继续编辑</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="screen" id="theme-detail" data-od-id="screen-theme-detail">
+          <div class="page-head">
+            <div><div class="eyebrow">Theme detail</div><h1>主题详情：泥塑里的家乡</h1></div>
+            <div class="tabs"><button class="chip active">概览</button><button class="chip">资料库</button><button class="chip">计划文档</button></div>
+          </div>
+          <div class="grid grid-main">
+            <div class="card stack">
+              <div class="card-head"><h2>主题进度</h2><span class="badge badge-dot accent">第 3 周 / 共 6 周</span></div>
+              <div class="timeline">
+                <div class="timeline-step"><strong>预设网络</strong><p>中心词与 4 个初始分支已定稿</p></div>
+                <div class="timeline-step"><strong>语料聚类</strong><p>按对象标签归为 6 组</p></div>
+                <div class="timeline-step"><strong>生成网络</strong><p>本周新增“屋顶形状”节点</p></div>
+                <div class="timeline-step"><strong>月计划</strong><p>草稿可提交</p></div>
+                <div class="timeline-step"><strong>主题反思</strong><p>主题结束后启用</p></div>
+              </div>
+            </div>
+            <aside class="card stack">
+              <h2>关键入口</h2>
+              <button class="nav-btn" data-screen-link="corpus">提取过往儿童语料</button>
+              <button class="nav-btn" data-screen-link="map">编辑生成版网络图</button>
+              <button class="nav-btn" data-screen-link="plans">撰写月/周计划</button>
+              <button class="nav-btn" data-screen-link="lesson">创建主题活动教案</button>
+            </aside>
+          </div>
+          <div class="grid grid-3" style="margin-top: var(--space-4);">
+            <div class="card"><h3>主题来源</h3><p>园所文化方向：本土材料与家乡经验。教师从幼儿区角泥塑活动中提炼主题载体。</p></div>
+            <div class="card"><h3>资料归属</h3><p>所有照片、视频、作品图与语料均挂在当前主题下，跨主题总库只做检索入口。</p></div>
+            <div class="card"><h3>非阻塞文档</h3><p>月计划提交后，周计划与教案可以继续撰写，不等待管理员通过。</p></div>
+          </div>
+        </section>
+
+        <section class="screen" id="corpus" data-od-id="screen-corpus">
+          <div class="page-head">
+            <div><div class="eyebrow">Utterance corpus</div><h1>儿童语料库：筛选、打标、提升为子探究点</h1></div>
+            <button class="btn btn-primary" id="promoteBtn">提升为子探究点</button>
+          </div>
+          <div class="grid grid-main">
+            <div class="stack">
+              <div class="card stack-sm">
+                <div class="filters">
+                  <button class="chip active" data-filter="all">全部语料</button>
+                  <button class="chip" data-filter="建筑">建筑</button>
+                  <button class="chip" data-filter="花朵">花朵</button>
+                  <button class="chip" data-filter="questioning">提出问题</button>
+                  <button class="chip" data-filter="causal_reasoning">因果推理</button>
+                </div>
+              </div>
+              <div class="stack" id="utteranceList">
+                <label class="utterance-item" data-tags="建筑 questioning">
+                  <input type="checkbox" value="u1">
+                  <span><strong>“为什么老房子的屋顶不是平的？”</strong><p>辰辰 · 集体讨论 · 2026-03-12</p><span class="badge">建筑</span> <span class="badge">提出问题</span></span>
+                  <span class="badge badge-dot accent">可提升</span>
+                </label>
+                <label class="utterance-item" data-tags="建筑 causal_reasoning">
+                  <input type="checkbox" value="u2">
+                  <span><strong>“下雨会从斜斜的地方滑下来。”</strong><p>安安 · 区角活动 · 2026-03-13</p><span class="badge">建筑</span> <span class="badge">因果推理</span></span>
+                  <span class="badge badge-dot accent">可提升</span>
+                </label>
+                <label class="utterance-item" data-tags="花朵 imagination">
+                  <input type="checkbox" value="u3">
+                  <span><strong>“泥花可以种在墙上，像奶奶家门口。”</strong><p>小禾 · 美工区 · 2026-03-14</p><span class="badge">花朵</span> <span class="badge">想象联想</span></span>
+                  <span class="badge">已关联</span>
+                </label>
+                <label class="utterance-item" data-tags="建筑 transfer">
+                  <input type="checkbox" value="u4">
+                  <span><strong>“我见过祠堂门口也有这个尖尖。”</strong><p>佑佑 · 户外散步 · 2026-03-15</p><span class="badge">建筑</span> <span class="badge">经验迁移</span></span>
+                  <span class="badge badge-dot accent">可提升</span>
+                </label>
+              </div>
+            </div>
+            <aside class="card stack">
+              <h2>过往数据调用</h2>
+              <p>制定主题网络时，教师可以从当前主题资料库与跨主题总库提取儿童原话。系统保留原始场景、日期、对象标签和思维类型，作为节点证据。</p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>来源</th><th>命中</th></tr></thead>
+                  <tbody>
+                    <tr><td>当前主题</td><td class="mono">86</td></tr>
+                    <tr><td>春天的种子</td><td class="mono">12</td></tr>
+                    <tr><td>桥从哪里来</td><td class="mono">9</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen" id="map" data-od-id="screen-map">
+          <div class="page-head">
+            <div><div class="eyebrow">Theme map</div><h1>主题网络图：预设版与生成版双轨</h1></div>
+            <div class="tabs"><button class="chip">预设版</button><button class="chip active">生成版</button><button class="chip">对照视图</button></div>
+          </div>
+          <div class="grid grid-main">
+            <div class="canvas" id="mapCanvas" aria-label="主题网络图画布">
+              <div class="connector" style="left: 48%; top: 48%; width: 180px; transform: rotate(-28deg);"></div>
+              <div class="connector" style="left: 48%; top: 50%; width: 190px; transform: rotate(26deg);"></div>
+              <div class="connector" style="left: 38%; top: 50%; width: 170px; transform: rotate(150deg);"></div>
+              <div class="node center">泥塑里的家乡</div>
+              <div class="node" style="left: 64%; top: 24%;">家乡建筑<br><span class="meta">8 条语料</span></div>
+              <div class="node" style="left: 68%; top: 61%;">花朵纹样<br><span class="meta">5 条语料</span></div>
+              <div class="node" style="left: 16%; top: 62%;">人物故事<br><span class="meta">4 条语料</span></div>
+            </div>
+            <aside class="card stack">
+              <h2>节点证据</h2>
+              <div class="annotation"><strong>家乡建筑</strong><span class="meta">关联 8 条儿童语料，2 张照片，1 个教案</span></div>
+              <div class="annotation"><strong id="newNodeName">等待提升</strong><span class="meta" id="newNodeMeta">从语料库选择语料后生成节点</span></div>
+              <button class="btn" data-screen-link="corpus">返回语料库提取</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen" id="plans" data-od-id="screen-plans">
+          <div class="page-head">
+            <div><div class="eyebrow">Plans</div><h1>月计划与周计划编辑</h1></div>
+            <button class="btn btn-primary">提交月计划</button>
+          </div>
+          <div class="planner">
+            <aside class="doc-nav">
+              <button class="nav-btn active">3 月月计划 <span class="badge">草稿</span></button>
+              <button class="nav-btn">第 3 周周计划 <span class="badge">已提交</span></button>
+              <button class="nav-btn">第 4 周周计划 <span class="badge">草稿</span></button>
+            </aside>
+            <div class="stack">
+              <div class="doc-section">
+                <div class="row-between"><h2>主题来源与价值分析</h2><span class="badge">富文本</span></div>
+                <div class="rich-placeholder">灰块占位：后续替换为园所模板正文。这里可插入儿童语料引用块与主题网络图节点引用。</div>
+              </div>
+              <div class="doc-section">
+                <div class="row-between"><h2>主题网络图</h2><button class="btn btn-small" data-screen-link="map">查看嵌入图</button></div>
+                <div class="rich-placeholder">嵌入当前主题生成版网络图快照，提交时记录版本。</div>
+              </div>
+              <div class="doc-section">
+                <h2>周次安排</h2>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>周次</th><th>子主题</th><th>核心活动</th><th>教案</th></tr></thead>
+                    <tbody>
+                      <tr><td>第 3 周</td><td>屋顶形状</td><td>观察老房子屋顶</td><td><button class="btn btn-small" data-screen-link="lesson">创建</button></td></tr>
+                      <tr><td>第 4 周</td><td>花窗纹样</td><td>泥片压印与拓印</td><td><button class="btn btn-small">已关联</button></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" id="lesson" data-od-id="screen-lesson">
+          <div class="page-head">
+            <div><div class="eyebrow">Lesson plan</div><h1>教案编辑：主题活动必须关联语料或子探究点</h1></div>
+            <button class="btn btn-primary" id="submitLesson">提交教案</button>
+          </div>
+          <div class="grid grid-main">
+            <form class="card stack" id="lessonForm">
+              <div class="grid grid-2">
+                <div class="field"><label>教案名称</label><input value="屋顶为什么是斜的"></div>
+                <div class="field"><label>活动类型</label><select id="activityType"><option value="theme_group_activity">主题集体活动</option><option value="routine_activity">常规活动</option></select></div>
+                <div class="field"><label>领域归属</label><input value="科学、语言、艺术"></div>
+                <div class="field"><label>活动时长</label><input value="30 分钟"></div>
+              </div>
+              <div class="field"><label>活动来源</label><textarea>由儿童关于“斜屋顶”的提问生成，关联建筑对象标签下的语料。</textarea></div>
+              <div class="field"><label>关联证据</label><select id="evidenceSelect"><option value="">未选择</option><option value="utterance">3 条儿童语料</option><option value="node">子探究点：家乡建筑</option></select></div>
+              <div class="field"><label>活动过程</label><div class="rich-placeholder">灰块占位：导入 / 展开 / 结束。可从主题资料库插入图片与语料引用。</div></div>
+            </form>
+            <aside class="card stack">
+              <h2>提交校验</h2>
+              <p id="lessonValidation">主题相关活动在提交时必须至少关联 1 条语料或 1 个子探究点。</p>
+              <div class="annotation"><strong>可调用证据</strong><span class="meta">建筑标签 8 条，提出问题 3 条，因果推理 2 条</span></div>
+              <button class="btn" data-screen-link="corpus">去选择语料</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen" id="review" data-od-id="screen-review">
+          <div class="page-head">
+            <div><div class="eyebrow">Review</div><h1>审阅批注：退回后教师按字段处理</h1></div>
+            <div class="tabs"><button class="chip active">退回修改</button><button class="chip">已提交</button><button class="chip">已通过</button></div>
+          </div>
+          <div class="grid grid-main">
+            <article class="card stack">
+              <div class="row-between"><h2>教案：屋顶为什么是斜的</h2><span class="badge badge-dot danger">退回修改</span></div>
+              <div class="doc-section">
+                <h3>活动目标</h3>
+                <p>幼儿能够观察不同屋顶形状，并尝试表达斜屋顶与排水之间的关系。</p>
+              </div>
+              <div class="doc-section">
+                <h3>活动来源</h3>
+                <p style="background: color-mix(in oklab, var(--accent), transparent 88%); padding: var(--space-2); border-radius: var(--radius-sm); color: var(--fg);">由儿童关于“斜屋顶”的提问生成，但需补充更多原话证据。</p>
+              </div>
+              <button class="btn btn-primary">重新提交</button>
+            </article>
+            <aside class="card stack">
+              <h2>批注侧栏</h2>
+              <div class="annotation"><strong>活动来源</strong><span>请补充至少 2 条原始语料，并说明为什么从语料提升为该活动。</span><button class="btn btn-small">标记已处理</button></div>
+              <div class="annotation"><strong>活动过程</strong><span>建议增加观察材料对比，避免只停留在教师讲述。</span><button class="btn btn-small">标记已处理</button></div>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-panel">
+      <div class="row-between">
+        <div><div class="eyebrow">New utterance</div><h2>新增儿童语料</h2></div>
+        <button class="btn btn-small" id="closeDrawer">关闭</button>
+      </div>
+      <div class="stack">
+        <div class="field"><label>孩子原话</label><textarea placeholder="输入儿童原话"></textarea></div>
+        <div class="grid grid-2">
+          <div class="field"><label>儿童</label><input placeholder="可匿名"></div>
+          <div class="field"><label>发生场景</label><select><option>集体讨论</option><option>区角活动</option><option>户外</option></select></div>
+        </div>
+        <div class="field"><label>话题对象标签</label><input placeholder="建筑、花朵、人物"></div>
+        <div class="field"><label>思维类型</label><select><option>提出问题</option><option>观察描述</option><option>因果推理</option><option>想象联想</option><option>经验迁移</option></select></div>
+      </div>
+      <button class="btn btn-primary" id="saveUtterance">保存语料</button>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const screens = [...document.querySelectorAll('.screen')];
+    const navButtons = [...document.querySelectorAll('[data-screen]')];
+    const sidebar = document.querySelector('#sidebar');
+    const toast = document.querySelector('#toast');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function activateScreen(id) {
+      screens.forEach(screen => screen.classList.toggle('active', screen.id === id));
+      navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.screen === id));
+      localStorage.setItem('teacher-workbench-screen', id);
+      sidebar.classList.remove('open');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    navButtons.forEach(btn => btn.addEventListener('click', () => activateScreen(btn.dataset.screen)));
+    document.querySelectorAll('[data-screen-link]').forEach(btn => {
+      btn.addEventListener('click', () => activateScreen(btn.dataset.screenLink));
+    });
+    document.querySelector('#menuBtn').addEventListener('click', () => sidebar.classList.add('open'));
+
+    const savedScreen = localStorage.getItem('teacher-workbench-screen');
+    if (savedScreen && document.getElementById(savedScreen)) activateScreen(savedScreen);
+
+    document.querySelectorAll('#utteranceList input[type="checkbox"]').forEach(input => {
+      input.addEventListener('change', () => input.closest('.utterance-item').classList.toggle('selected', input.checked));
+    });
+
+    document.querySelectorAll('[data-filter]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('[data-filter]').forEach(item => item.classList.remove('active'));
+        chip.classList.add('active');
+        const filter = chip.dataset.filter;
+        document.querySelectorAll('.utterance-item').forEach(item => {
+          item.style.display = filter === 'all' || item.dataset.tags.includes(filter) ? 'grid' : 'none';
+        });
+      });
+    });
+
+    document.querySelector('#promoteBtn').addEventListener('click', () => {
+      const selected = [...document.querySelectorAll('#utteranceList input:checked')];
+      if (!selected.length) {
+        showToast('请先勾选要提升的儿童语料');
+        return;
+      }
+      const canvas = document.querySelector('#mapCanvas');
+      const node = document.createElement('div');
+      node.className = 'node generated';
+      node.style.left = '34%';
+      node.style.top = '18%';
+      node.innerHTML = `斜屋顶为什么存在<br><span class="meta">${selected.length} 条语料</span>`;
+      canvas.appendChild(node);
+      document.querySelector('#newNodeName').textContent = '斜屋顶为什么存在';
+      document.querySelector('#newNodeMeta').textContent = `${selected.length} 条过往儿童语料已作为证据关联`;
+      showToast('已从过往语料生成子探究点，并关联到生成版网络图');
+      activateScreen('map');
+    });
+
+    document.querySelector('#submitLesson').addEventListener('click', () => {
+      const type = document.querySelector('#activityType').value;
+      const evidence = document.querySelector('#evidenceSelect').value;
+      const validation = document.querySelector('#lessonValidation');
+      if (type.startsWith('theme_') && !evidence) {
+        validation.textContent = '校验未通过：主题相关活动提交前必须关联语料或子探究点。';
+        validation.className = 'danger';
+        showToast('提交失败：缺少活动来源证据');
+        return;
+      }
+      validation.textContent = '校验通过：教案可提交园所审阅。';
+      validation.className = 'success';
+      showToast('教案已提交');
+    });
+
+    const drawer = document.querySelector('#drawer');
+    document.querySelector('[data-open-drawer]').addEventListener('click', () => {
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+    });
+    document.querySelector('#closeDrawer').addEventListener('click', () => {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+    });
+    document.querySelector('#saveUtterance').addEventListener('click', () => {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      showToast('语料已保存，可继续打标或提升为子探究点');
+    });
+  </script>
+</body>
+</html>

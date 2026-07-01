@@ -1,0 +1,12 @@
+# Temporary/preview process files
+.preview-*.tmp
+
+# Tooling cache
+.od-skills/
+.claude/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

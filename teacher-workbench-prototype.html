@@ -813,6 +813,103 @@
       gap: var(--space-2);
       align-items: center;
     }
+    .theme-stack {
+      display: grid;
+      gap: var(--space-4);
+    }
+    .theme-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: var(--space-5);
+      display: grid;
+      gap: var(--space-5);
+    }
+    .theme-card-head {
+      display: grid;
+      grid-template-columns: minmax(112px, 0.24fr) minmax(0, 1fr) auto;
+      gap: var(--space-4);
+      align-items: start;
+    }
+    .theme-month {
+      display: grid;
+      gap: var(--space-1);
+      color: var(--fg);
+    }
+    .theme-month strong {
+      font-size: clamp(36px, 5vw, var(--text-4xl));
+      line-height: 0.95;
+      letter-spacing: var(--tracking-display);
+    }
+    .theme-month span {
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+    .theme-card h2 {
+      font-size: var(--text-2xl);
+      line-height: var(--leading-tight);
+    }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: var(--space-4);
+    }
+    .theme-block {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      padding: var(--space-4);
+      display: grid;
+      gap: var(--space-3);
+    }
+    .theme-block h3 {
+      font-size: var(--text-lg);
+      line-height: var(--leading-tight);
+    }
+    .theme-block p,
+    .theme-block li {
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+    .theme-goals {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .theme-goals li + li { margin-top: var(--space-2); }
+    .theme-evidence,
+    .theme-domains {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .evidence-chip {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      padding: 6px 10px;
+      color: var(--fg);
+      font-size: var(--text-xs);
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .plan-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+    .plan-summary > div {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: var(--space-3);
+      display: grid;
+      gap: 4px;
+    }
+    .plan-summary strong {
+      font-size: var(--text-xl);
+      line-height: var(--leading-tight);
+    }
     .schedule-table th:first-child,
     .schedule-table td:first-child {
       width: 86px;
@@ -1132,6 +1229,7 @@
       .content { padding-inline: var(--container-gutter-tablet); }
       .page-head { grid-template-columns: 1fr; }
       .grid-2, .grid-3, .planner { grid-template-columns: 1fr; }
+      .theme-card-head, .theme-grid, .plan-summary { grid-template-columns: 1fr; }
       .plan-week-children { margin-left: var(--space-2); padding-left: var(--space-3); }
       .week-summary, .reference-chain, .month-plan-grid { grid-template-columns: 1fr; }
       .lesson-outline { grid-template-columns: 1fr; }
@@ -1151,6 +1249,7 @@
       .content { padding: var(--space-5) var(--container-gutter-phone) var(--space-12); }
       .grid-4, .source-grid { grid-template-columns: 1fr; }
       .card { padding: var(--space-4); }
+      .theme-card { padding: var(--space-4); }
       .card-head, .row-between { align-items: flex-start; flex-direction: column; }
       .utterance-item { grid-template-columns: auto minmax(0, 1fr); }
       .utterance-item .badge { grid-column: 2; }
@@ -1182,12 +1281,12 @@
 <nav class="nav-list" id="nav">
 <button class="nav-btn active" data-screen="dashboard">工作台 <span class="meta">1</span></button>
 <button class="nav-btn" data-screen="themes">主题列表 <span class="meta">2</span></button>
-<button class="nav-btn" data-screen="theme-detail">主题详情 <span class="meta">3</span></button>
-<button class="nav-btn" data-screen="corpus">儿童语料库 <span class="meta">4</span></button>
-<button class="nav-btn" data-screen="map">主题网络图 <span class="meta">5</span></button>
-<button class="nav-btn" data-screen="plans">月/周计划 <span class="meta">6</span></button>
-<button class="nav-btn" data-screen="lesson">教案编辑 <span class="meta">7</span></button>
-<button class="nav-btn" data-screen="review">审阅批注 <span class="meta">8</span></button>
+
+<button class="nav-btn" data-screen="corpus">儿童语料库 <span class="meta">3</span></button>
+<button class="nav-btn" data-screen="map">主题网络图 <span class="meta">4</span></button>
+<button class="nav-btn" data-screen="plans">月/周计划 <span class="meta">5</span></button>
+<button class="nav-btn" data-screen="lesson">教案编辑 <span class="meta">6</span></button>
+<button class="nav-btn" data-screen="review">审阅批注 <span class="meta">7</span></button>
 </nav>
 <div class="sidebar-foot">
 <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
@@ -1209,7 +1308,7 @@
 <div class="eyebrow">Teacher workspace</div>
 <h1>把主题探究从素材沉淀推进到文档提交</h1>
 </div>
-<button class="btn btn-primary" data-screen-link="theme-detail">进入当前主题</button>
+<button class="btn btn-primary" data-screen-link="themes">进入当前主题</button>
 </div>
 <div class="grid hero-workbench">
 <div class="card stack">
@@ -1316,99 +1415,185 @@
 </div>
 </section>
 <section class="screen" data-od-id="screen-themes" id="themes">
-<div class="page-head">
-<div><div class="eyebrow">Themes</div><h1>按学期管理主题活动</h1></div>
-<button class="btn btn-primary">新建主题</button>
-</div>
-<div class="tabs" role="tablist">
-<button class="chip active">全部</button><button class="chip">进行中</button><button class="chip">规划中</button><button class="chip">已结束</button>
-</div>
-<div class="grid grid-3" style="margin-top: var(--space-4);">
-<article class="card stack">
-<div class="row-between"><h2>泥塑里的家乡</h2><span class="badge badge-dot accent">进行中</span></div>
-<p>从幼儿对泥土、建筑、家乡物件的讨论中生成探究网络。</p>
-<div class="progress"><span style="width: 58%"></span></div>
-<button class="btn" data-screen-link="theme-detail">查看主题详情</button>
-</article>
-<article class="card stack">
-<div class="row-between"><h2>春天的种子</h2><span class="badge badge-dot success">已结束</span></div>
-<p>生成版网络比预设版新增“照料责任”和“失败原因”两支。</p>
-<div class="progress"><span style="width: 100%"></span></div>
-<button class="btn">查看档案</button>
-</article>
-<article class="card stack">
-<div class="row-between"><h2>桥从哪里来</h2><span class="badge">规划中</span></div>
-<p>园所文化方向：水乡建筑。等待教师补充来源描述。</p>
-<div class="progress"><span style="width: 18%"></span></div>
-<button class="btn">继续编辑</button>
-</article>
-</div>
-</section>
-<section class="screen" data-od-id="screen-theme-detail" id="theme-detail">
-<div class="page-head">
-<div><div class="eyebrow">Theme detail</div><h1>主题详情：泥塑里的家乡</h1></div>
-<div class="tabs"><button class="chip active">概览</button><button class="chip">资料库</button><button class="chip">计划文档</button></div>
-</div>
-<div class="grid grid-main">
-<div class="card stack">
-<div class="card-head"><h2>主题进度</h2><span class="badge badge-dot accent">第 3 周 / 共 6 周</span></div>
-<div class="timeline">
-<div class="timeline-step"><strong>预设网络</strong><p>中心词与 4 个初始分支已定稿</p></div>
-<div class="timeline-step"><strong>语料聚类</strong><p>按对象标签归为 6 组</p></div>
-<div class="timeline-step"><strong>生成网络</strong><p>本周新增“屋顶形状”节点</p></div>
-<div class="timeline-step"><strong>月计划</strong><p>草稿可提交</p></div>
-<div class="timeline-step"><strong>主题反思</strong><p>主题结束后启用</p></div>
-</div>
-</div>
-<aside class="card stack">
-<h2>关键入口</h2>
-<button class="nav-btn" data-screen-link="corpus">提取过往儿童语料</button>
-<button class="nav-btn" data-screen-link="map">编辑生成版网络图</button>
-<button class="nav-btn" data-screen-link="plans">撰写月/周计划</button>
-<button class="nav-btn" data-screen-link="lesson">创建主题活动教案</button>
-</aside>
-</div>
-<div class="doc-section" style="margin-top: var(--space-4);">
-<div class="row-between">
-<div><h2>课程依据矩阵</h2><p>主题、月计划、周计划和教案都从这里引用依据；儿童语料只是“儿童需求”中的一类材料。</p></div>
-<button class="btn btn-small" data-screen-link="plans">查看计划引用</button>
-</div>
-<div class="source-grid">
-<article class="source-card">
-<span class="source-type">Policy</span>
-<h3>政策要求</h3>
-<ul class="source-list">
-<li>《3-6岁儿童学习与发展指南》：科学探究、艺术表现、语言表达</li>
-<li>《幼儿园教育指导纲要》：生活化、综合化、游戏化活动组织</li>
-</ul>
-</article>
-<article class="source-card">
-<span class="source-type">School context</span>
-<h3>园所文化与原本课程</h3>
-<ul class="source-list">
-<li>园本课程线索：岭南水乡、泥塑材料、家乡建筑</li>
-<li>近期课题：本土文化资源在中班主题探究中的转化</li>
-</ul>
-</article>
-<article class="source-card">
-<span class="source-type">Resources</span>
-<h3>可用资源</h3>
-<ul class="source-list">
-<li>社区资源：老屋照片、祠堂门窗、街巷观察路线</li>
-<li>家长资源：家庭建筑照片、长辈访谈、可带入材料</li>
-</ul>
-</article>
-<article class="source-card">
-<span class="source-type">Children needs</span>
-<h3>儿童需求</h3>
-<ul class="source-list">
-<li>儿童语料：屋顶、排水、花窗、家乡经验相关原话</li>
-<li>作品与行为：泥工尝试、建构照片、区域持续选择</li>
-</ul>
-</article>
-</div>
-</div>
-</section>
+          <div class="page-head">
+            <div><h1>本学期主题探究 · 3-6 月</h1></div>
+            <button class="btn btn-primary">新建主题</button>
+          </div>
+          <div class="theme-stack">
+
+            <article class="theme-card" id="theme-mar" data-theme-card="mar">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>3月</strong><span>已通过 · 起始月</span></div>
+                <div>
+                  <h2>泥塑里的家乡 · 屋顶与花窗</h2>
+                  <p class="meta">大一班 · 2026-03-04 至 2026-03-29</p>
+                </div>
+                <span class="badge badge-dot success">已通过</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>老屋照片、屋顶形状、花窗纹样、泥塑材料。</p>
+                  <div class="theme-domains"><span class="domain-tag">科学</span><span class="domain-tag">艺术</span><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《指南》科学探究、艺术表现</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>园本泥塑课程 · 岭南老屋</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>社区老屋照片 · 家庭建筑照片</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>屋顶/窗格语料 11 条</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>已通过</p></div>
+                  <div><span class="source-type">周计划</span><strong>2 份</strong><p>第 3-4 周</p></div>
+                  <div><span class="source-type">教案</span><strong>6 份</strong><p>主题活动与区域延伸</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-plan-link="month-plan">查看 3 月月计划</button>
+                  <button class="btn" data-review-link="review-mar">查看审核意见</button>
+                  <button class="btn" data-screen-link="map">查看主题网络图</button>
+                </div>
+              </section>
+            </article>
+
+            <article class="theme-card" id="theme-apr" data-theme-card="apr">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>4月</strong><span>进行中 · 当前月</span></div>
+                <div>
+                  <h2>泥塑里的家乡 · 社区街巷</h2>
+                  <p class="meta">大一班 · 2026-04-01 至 2026-04-30</p>
+                </div>
+                <span class="badge badge-dot accent">进行中</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>花窗纹样、门楣瓦当、街巷路线、家乡故事。</p>
+                  <ul class="theme-goals">
+                    <li>补齐四类证据。</li>
+                    <li>完成第 4 周待填写教案。</li>
+                  </ul>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《纲要》生活化、综合化活动</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>岭南水乡街巷 · 园本泥塑</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>走访路线 · 家长访谈 · 社区纹样</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>花窗/路线/故事语料 18 条</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>退回修改中</p></div>
+                  <div><span class="source-type">周计划</span><strong>2 份</strong><p>第 7-8 周</p></div>
+                  <div><span class="source-type">教案</span><strong>5 份</strong><p>4 已填 · 1 待填</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-plan-link="month-apr">进入 4 月月计划</button>
+                  <button class="btn" data-review-link="review-apr">查看退回意见</button>
+                  <button class="btn" data-screen-link="corpus">提取儿童语料</button>
+                </div>
+              </section>
+            </article>
+
+            <article class="theme-card" id="theme-bridge" data-theme-card="bridge">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>5月</strong><span>预排 · 延伸月</span></div>
+                <div>
+                  <h2>家乡的桥</h2>
+                  <p class="meta">大一班 · 2026-05-04 至 2026-05-29</p>
+                </div>
+                <span class="badge">预排</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>桥拱、栏杆、桥墩、水乡交通、建造者故事。</p>
+                  <div class="theme-domains"><span class="domain-tag">社会</span><span class="domain-tag">语言</span><span class="domain-tag">科学</span><span class="domain-tag">艺术</span><span class="domain-tag">数学</span></div>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《指南》社会适应、科学观察</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>水乡建筑文化 · 桥作为地标</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>社区两座桥 · 老照片 · 家长职业资源</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>路桥提问 6 条（待沉淀）</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>预排</p></div>
+                  <div><span class="source-type">周计划</span><strong>0 份</strong><p>待拆解</p></div>
+                  <div><span class="source-type">教案</span><strong>0 份</strong><p>待撰写</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-screen-link="plans">进入 5 月月计划</button>
+                  <button class="btn" data-screen-link="map">规划主题网络图</button>
+                  <button class="btn" data-screen-link="corpus">补充儿童语料</button>
+                </div>
+              </section>
+            </article>
+
+            <article class="theme-card" id="theme-exhibition" data-theme-card="exhibition">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>6月</strong><span>未开始 · 展示月</span></div>
+                <div>
+                  <h2>我们的小展 · 作品整理与讲述</h2>
+                  <p class="meta">大一班 · 2026-06-01 至 2026-06-26</p>
+                </div>
+                <span class="badge">未开始</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>作品整理、照片录音、儿童讲述、班级小展。</p>
+                  <div class="theme-domains"><span class="domain-tag">艺术</span><span class="domain-tag">语言</span><span class="domain-tag">社会</span><span class="domain-tag">健康</span></div>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《指南》表现与创造</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>园所每学期一次"小展"传统</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>儿童作品 · 录音 · 家庭邀请函</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>分享意愿语料 4 条</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>未开始</p></div>
+                  <div><span class="source-type">周计划</span><strong>0 份</strong><p>待拆解</p></div>
+                  <div><span class="source-type">档案</span><strong>4 份</strong><p>可复用</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-screen-link="plans">进入 6 月月计划</button>
+                  <button class="btn" data-screen-link="corpus">检索历史语料</button>
+                </div>
+              </section>
+            </article>
+
+          </div>
+        </section>
+
 <section class="screen" data-od-id="screen-corpus" id="corpus">
 <div class="page-head">
 <div><div class="eyebrow">Utterance corpus</div><h1>儿童语料库：筛选、打标、提升为子探究点</h1></div>
@@ -1586,7 +1771,7 @@
 </aside>
 <div class="stack">
 <div class="reference-chain">
-<button class="reference-card active" data-screen-link="theme-detail">
+<button class="reference-card active" data-screen-link="themes">
 <span class="source-type">Theme</span>
 <strong>月主题：泥塑里的家乡</strong>
 <span class="meta">承载课程依据矩阵与主题价值</span>
@@ -2009,7 +2194,7 @@
 <p id="lessonValidation">主题相关活动在提交时必须至少关联 1 类课程依据；儿童语料属于儿童需求，不是唯一来源。</p>
 <div class="annotation"><strong>可调用课程依据</strong><span class="meta">政策 2 条，园本课程 2 条，社区/家长资源 5 项，儿童需求材料 18 条</span></div>
 <button class="btn" data-plan-link="week-4">返回周计划</button>
-<button class="btn" data-screen-link="theme-detail">查看课程依据矩阵</button>
+<button class="btn" data-screen-link="themes">查看课程依据矩阵</button>
 <button class="btn" data-screen-link="corpus">去选择语料</button>
 </aside>
 </div>

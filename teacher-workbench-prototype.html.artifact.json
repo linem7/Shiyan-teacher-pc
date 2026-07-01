@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "teacher-workbench-prototype.html",
+  "entry": "teacher-workbench-prototype.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-01T04:03:34.922Z",
+  "updatedAt": "2026-07-01T04:03:34.922Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

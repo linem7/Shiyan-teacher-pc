@@ -693,6 +693,43 @@
       gap: var(--space-2);
       align-content: start;
     }
+    .plan-nav-group { display: grid; gap: var(--space-1); }
+    .plan-month { padding: 10px 12px; }
+    .plan-month .plan-caret,
+    .plan-month .plan-label {
+      display: inline-flex;
+      align-items: center;
+    }
+    .plan-caret {
+      width: 14px;
+      height: 14px;
+      display: inline-grid;
+      place-items: center;
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+      flex: 0 0 auto;
+    }
+    .plan-nav-group.expanded .plan-caret { transform: rotate(90deg); color: var(--accent); }
+    .plan-month .badge { margin-left: auto; }
+    .plan-week-children {
+      display: grid;
+      gap: 2px;
+      margin-left: var(--space-3);
+      padding-left: var(--space-4);
+      border-left: 1px solid var(--border-soft);
+    }
+    .plan-nav-group.expanded .plan-week-children { display: grid; }
+    .plan-week { font-size: var(--text-sm); padding: 6px 10px; color: var(--muted); }
+    .plan-week.active { color: var(--accent); }
+    .plan-week .badge { font-size: 10px; padding: 2px 7px; }
+    .plan-week-empty {
+      display: block;
+      font-size: var(--text-xs);
+      color: var(--muted);
+      font-style: italic;
+      padding: 4px 8px;
+    }
     .doc-section {
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
@@ -1092,6 +1129,7 @@
       .content { padding-inline: var(--container-gutter-tablet); }
       .page-head { grid-template-columns: 1fr; }
       .grid-2, .grid-3, .planner { grid-template-columns: 1fr; }
+      .plan-week-children { margin-left: var(--space-2); padding-left: var(--space-3); }
       .week-summary, .reference-chain, .month-plan-grid { grid-template-columns: 1fr; }
       .lesson-outline { grid-template-columns: 1fr; }
       .search { min-width: 0; width: 100%; }
@@ -1501,13 +1539,62 @@
           </div>
           <div class="planner">
             <aside class="doc-nav">
-              <button class="nav-btn plan-tab active" data-plan-tab="month-plan">3 月月计划 <span class="badge">草稿</span></button>
-              <button class="nav-btn plan-tab" data-plan-tab="month-apr">4 月月计划 <span class="badge badge-dot warn">月末</span></button>
-              <button class="nav-btn plan-tab" data-plan-tab="month-may">5 月月计划 <span class="badge">预排</span></button>
-              <button class="nav-btn plan-tab" data-plan-tab="month-jun">6 月月计划 <span class="badge">未开始</span></button>
-              <button class="nav-btn plan-tab" data-plan-tab="month-jul">7 月月计划 <span class="badge">未开始</span></button>
-              <button class="nav-btn plan-tab" data-plan-tab="week-3">第 3 周周计划 <span class="badge">已提交</span></button>
-              <button class="nav-btn plan-tab" data-plan-tab="week-4">第 4 周周计划 <span class="badge">草稿</span></button>
+<div class="plan-nav-group" data-month-group="month-plan">
+                <button class="nav-btn plan-tab plan-month" data-plan-tab="month-plan">
+                  <span class="plan-caret" aria-hidden="true">▶</span>
+                  <span class="plan-label">3 月月计划</span>
+                  <span class="badge">草稿</span>
+                </button>
+                <div class="plan-week-children" hidden>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-1">第 1 周：启动探究 <span class="badge badge-dot success">已提交</span></button>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-2">第 2 周：泥塑材料初识 <span class="badge badge-dot success">已提交</span></button>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-3">第 3 周：屋顶形状 <span class="badge badge-dot success">已提交</span></button>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-4">第 4 周：花窗纹样 <span class="badge badge-dot success">已提交</span></button>
+                </div>
+              </div>
+              <div class="plan-nav-group" data-month-group="month-apr">
+                <button class="nav-btn plan-tab plan-month" data-plan-tab="month-apr">
+                  <span class="plan-caret" aria-hidden="true">▶</span>
+                  <span class="plan-label">4 月月计划</span>
+                  <span class="badge badge-dot warn">月末</span>
+                </button>
+                <div class="plan-week-children" hidden>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-5">第 5 周：花窗再观察 <span class="badge badge-dot success">已提交</span></button>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-6">第 6 周：街巷纹样 <span class="badge badge-dot success">已提交</span></button>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-7">第 7 周：社区资源 <span class="badge badge-dot success">已提交</span></button>
+                  <button class="nav-btn plan-tab plan-week" data-plan-tab="week-8">第 8 周：月末整理 <span class="badge badge-dot warn">进行中</span></button>
+                </div>
+              </div>
+              <div class="plan-nav-group" data-month-group="month-may">
+                <button class="nav-btn plan-tab plan-month" data-plan-tab="month-may">
+                  <span class="plan-caret" aria-hidden="true">▶</span>
+                  <span class="plan-label">5 月月计划</span>
+                  <span class="badge">预排</span>
+                </button>
+                <div class="plan-week-children" hidden>
+                  <span class="plan-week-empty">暂未拆解周计划</span>
+                </div>
+              </div>
+              <div class="plan-nav-group" data-month-group="month-jun">
+                <button class="nav-btn plan-tab plan-month" data-plan-tab="month-jun">
+                  <span class="plan-caret" aria-hidden="true">▶</span>
+                  <span class="plan-label">6 月月计划</span>
+                  <span class="badge">未开始</span>
+                </button>
+                <div class="plan-week-children" hidden>
+                  <span class="plan-week-empty">暂未拆解周计划</span>
+                </div>
+              </div>
+              <div class="plan-nav-group" data-month-group="month-jul">
+                <button class="nav-btn plan-tab plan-month" data-plan-tab="month-jul">
+                  <span class="plan-caret" aria-hidden="true">▶</span>
+                  <span class="plan-label">7 月月计划</span>
+                  <span class="badge">未开始</span>
+                </button>
+                <div class="plan-week-children" hidden>
+                  <span class="plan-week-empty">暂未拆解周计划</span>
+                </div>
+              </div>
             </aside>
             <div class="stack">
               <div class="reference-chain">
@@ -1547,6 +1634,8 @@
                     <table>
                       <thead><tr><th>周次</th><th>子主题</th><th>上承依据</th><th>核心活动</th><th>教案</th></tr></thead>
                       <tbody>
+                        <tr><td>第 1 周</td><td>启动探究</td><td>政策要求 + 园所文化</td><td>主题网络搭建、材料熟悉</td><td><button class="btn btn-small" data-plan-link="week-1">打开周计划</button></td></tr>
+                        <tr><td>第 2 周</td><td>泥塑材料初识</td><td>可用资源 + 儿童需求</td><td>玩泥土、初步塑形</td><td><button class="btn btn-small" data-plan-link="week-2">打开周计划</button></td></tr>
                         <tr><td>第 3 周</td><td>屋顶形状</td><td>政策要求 + 儿童需求 + 社区资源</td><td>观察老房子屋顶</td><td><button class="btn btn-small" data-plan-link="week-3">打开周计划</button></td></tr>
                         <tr><td>第 4 周</td><td>花窗纹样</td><td>园所文化 + 家长资源 + 儿童作品</td><td>泥片压印与拓印</td><td><button class="btn btn-small" data-plan-link="week-4">打开周计划</button></td></tr>
                       </tbody>
@@ -1571,8 +1660,10 @@
                     <table>
                       <thead><tr><th>周次</th><th>推进重点</th><th>引用来源</th><th>当前处理</th></tr></thead>
                       <tbody>
-                        <tr><td>第 4 周</td><td>花窗纹样与泥板压印</td><td>园所文化 + 家长资源 + 儿童作品</td><td>根据退回意见补充依据链</td></tr>
-                        <tr><td>月末</td><td>主题网络图版本回写</td><td>儿童语料 + 作品照片 + 社区照片</td><td>准备提交 5 月延伸方向</td></tr>
+                        <tr><td>第 5 周</td><td>花窗再观察（4.1-4.3 实际跨 3 月末-4 月初）</td><td>儿童语料 + 老屋照片</td><td>已提交</td></tr>
+                        <tr><td>第 6 周</td><td>街巷纹样：路线与符号</td><td>社区资源 + 儿童作品</td><td>已提交</td></tr>
+                        <tr><td>第 7 周</td><td>社区资源：家长口述与老照片</td><td>家长访谈 + 社区资源</td><td>已提交</td></tr>
+                        <tr><td>第 8 周</td><td>月末整理：作品说明 + 审核修订</td><td>儿童语料 + 政策要求 + 社区资源</td><td>进行中（含 2 份待填教案）</td></tr>
                       </tbody>
                     </table>
                   </div>
@@ -1615,6 +1706,44 @@
                 </div>
               </div>
 
+              <div class="plan-doc stack" id="week-1">
+                <div class="weekly-plan-sheet">
+                  <div class="weekly-title">
+                    <div>
+                      <div class="eyebrow">Weekly plan</div>
+                      <h2>大一班第 1 周活动计划：启动探究</h2>
+                    </div>
+                    <div class="weekly-meta"><span>时间：2026.3.2 - 3.6</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+                  </div>
+                  <div class="weekly-table-wrap">
+                    <table class="weekly-table">
+                      <thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+                      <tbody>
+                        <tr><td class="time-slot">7:45-8:45</td><div class="activity-cell"><strong>晨间自主：签到与新书</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：认识班级</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：积木区探玩</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：泥工区安全</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：家庭照片翻看</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">8:45-11:40</td><div class="activity-cell"><div class="activity-title"><strong>主题导入：泥塑里的家乡</strong><button class="lesson-link" data-lesson-link="lesson-intro-theme">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">通过照片和故事引出家乡的泥塑传统。</span></div><div class="activity-cell"><div class="activity-title"><strong>一起看老房子</strong><button class="lesson-link" data-lesson-link="lesson-old-house">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">教师展示岭南老屋照片，记录儿童提问。</span></div><div class="activity-cell"><div class="activity-title"><strong>主题网络图：一起画</strong><button class="lesson-link" data-lesson-link="lesson-theme-network">查看教案</button></div><div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">语言</span></div><span class="meta">与儿童共同画出初步主题网络图。</span></div><div class="activity-cell"><div class="activity-title"><strong>我的家乡在哪里</strong><button class="lesson-link" data-lesson-link="lesson-my-hometown">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">儿童用简笔画或照片介绍自己的家乡。</span></div><div class="activity-cell"><div class="activity-title"><strong>下周问题：泥从哪里来</strong><button class="lesson-link" data-lesson-link="lesson-clay-from-where">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">语言</span></div><span class="meta">共同生成下周要探究的问题。</span></div></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><div class="activity-cell"><strong>区域：语言区故事盒</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：建构区老屋搭建</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：美工区自由涂鸦</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：科学区泥塑材料</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域延伸：家乡照片墙</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="plan-doc stack" id="week-2">
+                <div class="weekly-plan-sheet">
+                  <div class="weekly-title">
+                    <div>
+                      <div class="eyebrow">Weekly plan</div>
+                      <h2>大一班第 2 周活动计划：泥塑材料初识</h2>
+                    </div>
+                    <div class="weekly-meta"><span>时间：2026.3.9 - 3.13</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+                  </div>
+                  <div class="weekly-table-wrap">
+                    <table class="weekly-table">
+                      <thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+                      <tbody>
+                        <tr><td class="time-slot">7:45-8:45</td><div class="activity-cell"><strong>晨间自主：泥土触感</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：搓团圆</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：压扁游戏</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：搓长条</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：工具尝试</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">8:45-11:40</td><div class="activity-cell"><div class="activity-title"><strong>泥土是什么</strong><button class="lesson-link" data-lesson-link="lesson-clay-what">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">语言</span></div><span class="meta">观察泥土的颜色、干湿和气味。</span></div><div class="activity-cell"><div class="activity-title"><strong>干湿泥土的区别</strong><button class="lesson-link" data-lesson-link="lesson-clay-dry-wet">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span></div><span class="meta">比较干泥、湿泥、稀泥的塑形差异。</span></div><div class="activity-cell"><div class="activity-title"><strong>团圆与压扁</strong><button class="lesson-link" data-lesson-link="lesson-clay-ball-flat">查看教案</button></div><div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">数学</span></div><span class="meta">练习基本泥工动作：团圆、压扁、搓条。</span></div><div class="activity-cell"><div class="activity-title"><strong>建一个我家</strong><button class="lesson-link" data-lesson-link="lesson-clay-my-house">查看教案</button></div><div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">社会</span></div><span class="meta">用基本泥工动作做自己的家。</span></div><div class="activity-cell"><div class="activity-title"><strong>介绍我的泥塑</strong><button class="lesson-link" data-lesson-link="lesson-clay-intro">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">同伴面前介绍作品，录音记录。</span></div></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><div class="activity-cell"><strong>区域：泥工区继续</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：建构区配合</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：美工区纹样</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：科学区干燥实验</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域延伸：作品晾晒</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
               <div class="plan-doc stack" id="week-3">
                 <div class="weekly-plan-sheet">
                   <div class="weekly-title">
@@ -1704,6 +1833,83 @@
                   </div>
                 </div>
               </div>
+              <div class="plan-doc stack" id="week-5">
+                <div class="weekly-plan-sheet">
+                  <div class="weekly-title">
+                    <div>
+                      <div class="eyebrow">Weekly plan</div>
+                      <h2>大一班第 5 周活动计划：花窗再观察</h2>
+                    </div>
+                    <div class="weekly-meta"><span>时间：2026.3.30 - 4.3</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+                  </div>
+                  <div class="weekly-table-wrap">
+                    <table class="weekly-table">
+                      <thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+                      <tbody>
+                        <tr><td class="time-slot">7:45-8:45</td><div class="activity-cell"><strong>晨间自主：花窗照片排序</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：纹样拼图</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：清明节故事</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：家庭观察单</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：照片贴墙</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">8:45-11:40</td><div class="activity-cell"><div class="activity-title"><strong>花窗照片里的重复</strong><button class="lesson-link" data-lesson-link="lesson-apr-repeat">查看教案</button></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">艺术</span></div><span class="meta">数清重复单元并记录。</span></div><div class="activity-cell"><div class="activity-title"><strong>窗格里的对称</strong><button class="lesson-link" data-lesson-link="lesson-apr-symmetry">查看教案</button></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">科学</span></div><span class="meta">观察左右、上下、旋转对称。</span></div><div class="activity-cell"><div class="activity-title"><strong>我家的窗户故事</strong><button class="lesson-link" data-lesson-link="lesson-apr-window-story">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">儿童讲述家中窗户的形状与故事。</span></div><div class="activity-cell"><div class="activity-title"><strong>家庭观察：找一扇特别的窗</strong><button class="lesson-link" data-lesson-link="lesson-apr-home-window">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">与家长一起寻找社区里特别的窗。</span></div><div class="activity-cell"><div class="activity-title"><strong>家庭观察：说说窗上的图案</strong><button class="lesson-link" data-lesson-link="lesson-apr-window-pattern">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">家长与儿童一起描述窗上图案。</span></div></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><div class="activity-cell"><strong>区域：图案配对</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：镜像拼摆</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：家庭窗户照片入库</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：假期延伸</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：回传照片和语料</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="plan-doc stack" id="week-6">
+                <div class="weekly-plan-sheet">
+                  <div class="weekly-title">
+                    <div>
+                      <div class="eyebrow">Weekly plan</div>
+                      <h2>大一班第 6 周活动计划：街巷纹样</h2>
+                    </div>
+                    <div class="weekly-meta"><span>时间：2026.4.6 - 4.10</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+                  </div>
+                  <div class="weekly-table-wrap">
+                    <table class="weekly-table">
+                      <thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+                      <tbody>
+                        <tr><td class="time-slot">7:45-8:45</td><div class="activity-cell"><strong>晨间自主：街巷照片墙</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：路线图贴纸</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：采访问题卡</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：纹样速写</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：问题回顾</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">8:45-11:40</td><div class="activity-cell"><div class="activity-title"><strong>街巷里的门窗符号</strong><button class="lesson-link" data-lesson-link="lesson-apr-street-symbol">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">认识瓦当、门楣、窗花的符号含义。</span></div><div class="activity-cell"><div class="activity-title"><strong>家乡路线小地图</strong><button class="lesson-link" data-lesson-link="lesson-apr-route-map">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">数学</span></div><span class="meta">共同绘制走访路线与节点。</span></div><div class="activity-cell"><div class="activity-title"><strong>采访爷爷奶奶</strong><button class="lesson-link" data-lesson-link="lesson-apr-interview">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">提前生成采访问题并演练倾听。</span></div><div class="activity-cell"><div class="activity-title"><strong>街巷纹样速写</strong><button class="lesson-link" data-lesson-link="lesson-apr-sketch">查看教案</button></div><div class="domain-tags"><span class="domain-tag">美术</span><span class="domain-tag">艺术</span></div><span class="meta">用速写记录走访中看到的纹样。</span></div><div class="activity-cell"><div class="activity-title"><strong>周末任务：带回一段故事</strong><button class="lesson-link" data-lesson-link="lesson-apr-weekend-story">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">请家长协助记录一段家乡街巷故事。</span></div></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><div class="activity-cell"><strong>区域：照片分类</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：路线拼搭</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：录音回听</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：纹样拓展</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：回流主题网络</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="plan-doc stack" id="week-7">
+                <div class="weekly-plan-sheet">
+                  <div class="weekly-title">
+                    <div>
+                      <div class="eyebrow">Weekly plan</div>
+                      <h2>大一班第 7 周活动计划：社区资源</h2>
+                    </div>
+                    <div class="weekly-meta"><span>时间：2026.4.13 - 4.17</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+                  </div>
+                  <div class="weekly-table-wrap">
+                    <table class="weekly-table">
+                      <thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+                      <tbody>
+                        <tr><td class="time-slot">7:45-8:45</td><div class="activity-cell"><strong>晨间自主：资源卡分类</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：访谈照片整理</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：材料触摸箱</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：展板命名</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：作品归档</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">8:45-11:40</td><div class="activity-cell"><div class="activity-title"><strong>谁能帮助我们了解老房子</strong><button class="lesson-link" data-lesson-link="lesson-apr-helper">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">梳理可邀请的家长与社区资源。</span></div><div class="activity-cell"><div class="activity-title"><strong>材料从哪里来</strong><button class="lesson-link" data-lesson-link="lesson-apr-material">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">社会</span></div><span class="meta">了解泥、瓦、木等材料来源。</span></div><div class="activity-cell"><div class="activity-title"><strong>社区资源地图</strong><button class="lesson-link" data-lesson-link="lesson-apr-resource-map">查看教案</button></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">社会</span></div><span class="meta">把社区资源按位置标在地图上。</span></div><div class="activity-cell"><div class="activity-title"><strong>邀请家长讲家乡建筑</strong><button class="lesson-link" data-lesson-link="lesson-apr-parent-talk">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">邀请家长到班级分享家乡建筑故事。</span></div><div class="activity-cell"><div class="activity-title"><strong>资源回收：下周怎么用</strong><button class="lesson-link" data-lesson-link="lesson-apr-resource-recap">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">回顾资源，整理月末用得到的素材。</span></div></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><div class="activity-cell"><strong>区域：资源卡贴墙</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：材料实验</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：路线地图完善</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：访谈录音整理</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：月末整理准备</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="plan-doc stack" id="week-8">
+                <div class="weekly-plan-sheet">
+                  <div class="weekly-title">
+                    <div>
+                      <div class="eyebrow">Weekly plan</div>
+                      <h2>大一班第 8 周活动计划：月末整理与审核修订</h2>
+                    </div>
+                    <div class="weekly-meta"><span>时间：2026.4.20 - 4.24</span><span>执教教师：班级教师</span><span class="badge badge-dot warn">进行中</span></div>
+                  </div>
+                  <div class="weekly-table-wrap">
+                    <table class="weekly-table">
+                      <thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+                      <tbody>
+                        <tr><td class="time-slot">7:45-8:45</td><div class="activity-cell"><strong>晨间自主：月末作品初选</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：审核意见卡</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：资料补洞</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：讲述录音</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>晨间自主：展板排版</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">8:45-11:40</td><div class="activity-cell"><div class="activity-title"><strong>我的花窗作品说明</strong><button class="lesson-link" data-lesson-link="lesson-apr-work-explain">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">艺术</span></div><span class="meta">用图卡和口述介绍自己的作品。</span></div><div class="activity-cell"><div class="activity-title"><strong>我们还缺哪些依据</strong><button class="lesson-link" data-lesson-link="lesson-apr-evidence-gap">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">对照政策、园所、资源、儿童需求补齐依据。</span></div><div class="activity-cell"><div class="activity-title"><strong>月末档案整理</strong><button class="lesson-link" data-lesson-link="lesson-apr-archive">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">整理作品照片、录音、家长口述。</span></div><div class="activity-cell"><div class="activity-title"><strong>审核意见处理</strong><button class="lesson-link" data-lesson-link="lesson-apr-review-handle">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">按 4 月退回意见逐条处理。</span></div><div class="activity-cell"><div class="activity-title"><strong>月末分享准备</strong><button class="lesson-link" data-lesson-link="lesson-apr-month-share">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">准备月末与家长分享的内容。</span></div></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><div class="activity-cell"><strong>区域：作品说明贴纸</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：证据来源标记</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：主题网络更新</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：生成 5 月问题</strong><span class="meta">入园、签到、桌面材料。</span></div><div class="activity-cell"><strong>区域：离园前分享</strong><span class="meta">入园、签到、桌面材料。</span></div></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
               <aside class="lesson-peek" id="lessonPeek" aria-hidden="true" aria-label="当前周计划教案预览">
                 <div class="lesson-peek-head">
                   <div class="lesson-peek-title">
@@ -2017,14 +2223,50 @@
       if (event.target.closest('[data-month-node]')) return;
       document.querySelectorAll('[data-month-node]').forEach(node => node.classList.remove('open'));
     });
+    const planNavGroups = [...document.querySelectorAll('.plan-nav-group')];
+
+    function setExpandedPlanGroup(monthId) {
+      planNavGroups.forEach(group => {
+        const expand = group.dataset.monthGroup === monthId;
+        group.classList.toggle('expanded', expand);
+        const children = group.querySelector('.plan-week-children');
+        if (children) children.hidden = !expand;
+      });
+    }
+
     function activatePlanDoc(id) {
       document.querySelectorAll('.plan-doc').forEach(doc => doc.classList.toggle('active', doc.id === id));
       document.querySelectorAll('[data-plan-tab]').forEach(btn => btn.classList.toggle('active', btn.dataset.planTab === id));
+      // 激活周计划时，自动展开其父月
+      const weekBtn = document.querySelector(`.plan-week[data-plan-tab="${id}"]`);
+      const monthGroup = weekBtn ? weekBtn.closest('.plan-nav-group') : null;
+      if (monthGroup) setExpandedPlanGroup(monthGroup.dataset.monthGroup);
       closeLessonPeek();
     }
 
-    document.querySelectorAll('[data-plan-tab]').forEach(btn => {
+    // 月计划按钮：点击展开（同时激活）
+    document.querySelectorAll('.plan-month').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = btn.closest('.plan-nav-group');
+        if (!group) return;
+        setExpandedPlanGroup(group.dataset.monthGroup);
+        activatePlanDoc(btn.dataset.planTab);
+      });
+    });
+    // 周计划按钮：只激活（父月会通过 activatePlanDoc 自动展开）
+    document.querySelectorAll('.plan-week').forEach(btn => {
       btn.addEventListener('click', () => activatePlanDoc(btn.dataset.planTab));
+    });
+    // 兼容旧 data-plan-tab 引用（防止遗漏）
+    document.querySelectorAll('[data-plan-tab]:not(.plan-month):not(.plan-week)').forEach(btn => {
+      btn.addEventListener('click', () => activatePlanDoc(btn.dataset.planTab));
+    });
+
+    // 初始：所有月计划折叠，点击月才展开周
+    planNavGroups.forEach(group => {
+      if (group.dataset.defaultOpen === 'true') {
+        setExpandedPlanGroup(group.dataset.monthGroup);
+      }
     });
     document.querySelectorAll('[data-plan-link]').forEach(btn => {
       btn.addEventListener('click', () => {

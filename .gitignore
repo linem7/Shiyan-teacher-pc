@@ -10,3 +10,7 @@
 Thumbs.db
 .vscode/
 .idea/
+
+# Backup / temp files
+*.backup-*.html
+~$*.docx

@@ -768,7 +768,7 @@
       gap: var(--space-2);
     }
     .review-month-panel { display: none; }
-    .review-month-panel.active { display: contents; }
+    .review-month-panel.active { display: block; }
     .source-type {
       color: var(--muted);
       font-size: var(--text-xs);
@@ -1295,6 +1295,191 @@
       padding-left: var(--space-3);
       display: grid;
       gap: var(--space-1);
+    }
+
+    /* ── 审阅批注 4 分类结构 ─────────────────────────────── */
+    .review-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: var(--space-5);
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .review-layout { grid-template-columns: 1fr; }
+    }
+    .review-summary-card {
+      position: sticky;
+      top: var(--space-4);
+      display: grid;
+      gap: var(--space-4);
+    }
+    .review-status-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .review-summary-list {
+      display: grid;
+      gap: var(--space-3);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .review-summary-list li {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--muted);
+      align-items: start;
+    }
+    .review-summary-list li strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+    .review-summary-list .label-mono {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      padding-top: 2px;
+    }
+    .review-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .annotation-stack {
+      display: grid;
+      gap: var(--space-4);
+    }
+    .annotation-category {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: var(--space-4) var(--space-5);
+      display: grid;
+      gap: var(--space-3);
+    }
+    .annotation-category[data-empty="true"] {
+      background: var(--bg);
+      border-style: dashed;
+    }
+    .annotation-category-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .annotation-category-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .annotation-category-title .cat-index {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+    .annotation-category-title .cat-name {
+      font-weight: 600;
+    }
+    .annotation-category-title .cat-sub {
+      font-size: var(--text-xs);
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: var(--space-2);
+    }
+    .annotation-count {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--muted);
+    }
+    .annotation-count .num {
+      color: var(--fg);
+      font-weight: 600;
+    }
+    .annotation-empty {
+      font-size: var(--text-sm);
+      color: var(--muted);
+      padding: var(--space-3);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+    }
+    .annotation-list {
+      display: grid;
+      gap: var(--space-3);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .annotation-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      align-items: start;
+    }
+    .annotation-item[data-state="resolved"] {
+      background: color-mix(in oklab, var(--success), transparent 92%);
+      border-color: color-mix(in oklab, var(--success), transparent 60%);
+    }
+    .annotation-body {
+      display: grid;
+      gap: var(--space-1);
+      min-width: 0;
+    }
+    .annotation-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .annotation-meta .meta-tag {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+    .annotation-meta .meta-tag.cat-1 { color: oklch(45% 0.14 250); border-color: color-mix(in oklab, oklch(60% 0.14 250), transparent 50%); background: color-mix(in oklab, oklch(60% 0.14 250), transparent 86%); }
+    .annotation-meta .meta-tag.cat-2 { color: oklch(45% 0.12 170); border-color: color-mix(in oklab, oklch(60% 0.12 170), transparent 50%); background: color-mix(in oklab, oklch(60% 0.12 170), transparent 86%); }
+    .annotation-meta .meta-tag.cat-3 { color: oklch(45% 0.12 80); border-color: color-mix(in oklab, oklch(60% 0.12 80), transparent 50%); background: color-mix(in oklab, oklch(60% 0.12 80), transparent 86%); }
+    .annotation-meta .meta-tag.cat-4 { color: oklch(45% 0.14 30); border-color: color-mix(in oklab, oklch(60% 0.14 30), transparent 50%); background: color-mix(in oklab, oklch(60% 0.14 30), transparent 86%); }
+    .annotation-title {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .annotation-text {
+      font-size: var(--text-sm);
+      color: var(--fg);
+      line-height: var(--leading-body);
+    }
+    .annotation-source {
+      font-size: var(--text-xs);
+      color: var(--muted);
+    }
+    .annotation-action {
+      align-self: start;
     }
 
     .toast {
@@ -2965,9 +3150,6 @@
 </div>
 </div>
 </aside>
-</div>
-</div>
-</section>
 <div id="lessonDataStore" hidden aria-hidden="true">
 <article class="lesson-detail-panel" id="lesson-roof">
 <div class="lesson-outline">
@@ -3354,7 +3536,7 @@
 </div>
 <section class="screen" data-od-id="screen-review" id="review">
 <div class="page-head">
-<div><div class="eyebrow">Review</div><h1>审阅批注：退回后教师按字段处理</h1></div>
+<div><div class="eyebrow">Review</div><h1>审阅批注：按来源分类退回意见</h1></div>
 <div class="tabs">
 <button class="chip" data-review-month="review-mar">3 月</button>
 <button class="chip active" data-review-month="review-apr">4 月</button>
@@ -3363,70 +3545,455 @@
 <button class="chip" data-review-month="review-jul">7 月</button>
 </div>
 </div>
+
 <div class="review-month-panel" id="review-mar">
-<div class="grid grid-main">
-<article class="card stack">
-<div class="row-between"><h2>3 月月计划：泥塑里的家乡</h2><span class="badge badge-dot success">已通过</span></div>
-<div class="doc-section"><h3>上级意见摘要</h3><p>主题来源清晰，已能说明儿童语料、园本泥塑课程和社区建筑资源之间的关系。</p></div>
-<div class="doc-section"><h3>保留意见</h3><p>建议在后续周计划中继续标注每个活动涉及的领域，避免主题网络停留在素材罗列。</p></div>
-<button class="btn" data-plan-link="month-plan">查看 3 月月计划</button>
-</article>
-<aside class="card stack">
-<h2>3 月批注</h2>
-<div class="annotation"><strong>主题价值</strong><span>已处理：补充了园所文化与社区资源依据。</span></div>
-<div class="annotation"><strong>周计划拆解</strong><span>已处理：第 3 周、第 4 周均已关联月计划条目。</span></div>
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge badge-dot success">已通过</span>
+<span class="meta">3 月月末审核 · 教研主任·王老师</span>
+</div>
+<h2 style="margin:0;">3 月·泥塑里的家乡</h2>
+<p class="meta">提交批次：3 月主题网络 + 4 周周计划。意见共 2 条，全部已处理。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">对应文档</span><span><strong>3 月月计划</strong>、第 1-4 周周计划、主题网络、教案《泥板拼贴》。</span></li>
+<li><span class="label-mono">审核结论</span><span>主题来源清晰，已能说明儿童语料、园本泥塑课程和社区建筑资源之间的关系。</span></li>
+<li><span class="label-mono">保留意见</span><span>在后续周计划中继续标注每个活动涉及的领域，避免主题网络停留在素材罗列。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-primary" data-plan-link="month-plan">查看 3 月月计划</button>
+<button class="btn" data-screen="themes">查看主题列表</button>
+</div>
 </aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-category="corpus" data-od-id="review-mar-cat-1">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+<span class="cat-sub">可能不够，或挑选内容不够精准反映儿童兴趣或想法</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<div class="annotation-empty">本月语料引用充分，已覆盖兴趣关键词与原话节选，无需补充。</div>
+</section>
+<section class="annotation-category" data-category="month" data-od-id="review-mar-cat-2">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+<span class="cat-sub">含相关主题支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item" data-state="resolved">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">已处理</span><span>月主题 · 园本课程依据</span></div>
+<div class="annotation-title">主题价值</div>
+<div class="annotation-text">已补充园所文化与社区资源依据，主题来源说明完整。</div>
+<div class="annotation-source">来源：月计划《泥塑里的家乡》第一节</div>
+</div>
+</li>
+</ul>
+</section>
+<section class="annotation-category" data-category="week" data-od-id="review-mar-cat-3">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+<span class="cat-sub">含相关支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item" data-state="resolved">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-3">已处理</span><span>周计划 · 活动拆解</span></div>
+<div class="annotation-title">周计划拆解</div>
+<div class="annotation-text">第 3 周、第 4 周均已关联月计划条目；五大领域覆盖完整。</div>
+<div class="annotation-source">来源：3 月第 3-4 周周计划表</div>
+</div>
+</li>
+</ul>
+</section>
+<section class="annotation-category" data-category="lesson" data-od-id="review-mar-cat-4">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+<span class="cat-sub">退回后逐条处理</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<div class="annotation-empty">3 月教案全部提交通过，无待处理意见。</div>
+</section>
 </div>
 </div>
+</div>
+
 <div class="review-month-panel active" id="review-apr">
-<div class="grid grid-main">
-<article class="card stack">
-<div class="row-between"><h2>4 月月末审核：花窗纹样</h2><span class="badge badge-dot danger">退回修改</span></div>
-<div class="doc-section">
-<h3>对应文档</h3>
-<p>4 月月计划、第 4 周周计划、教案《屋顶为什么是斜的》。</p>
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge badge-dot danger">退回修改</span>
+<span class="meta">4 月月末审核 · 教研主任·王老师</span>
 </div>
-<div class="doc-section">
-<h3>活动来源</h3>
-<p style="background: color-mix(in oklab, var(--accent), transparent 88%); padding: var(--space-2); border-radius: var(--radius-sm); color: var(--fg);">由第 3 周周计划生成，已关联儿童问题，但政策要求和社区资源引用不足。</p>
+<h2 style="margin:0;">4 月·泥塑里的家乡·屋顶与花窗</h2>
+<p class="meta">提交批次：4 月月计划 + 第 4 周周计划 + 教案《屋顶为什么是斜的》。意见共 10 条，跨 4 类来源。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">对应文档</span><span><strong>4 月月计划</strong>、第 4 周周计划、教案《屋顶为什么是斜的》《我们一起做花窗》。</span></li>
+<li><span class="label-mono">退回原因</span><span>儿童语料偏少；月计划支撑材料未补齐；周计划与教案对齐度不足。</span></li>
+<li><span class="label-mono">处理顺序</span><span>先补儿童语料 → 再补主题网络 → 再对齐周计划 → 最后修订教案。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-primary" data-plan-link="month-apr">返回 4 月月计划</button>
+<button class="btn" data-screen="themes">查看主题列表</button>
+<button class="btn" data-plan-link="week-4">查看第 4 周周计划</button>
 </div>
-<button class="btn btn-primary" data-plan-link="month-apr">返回 4 月月计划修改</button>
-</article>
-<aside class="card stack">
-<h2>4 月批注侧栏</h2>
-<div class="annotation"><strong>活动来源</strong><span>请补齐政策要求与社区资源引用，再说明儿童语料如何支持该活动生成。</span><button class="btn btn-small">标记已处理</button></div>
-<div class="annotation"><strong>活动过程</strong><span>建议增加观察材料对比，避免只停留在教师讲述。</span><button class="btn btn-small">标记已处理</button></div>
 </aside>
+<div class="annotation-stack">
+
+<section class="annotation-category" data-category="corpus" data-od-id="review-apr-cat-1">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+<span class="cat-sub">可能不够，或挑选内容不够精准反映儿童兴趣或想法</span>
+</div>
+<span class="annotation-count"><span class="num">3</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-1">儿童语料</span><span>语料覆盖度</span></div>
+<div class="annotation-title">语料数量不足以呈现主题深度</div>
+<div class="annotation-text">4 月主题共引用 3 条儿童语料，主要集中在「我喜欢花窗」一类感受。建议补足 6-8 条，覆盖儿童对屋顶形状、瓦当颜色、邻里砖墙的不同描述。</div>
+<div class="annotation-source">来源：4 月主题网络·探究脉络·参考资料</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-1">儿童语料</span><span>语料代表性</span></div>
+<div class="annotation-title">缺少观察记录与原话节选</div>
+<div class="annotation-text">当前 3 条语料均为儿童发言节选，建议补充教师观察记录（如区域活动中儿童自发对话、建构区作品旁白），让语料能同时反映兴趣与思维。</div>
+<div class="annotation-source">来源：4 月主题网络·参考资料</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-1">儿童语料</span><span>主题词频</span></div>
+<div class="annotation-title">未指向主题核心问题</div>
+<div class="annotation-text">月计划核心问题是「家乡的屋顶为什么是斜的」，但语料多围绕「花窗好看」，主题词频需要重新切分，补充指向屋顶、瓦当、屋脊的儿童原话。</div>
+<div class="annotation-source">来源：4 月主题网络·核心问题</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-small">导入儿童语料库</button>
+</div>
+</section>
+
+<section class="annotation-category" data-category="month" data-od-id="review-apr-cat-2">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+<span class="cat-sub">含相关主题支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">3</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">月主题</span><span>政策依据</span></div>
+<div class="annotation-title">月计划缺少政策依据</div>
+<div class="annotation-text">请在 4 月月计划第一节补充《3-6 岁儿童学习与发展指南》艺术领域目标 1（喜欢自然界与生活中美的事物）与目标 3（具有初步的艺术表现与创造能力）的对应引用。</div>
+<div class="annotation-source">来源：月计划《泥塑里的家乡·屋顶与花窗》第一节</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">主题网络</span><span>园本课程衔接</span></div>
+<div class="annotation-title">与 3 月主题的递进关系未说明</div>
+<div class="annotation-text">主题网络应明确 4 月「屋顶与花窗」如何承接 3 月「泥塑里的家乡·社区街巷」，避免两个月份主题被读成并列关系。</div>
+<div class="annotation-source">来源：主题网络·跨月脉络</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">主题支撑</span><span>社区资源</span></div>
+<div class="annotation-title">缺少社区资源实地素材</div>
+<div class="annotation-text">请补充 2-3 张本园周边社区走访照片（屋顶、瓦当、巷门），作为主题网络的实地支撑；可挂在主题网络页面的「家乡建筑」节点下。</div>
+<div class="annotation-source">来源：主题网络·节点「家乡建筑」</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+</section>
+
+<section class="annotation-category" data-category="week" data-od-id="review-apr-cat-3">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+<span class="cat-sub">含相关支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">2</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-3">周计划</span><span>目标对齐</span></div>
+<div class="annotation-title">第 4 周活动目标未对齐月计划核心问题</div>
+<div class="annotation-text">第 4 周主活动《屋顶为什么是斜的》目标仅写「观察屋顶」，未对应月计划核心问题。请把活动目标改为「通过比较不同屋顶，尝试解释家乡屋顶为什么大多是斜的」。</div>
+<div class="annotation-source">来源：第 4 周周计划·周一上午</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-3">周计划</span><span>领域标注</span></div>
+<div class="annotation-title">五大领域覆盖标注不全</div>
+<div class="annotation-text">第 4 周 4 个活动中，仅 2 个标注了领域（艺术、社会）。请在「我们一起做花窗」「花窗里藏着什么形状」后分别补「艺术」与「科学」领域标注。</div>
+<div class="annotation-source">来源：第 4 周周计划表</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-small">查看第 4 周周计划</button>
+</div>
+</section>
+
+<section class="annotation-category" data-category="lesson" data-od-id="review-apr-cat-4">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+<span class="cat-sub">退回后逐条处理</span>
+</div>
+<span class="annotation-count"><span class="num">2</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-4">教案</span><span>活动来源</span></div>
+<div class="annotation-title">《屋顶为什么是斜的》来源说明过于简略</div>
+<div class="annotation-text">教案「活动来源」一栏仅写「由第 3 周周计划生成」，未交代是哪句儿童原话触发了这个活动。请补充儿童原话节选与对应的观察记录链接。</div>
+<div class="annotation-source">来源：教案《屋顶为什么是斜的》·活动来源</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-4">教案</span><span>活动过程</span></div>
+<div class="annotation-title">《我们一起做花窗》准备材料不全</div>
+<div class="annotation-text">请在「活动准备」中列出教师预操作示例（至少 2 张教师示范泥板照片），并补充低结构材料清单（KT 板、牙签、印花工具）。</div>
+<div class="annotation-source">来源：教案《我们一起做花窗》·活动准备</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-small">进入教案详情</button>
+</div>
+</section>
+
 </div>
 </div>
+</div>
+
 <div class="review-month-panel" id="review-may">
-<div class="grid grid-main">
-<article class="card stack">
-<div class="row-between"><h2>5 月审核意见</h2><span class="badge">尚未提交</span></div>
-<div class="doc-section"><h3>待提交材料</h3><p>5 月月计划仍为预排状态，需等 4 月退回意见处理后再提交。</p></div>
-<button class="btn" data-plan-link="month-may">查看 5 月预排月计划</button>
-</article>
-<aside class="card stack"><h2>意见状态</h2><div class="rich-placeholder">暂无上级意见。提交后这里会显示园长/教研主任批注。</div></aside>
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge">尚未提交</span>
+<span class="meta">5 月·预排中</span>
+</div>
+<h2 style="margin:0;">5 月·家乡的桥</h2>
+<p class="meta">5 月月计划仍为预排状态，需等 4 月退回意见处理后再提交审核。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">对应文档</span><span><strong>5 月月计划（预排）</strong>、第 1-2 周周计划草稿、教案占位。</span></li>
+<li><span class="label-mono">前置条件</span><span>4 月退回意见全部「标记已处理」后方可提交。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-primary" data-plan-link="month-may">查看 5 月预排月计划</button>
+</div>
+</aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-od-id="review-may-cat-1" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+<span class="cat-sub">可能不够，或挑选内容不够精准反映儿童兴趣或想法</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">提交审核后，这里会显示园长/教研主任针对语料的批注。</div>
+</section>
+<section class="annotation-category" data-od-id="review-may-cat-2" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+<span class="cat-sub">含相关主题支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-may-cat-3" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+<span class="cat-sub">含相关支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-may-cat-4" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+<span class="cat-sub">退回后逐条处理</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
 </div>
 </div>
+</div>
+
 <div class="review-month-panel" id="review-jun">
-<div class="grid grid-main">
-<article class="card stack">
-<div class="row-between"><h2>6 月审核意见</h2><span class="badge">未开始</span></div>
-<div class="doc-section"><h3>当前状态</h3><p>6 月计划用于作品档案整理，尚未生成提交记录。</p></div>
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge">未开始</span>
+<span class="meta">6 月·作品档案整理</span>
+</div>
+<h2 style="margin:0;">6 月·我们的小展·作品整理与讲述</h2>
+<p class="meta">6 月计划用于作品档案整理，尚未生成提交记录。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">当前状态</span><span>计划壳已建立，等待 5 月审阅通过后再展开。</span></li>
+</ul>
+<div class="review-actions">
 <button class="btn" data-plan-link="month-jun">查看 6 月计划壳</button>
-</article>
-<aside class="card stack"><h2>意见状态</h2><div class="rich-placeholder">暂无上级意见。</div></aside>
+</div>
+</aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-od-id="review-jun-cat-1" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jun-cat-2" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jun-cat-3" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jun-cat-4" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
 </div>
 </div>
+</div>
+
 <div class="review-month-panel" id="review-jul">
-<div class="grid grid-main">
-<article class="card stack">
-<div class="row-between"><h2>7 月审核意见</h2><span class="badge">未开始</span></div>
-<div class="doc-section"><h3>当前状态</h3><p>7 月计划用于学期复盘与成长档案引用，尚未生成提交记录。</p></div>
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge">未开始</span>
+<span class="meta">7 月·学期复盘</span>
+</div>
+<h2 style="margin:0;">7 月·学期复盘与成长档案</h2>
+<p class="meta">7 月计划用于学期复盘与成长档案引用，尚未生成提交记录。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">当前状态</span><span>计划壳已建立，等待 6 月审阅通过后再展开。</span></li>
+</ul>
+<div class="review-actions">
 <button class="btn" data-plan-link="month-jul">查看 7 月计划壳</button>
-</article>
-<aside class="card stack"><h2>意见状态</h2><div class="rich-placeholder">暂无上级意见。</div></aside>
+</div>
+</aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-od-id="review-jul-cat-1" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jul-cat-2" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jul-cat-3" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jul-cat-4" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+</div>
 </div>
 </div>
 </section>

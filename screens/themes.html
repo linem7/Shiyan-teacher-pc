@@ -2180,6 +2180,44 @@
       color: var(--muted);
       font-size: var(--text-xs);
     }
+    /* 本月五大领域活动摘要 */
+    .sem-domain-summary {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+    .sem-domain-summary .summary-label {
+      color: var(--fg);
+      font-weight: 600;
+      margin-right: var(--space-1);
+    }
+    .sem-domain-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      padding: 3px 10px;
+      font-size: var(--text-xs);
+      color: var(--fg);
+      white-space: nowrap;
+    }
+    .sem-domain-chip .num {
+      font-family: var(--font-mono);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .sem-domain-chip.zero { color: var(--muted); }
+    .sem-domain-chip.zero .num { color: var(--muted); font-weight: 400; }
 
 </style>
 </head>
@@ -2198,11 +2236,10 @@
         <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
         <a class="nav-btn active" href="themes.html">主题列表 <span class="meta">3</span></a>
         <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
-        <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
-        <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">6</span></a>
-        <a class="nav-btn" href="materials.html">活动素材 <span class="meta">7</span></a>
-        <a class="nav-btn" href="story.html">课程故事 <span class="meta">8</span></a>
-        <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+        <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">5</span></a>
+        <a class="nav-btn" href="materials.html">活动素材 <span class="meta">6</span></a>
+        <a class="nav-btn" href="story.html">课程故事 <span class="meta">7</span></a>
+        <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
     </nav>
     <div class="sidebar-foot">
       <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
@@ -2267,7 +2304,6 @@
                 <div class="inline-actions">
                   <button class="btn btn-primary" data-plan-link="month-plan">查看 3 月月计划</button>
                   <button class="btn" data-review-link="review-mar">查看审核意见</button>
-                  <a class="btn" href="map.html">查看主题网络图</a>
                 </div>
               </section>
             </article>
@@ -2363,7 +2399,6 @@
                 </div>
                 <div class="inline-actions">
                   <a class="btn btn-primary" href="plans.html#month-may">进入 5 月月计划</a>
-                  <a class="btn" href="map.html">规划主题网络图</a>
                   <a class="btn" href="corpus.html">补充儿童语料</a>
                 </div>
               </section>
@@ -4086,8 +4121,7 @@
       activityNodes.prepend(node);
       document.querySelector('#newNodeName').textContent = '活动：斜屋顶为什么存在';
       document.querySelector('#newNodeMeta').textContent = `${selected.length} 条过往儿童语料已作为证据关联，并标注领域：科学、语言、艺术`;
-      showToast('已从过往语料生成一个活动节点，并加入月主题网络图');
-      activateScreen('map');
+      showToast('已从过往语料生成一个活动节点，并加入当月主题网络');
     });
 
     const drawer = document.querySelector('#drawer');
@@ -4240,16 +4274,49 @@
         ]
       }
     };
+    // 五大领域摘要：统计本月进入主题网络的活动分别覆盖 语言/健康/艺术/科学/社会 多少项
+    // （美术、泥工计入艺术；数学计入科学，与《指南》领域结构一致）
+    const FIVE_DOMAINS = ['语言', '健康', '艺术', '科学', '社会'];
+    const DOMAIN_ALIASES = { '美术': '艺术', '泥工': '艺术', '数学': '科学' };
+    function summarizeDomains(data) {
+      const counts = { 语言: 0, 健康: 0, 艺术: 0, 科学: 0, 社会: 0 };
+      let total = 0;
+      data.weeks.forEach(week => week.acts.forEach(act => {
+        total++;
+        const hit = new Set();
+        String(act.domain || '').split('/').forEach(raw => {
+          const d = DOMAIN_ALIASES[raw] || raw;
+          if (counts[d] !== undefined) hit.add(d);
+        });
+        hit.forEach(d => { counts[d]++; });
+      }));
+      return { counts, total };
+    }
+    function buildDomainSummary(data) {
+      const { counts, total } = summarizeDomains(data);
+      const summary = document.createElement('div');
+      summary.className = 'sem-domain-summary';
+      if (!total) {
+        summary.innerHTML = '<span class="summary-label">五大领域摘要</span><span>周计划提交后，自动统计本月进入网络的五大领域活动数量。</span>';
+        return summary;
+      }
+      const chips = FIVE_DOMAINS.map(d =>
+        `<span class="sem-domain-chip${counts[d] ? '' : ' zero'}">${d} <span class="num">${counts[d]}</span></span>`
+      ).join('');
+      summary.innerHTML = `<span class="summary-label">五大领域摘要</span><span>本月共 <strong>${total}</strong> 项主题活动进入网络：</span>${chips}`;
+      return summary;
+    }
     function renderSemesterNetwork(key, wrap) {
       const data = semesterNetworks[key];
       if (!data) return;
       wrap.replaceChildren();
+      wrap.appendChild(buildDomainSummary(data));
       data.weeks.forEach((week, idx) => {
         // 第 1 列：月目标（跨 4 行，只渲染一次）
         if (idx === 0) {
           const goal = document.createElement('div');
           goal.className = 'sem-net-node sem-net-goal';
-          goal.style.gridRow = `1 / span ${data.weeks.length}`;
+          goal.style.gridRow = `2 / span ${data.weeks.length}`; // 第 1 行是五大领域摘要
           goal.innerHTML = `<strong>${escapeHtml(data.goal)}</strong><span class="meta">${escapeHtml(data.goalMeta)}</span>`;
           wrap.appendChild(goal);
         }

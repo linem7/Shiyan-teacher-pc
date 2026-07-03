@@ -214,11 +214,10 @@
       <a class="nav-btn active" href="training.html">教研培训 <span class="meta">2</span></a>
       <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
       <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
-      <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
-      <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">6</span></a>
-      <a class="nav-btn" href="materials.html">活动素材 <span class="meta">7</span></a>
-      <a class="nav-btn" href="story.html">课程故事 <span class="meta">8</span></a>
-      <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+      <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">5</span></a>
+      <a class="nav-btn" href="materials.html">活动素材 <span class="meta">6</span></a>
+      <a class="nav-btn" href="story.html">课程故事 <span class="meta">7</span></a>
+      <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
     </nav>
     <div class="sidebar-foot">
       <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
@@ -259,7 +258,7 @@
                 <button class="chip" data-filter-status="reflect">待提交反思</button>
                 <button class="chip" data-filter-status="done">已完成</button>
               </div>
-              <p class="meta">园所发布的培训会出现在这里；已参加的教研需要提交反思与材料，教研结论会生成「活动修改建议」，点击链接可直接跳到要修改的计划或故事。</p>
+              <p class="meta">园所发布的培训会出现在这里；已参加的教研需要提交反思与材料。反思通过 6 类标签（儿童语料库 / 月计划 / 周计划 / 教案 / 活动素材 / 课程故事）标注将应用到哪里，具体修改内容用文字描述。</p>
             </div>
 
             <!-- ① 待报名 -->
@@ -390,15 +389,15 @@
                   <h3>教研成果 · 活动修改建议</h3>
                   <span class="badge">线下审议生成 · 3 条</span>
                 </div>
-                <p class="meta" style="margin-bottom: var(--space-2);">现场审议结论已转成可执行的修改建议——相当于一次线下的审阅批注。点击链接直接跳到要修改的文档，改完回来标记「已处理」。</p>
+                <p class="meta" style="margin-bottom: var(--space-2);">现场审议结论已转成可执行的修改建议——相当于一次线下的审阅批注。每条建议按应用方向打标签，改完回来标记「已处理」。</p>
                 <div class="outcome-list">
                   <div class="outcome-item done" data-outcome>
                     <span class="outcome-no">1</span>
                     <div class="outcome-body">
                       <strong>周计划需持续标注五大领域，避免只写活动名</strong>
-                      <span class="meta">来源：审议结论第 2 条 · 指向 4 月各周计划</span>
+                      <span class="meta">来源：审议结论第 2 条</span>
                       <span class="outcome-actions">
-                        <a class="btn btn-small" href="plans.html#week-8">打开第 8 周周计划</a>
+                        <span class="badge">周计划</span>
                         <button class="btn btn-small" data-outcome-toggle>已处理 ✓</button>
                       </span>
                     </div>
@@ -406,10 +405,11 @@
                   <div class="outcome-item" data-outcome>
                     <span class="outcome-no">2</span>
                     <div class="outcome-body">
-                      <strong>主题网络图补充「社区资源」分支，与走访活动对应</strong>
-                      <span class="meta">来源：审议结论第 3 条 · 指向当月主题网络图</span>
+                      <strong>主题网络补充「社区资源」分支，与走访活动对应</strong>
+                      <span class="meta">来源：审议结论第 3 条</span>
                       <span class="outcome-actions">
-                        <a class="btn btn-small" href="map.html">打开主题网络图</a>
+                        <span class="badge">月计划</span>
+                        <span class="badge">周计划</span>
                         <button class="btn btn-small" data-outcome-toggle>标记已处理</button>
                       </span>
                     </div>
@@ -418,9 +418,10 @@
                     <span class="outcome-no">3</span>
                     <div class="outcome-body">
                       <strong>课程故事保留儿童原话引用格式，证据链到活动素材</strong>
-                      <span class="meta">来源：审议结论第 5 条 · 指向 4 月课程故事</span>
+                      <span class="meta">来源：审议结论第 5 条</span>
                       <span class="outcome-actions">
-                        <a class="btn btn-small" href="story.html#story-apr">打开 4 月课程故事</a>
+                        <span class="badge">课程故事</span>
+                        <span class="badge">活动素材</span>
                         <button class="btn btn-small" data-outcome-toggle>标记已处理</button>
                       </span>
                     </div>
@@ -483,13 +484,16 @@
         <div class="upload-dropzone" id="reflectDropzone">拖拽或点击选择文件<br /><span class="meta">支持修改稿、照片、录音等</span></div>
       </div>
       <div class="field">
-        <label>本次反思会落到哪些文档（可多选）</label>
-        <div class="tag-picker">
-          <label class="tag-option"><input type="checkbox" value="story-mar" checked />3 月课程故事</label>
-          <label class="tag-option"><input type="checkbox" value="story-apr" />4 月课程故事</label>
-          <label class="tag-option"><input type="checkbox" value="week-8" />第 8 周周计划</label>
-          <label class="tag-option"><input type="checkbox" value="map" />主题网络图</label>
+        <label>反思将应用到（打标签，可多选）</label>
+        <div class="tag-picker" id="reflectTagPicker">
+          <label class="tag-option"><input type="checkbox" value="儿童语料库" />儿童语料库</label>
+          <label class="tag-option"><input type="checkbox" value="月计划" />月计划</label>
+          <label class="tag-option"><input type="checkbox" value="周计划" />周计划</label>
+          <label class="tag-option"><input type="checkbox" value="教案" />教案</label>
+          <label class="tag-option"><input type="checkbox" value="活动素材" />活动素材</label>
+          <label class="tag-option"><input type="checkbox" value="课程故事" checked />课程故事</label>
         </div>
+        <p class="meta">例如：语料收集质量不高标「儿童语料库」，计划设计不合理标「月计划 / 周计划」；具体改哪里、怎么改，请在上方反思正文中用文字描述。</p>
       </div>
       <div class="row-between">
         <span class="meta">提交后园所教研组会回执确认</span>
@@ -601,6 +605,11 @@
   document.getElementById('submitReflectBtn').addEventListener('click', function () {
     var text = document.getElementById('reflectText').value.trim();
     if (!text) { showToast('请先填写反思正文'); return; }
+    var tags = Array.prototype.map.call(
+      document.querySelectorAll('#reflectTagPicker input:checked'),
+      function (input) { return input.value; }
+    );
+    if (!tags.length) { showToast('请至少选择 1 个应用标签'); return; }
     var card = document.getElementById('training-story');
     card.dataset.status = 'done';
     var badge = card.querySelector('[data-status-badge]');
@@ -608,7 +617,9 @@
     badge.className = 'badge badge-dot success';
     var status = document.getElementById('storyReflectStatus');
     status.classList.add('submitted');
-    status.innerHTML = '✅ 反思与材料已提交（' + new Date().toISOString().slice(0, 10) + '），等待园所教研组回执确认。';
+    status.innerHTML = '✅ 反思与材料已提交（' + new Date().toISOString().slice(0, 10) + '），应用标签：' +
+      tags.map(function (t) { return '<span class="badge">' + t + '</span>'; }).join(' ') +
+      '，等待园所教研组回执确认。';
     var openBtn = card.querySelector('[data-open-reflect]');
     if (openBtn) { openBtn.textContent = '已提交 ✓'; openBtn.disabled = true; openBtn.classList.remove('btn-primary'); }
     bumpStat('statReflect', -1); bumpStat('statDone', 1);

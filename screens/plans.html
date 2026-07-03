@@ -1649,6 +1649,8 @@
     .kind-btn + .kind-btn { border-left: 1px solid var(--border); }
     .kind-btn.kind-theme.active { background: var(--accent); color: var(--accent-on); }
     .kind-btn.kind-other.active { background: color-mix(in oklab, var(--warn), white 70%); color: var(--fg); }
+    .kind-btn.lesson-yes.active { background: color-mix(in oklab, var(--warn), white 60%); color: var(--fg); font-weight: 600; }
+    .kind-btn.lesson-no.active { background: color-mix(in oklab, var(--border), transparent 30%); color: var(--fg); }
 
     /* 第一步：时段行 */
     .week-slot-row {
@@ -1716,6 +1718,8 @@
     }
     .cell-kind-badge.theme { background: color-mix(in oklab, var(--accent), transparent 88%); color: var(--accent); }
     .cell-kind-badge.other { background: color-mix(in oklab, var(--warn), white 70%); color: var(--fg); }
+    .cell-kind-badge.lesson { background: color-mix(in oklab, var(--warn), white 60%); color: color-mix(in oklab, var(--warn), black 40%); }
+    .cell-badges { display: flex; flex-wrap: wrap; gap: 4px; }
 
     /* 单元格编辑面板 */
     .cell-editor {
@@ -2211,11 +2215,10 @@
         <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
         <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
         <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
-        <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
-        <a class="nav-btn active" href="plans.html">月/周计划 <span class="meta">6</span></a>
-        <a class="nav-btn" href="materials.html">活动素材 <span class="meta">7</span></a>
-        <a class="nav-btn" href="story.html">课程故事 <span class="meta">8</span></a>
-        <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+        <a class="nav-btn active" href="plans.html">月/周计划 <span class="meta">5</span></a>
+        <a class="nav-btn" href="materials.html">活动素材 <span class="meta">6</span></a>
+        <a class="nav-btn" href="story.html">课程故事 <span class="meta">7</span></a>
+        <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
     </nav>
     <div class="sidebar-foot">
       <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
@@ -2235,8 +2238,8 @@
 <div class="page-head">
 <div><div class="eyebrow">Plans</div><h1>月计划与周计划编辑</h1></div>
 <div class="row-between" style="gap: var(--space-2);">
-<button class="btn btn-primary" id="openMonthPlanDrawerBtn" type="button">提交月计划</button>
-<button class="btn btn-primary" id="openWeekPlanDrawerBtn" type="button">提交周计划</button>
+<button class="btn btn-primary" id="openMonthPlanDrawerBtn" type="button">编辑月计划</button>
+<button class="btn btn-primary" id="openWeekPlanDrawerBtn" type="button">编辑周计划</button>
 </div>
 </div>
 <div class="planner">
@@ -2318,7 +2321,7 @@
 </div>
 <div class="plan-doc active stack" id="month-plan">
 <div class="doc-section" id="month-plan-sec-theme">
-<div class="row-between"><h2>主题来源与价值分析</h2><span class="badge">多源依据</span></div>
+<div class="row-between"><h2>主题来源与价值分析</h2><div class="inline-actions"><span class="badge">多源依据</span><button class="btn btn-small" data-edit-month-plan="3" type="button">编辑本月计划</button></div></div>
 <div class="source-grid">
 <article class="source-card"><span class="source-type">政策要求</span><strong>指南 / 纲要</strong><p>科学探究、艺术表现、语言表达和社会经验整合，不只服务单一领域。</p></article>
 <article class="source-card"><span class="source-type">园所文化</span><strong>园本课程与近期课题</strong><p>延续“家乡文化与泥塑材料”园本线索，回应本土课程资源转化课题。</p></article>
@@ -2327,8 +2330,8 @@
 </div>
 </div>
 <div class="doc-section" id="month-plan-sec-map">
-<div class="row-between"><h2>主题网络图</h2><a class="btn btn-small" href="map.html">查看嵌入图</a></div>
-<div class="rich-placeholder">嵌入当前主题生成版网络图快照，提交时记录版本；每个活动节点都显示它引用的月计划条目与课程依据类型。</div>
+<div class="row-between"><h2>主题网络图</h2><a class="btn btn-small" href="themes.html#theme-mar">在主题列表中查看</a></div>
+<div class="rich-placeholder">主题网络（月目标 → 周主题 → 周内主题活动）已在「主题列表」各月卡片中呈现，随周计划提交自动更新。</div>
 </div>
 <div class="doc-section" id="month-plan-sec-weeks">
 <div class="row-between"><h2>周次安排</h2><span class="badge">从月计划拆解</span></div>
@@ -2347,7 +2350,7 @@
 </div>
 <div class="plan-doc stack" id="month-apr">
 <div class="doc-section" id="month-apr-sec-overview">
-<div class="row-between"><h2>4 月月计划：花窗纹样与社区延伸</h2><span class="badge badge-dot warn">当前月末</span></div>
+<div class="row-between"><h2>4 月月计划：花窗纹样与社区延伸</h2><div class="inline-actions"><span class="badge badge-dot warn">当前月末</span><button class="btn btn-small" data-edit-month-plan="4" type="button">编辑本月计划</button></div></div>
 <p>承接 3 月“屋顶形状”和“花窗纹样”两个分支，4 月末重点是补齐多源课程依据，并根据审核意见调整第 4 周活动和教案。</p>
 <div class="month-plan-grid">
 <article class="month-plan-card"><span class="source-type">主题引用</span><strong>泥塑里的家乡 / 花窗纹样</strong><p>引用主题网络图中的“家乡建筑”和“花窗纹样”分支。</p></article>
@@ -2372,7 +2375,7 @@
 </div>
 <div class="plan-doc stack" id="month-may">
 <div class="doc-section" id="month-may-sec-overview">
-<div class="row-between"><h2>5 月月计划：家乡街巷走访</h2><span class="badge">预排</span></div>
+<div class="row-between"><h2>5 月月计划：家乡街巷走访</h2><div class="inline-actions"><span class="badge">预排</span><button class="btn btn-small" data-edit-month-plan="5" type="button">编辑本月计划</button></div></div>
 <p>从 4 月花窗纹样延伸到街巷观察、社区资源走访和家庭访谈，等待 4 月审核通过后正式生成周计划。</p>
 <div class="month-plan-grid">
 <article class="month-plan-card"><span class="source-type">上承主题</span><strong>花窗纹样 → 街巷符号</strong><p>将儿童对门窗、瓦当、纹样的兴趣带入真实社区观察。</p></article>
@@ -2383,7 +2386,7 @@
 </div>
 <div class="plan-doc stack" id="month-jun">
 <div class="doc-section" id="month-jun-sec-overview">
-<div class="row-between"><h2>6 月月计划：作品整理与表达</h2><span class="badge">未开始</span></div>
+<div class="row-between"><h2>6 月月计划：作品整理与表达</h2><div class="inline-actions"><span class="badge">未开始</span><button class="btn btn-small" data-edit-month-plan="6" type="button">编辑本月计划</button></div></div>
 <p>计划收集儿童作品、口述记录和家园资源，形成主题档案与阶段性展示。</p>
 <div class="month-plan-grid">
 <article class="month-plan-card"><span class="source-type">计划重点</span><strong>作品档案 / 儿童讲述</strong><p>以儿童表达和作品演变为主线。</p></article>
@@ -2394,7 +2397,7 @@
 </div>
 <div class="plan-doc stack" id="month-jul">
 <div class="doc-section" id="month-jul-sec-overview">
-<div class="row-between"><h2>7 月月计划：学期复盘与成长档案</h2><span class="badge">未开始</span></div>
+<div class="row-between"><h2>7 月月计划：学期复盘与成长档案</h2><div class="inline-actions"><span class="badge">未开始</span><button class="btn btn-small" data-edit-month-plan="7" type="button">编辑本月计划</button></div></div>
 <p>用于学期末回顾：整理主题成果、儿童发展证据、家园共育材料和后续课程建议。</p>
 <div class="month-plan-grid">
 <article class="month-plan-card"><span class="source-type">复盘对象</span><strong>主题网络 / 月周计划 / 教案</strong><p>把前期文档互相引用，形成可追溯课程链。</p></article>
@@ -2410,7 +2413,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 1 周活动计划：启动探究</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.3.2 - 3.6</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+<div class="weekly-meta"><span>时间：2026.3.2 - 3.6</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span><button class="btn btn-small" data-edit-week-plan="3-1" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-1-sec-table">
 <table class="weekly-table">
@@ -2429,7 +2432,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 2 周活动计划：泥塑材料初识</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.3.9 - 3.13</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+<div class="weekly-meta"><span>时间：2026.3.9 - 3.13</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span><button class="btn btn-small" data-edit-week-plan="3-2" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-2-sec-table">
 <table class="weekly-table">
@@ -2448,7 +2451,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 3 周活动计划：屋顶形状</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.3.16 - 3.20</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+<div class="weekly-meta"><span>时间：2026.3.16 - 3.20</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span><button class="btn btn-small" data-edit-week-plan="3-3" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-3-sec-table">
 <table class="weekly-table">
@@ -2492,7 +2495,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 4 周活动计划：花窗纹样</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.3.23 - 3.27</span><span>执教教师：班级教师</span><span class="badge">草稿</span></div>
+<div class="weekly-meta"><span>时间：2026.3.23 - 3.27</span><span>执教教师：班级教师</span><span class="badge">草稿</span><button class="btn btn-small" data-edit-week-plan="3-4" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-4-sec-table">
 <table class="weekly-table">
@@ -2536,7 +2539,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 5 周活动计划：花窗再观察</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.3.30 - 4.3</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+<div class="weekly-meta"><span>时间：2026.3.30 - 4.3</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span><button class="btn btn-small" data-edit-week-plan="4-1" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-5-sec-table">
 <table class="weekly-table">
@@ -2555,7 +2558,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 6 周活动计划：街巷纹样</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.4.6 - 4.10</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+<div class="weekly-meta"><span>时间：2026.4.6 - 4.10</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span><button class="btn btn-small" data-edit-week-plan="4-2" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-6-sec-table">
 <table class="weekly-table">
@@ -2574,7 +2577,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 7 周活动计划：社区资源</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.4.13 - 4.17</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+<div class="weekly-meta"><span>时间：2026.4.13 - 4.17</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span><button class="btn btn-small" data-edit-week-plan="4-3" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-7-sec-table">
 <table class="weekly-table">
@@ -2593,7 +2596,7 @@
 <div class="eyebrow">Weekly plan</div>
 <h2>大一班第 8 周活动计划：月末整理与审核修订</h2>
 </div>
-<div class="weekly-meta"><span>时间：2026.4.20 - 4.24</span><span>执教教师：班级教师</span><span class="badge badge-dot warn">进行中</span></div>
+<div class="weekly-meta"><span>时间：2026.4.20 - 4.24</span><span>执教教师：班级教师</span><span class="badge badge-dot warn">进行中</span><button class="btn btn-small" data-edit-week-plan="4-4" type="button">编辑本周计划</button></div>
 </div>
 <div class="weekly-table-wrap" id="week-8-sec-table">
 <table class="weekly-table">
@@ -2612,15 +2615,15 @@
 </div>
 
 
-<aside aria-hidden="true" aria-label="提交月计划抽屉" class="month-plan-drawer" id="monthPlanDrawer">
+<aside aria-hidden="true" aria-label="编辑月计划抽屉" class="month-plan-drawer" id="monthPlanDrawer">
 <div class="month-drawer-head">
 <div class="lesson-peek-title">
 <button aria-label="返回月计划" class="icon-btn" id="monthPlanCloseBtn" title="返回月计划" type="button">
 <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
-<div class="eyebrow">Submit month plan</div>
-<h2>提交月计划</h2>
+<div class="eyebrow">Edit month plan</div>
+<h2>编辑月计划</h2>
 </div>
 <button aria-label="关闭" class="icon-btn" id="monthPlanCloseBtnTop" type="button">×</button>
 </div>
@@ -2633,12 +2636,20 @@
 <div class="field">
 <label for="monthPlanMonth">月份</label>
 <select id="monthPlanMonth">
+<option value="1">1 月</option>
+<option value="2">2 月</option>
 <option value="3">3 月</option>
 <option value="4" selected="">4 月</option>
 <option value="5">5 月</option>
 <option value="6">6 月</option>
 <option value="7">7 月</option>
+<option value="8">8 月</option>
+<option value="9">9 月</option>
+<option value="10">10 月</option>
+<option value="11">11 月</option>
+<option value="12">12 月</option>
 </select>
+<span class="field-hint meta">选择 8 月即表示本学期包含 8 月；进入新学期（如 9 月-次年 1 月）时，请为新学期月份分别新建月计划。</span>
 </div>
 <div class="field">
 <label for="monthPlanThemeSelect">本月主题</label>
@@ -2711,16 +2722,19 @@
 </div>
 </form>
 </aside>
-<aside aria-hidden="true" aria-label="提交周计划抽屉" class="month-plan-drawer" id="weekPlanDrawer">
+<aside aria-hidden="true" aria-label="编辑周计划抽屉" class="month-plan-drawer" id="weekPlanDrawer">
 <div class="month-drawer-head">
 <div class="lesson-peek-title">
+<button aria-label="返回周计划" class="icon-btn" id="weekPlanBackBtn" title="返回周计划" type="button">
+<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
+</button>
 <div>
-<div class="eyebrow">Submit week plan</div>
-<h2>提交周计划</h2>
+<div class="eyebrow">Edit week plan</div>
+<h2>编辑周计划</h2>
 </div>
 <button aria-label="关闭" class="icon-btn" id="weekPlanCloseBtn" type="button">×</button>
 </div>
-<div class="month-drawer-status">周计划确定后，标注为“主题相关”的活动将自动进入当月主题网络图</div>
+<div class="month-drawer-status">周计划确定后，标注为“主题相关”的活动将自动进入当月主题网络（见主题列表）</div>
 </div>
 <form class="month-drawer-body" id="weekPlanForm" onsubmit="return false;">
 <div class="month-drawer-section">
@@ -2728,21 +2742,24 @@
 <div class="field">
 <label for="weekPlanMonth">所属月份</label>
 <select id="weekPlanMonth">
+<option value="1">1 月</option>
+<option value="2">2 月</option>
 <option value="3" selected="">3 月</option>
 <option value="4">4 月</option>
 <option value="5">5 月</option>
 <option value="6">6 月</option>
 <option value="7">7 月</option>
+<option value="8">8 月</option>
+<option value="9">9 月</option>
+<option value="10">10 月</option>
+<option value="11">11 月</option>
+<option value="12">12 月</option>
 </select>
 </div>
 <div class="field">
 <label for="weekPlanWeek">周次（月内）</label>
-<select id="weekPlanWeek">
-<option value="1" selected="">第 1 周</option>
-<option value="2">第 2 周</option>
-<option value="3">第 3 周</option>
-<option value="4">第 4 周</option>
-</select>
+<select id="weekPlanWeek"></select>
+<span class="field-hint meta">可选周次由该月月计划的起止日期自动切分（如 4 月为 3.30-5.1，共 5 周）。</span>
 </div>
 </div>
 <div class="field" style="margin-top: var(--space-3);">
@@ -2786,9 +2803,19 @@
 </select>
 </div>
 </div>
+<div class="grid grid-2">
 <div>
 <label for="cellActNote">简要说明（选填）</label>
 <input id="cellActNote" placeholder="一句话说明活动做什么" type="text"/>
+</div>
+<div>
+<label>是否需要教案</label>
+<div class="week-plan-kind" role="radiogroup" aria-label="是否需要教案">
+<button type="button" class="kind-btn lesson-yes" data-cell-lesson="need">需要教案</button>
+<button type="button" class="kind-btn lesson-no" data-cell-lesson="none">无需教案</button>
+</div>
+<span class="meta" style="display:block; margin-top: var(--space-1); font-size: var(--text-xs);">标注后可在表格中快速看到哪些活动还要补充详细教案。</span>
+</div>
 </div>
 <div class="cell-editor-foot">
 <button class="btn btn-small btn-danger" id="cellClearBtn" type="button">清空此格</button>
@@ -3911,6 +3938,7 @@
       localStorage.setItem(monthPlanStoreKey, JSON.stringify(monthPlanDrafts));
     }
     function defaultMonthRange(month) {
+      // 常用月份使用园所校历预设；其余月份按自然月首个周一至月末周五推算
       const map = {
         '3': { start: '2026-03-02', end: '2026-03-27' },
         '4': { start: '2026-03-30', end: '2026-05-01' },
@@ -3918,7 +3946,19 @@
         '6': { start: '2026-06-01', end: '2026-06-26' },
         '7': { start: '2026-07-01', end: '2026-07-24' }
       };
-      return map[month] || map['4'];
+      if (map[month]) return map[month];
+      const m = Number(month);
+      // 9-12 月属于秋季学期（当年），1-2 月属于秋季学期跨年部分，此处统一放在 2026 年演示
+      const y = 2026;
+      const first = new Date(y, m - 1, 1);
+      const last = new Date(y, m, 0);
+      // 首个周一
+      const firstMon = new Date(first);
+      firstMon.setDate(first.getDate() + ((8 - (first.getDay() || 7)) % 7));
+      // 月末前最后一个周五
+      const lastFri = new Date(last);
+      lastFri.setDate(last.getDate() - ((last.getDay() + 2) % 7));
+      return { start: fmtDate(firstMon), end: fmtDate(lastFri) };
     }
     // 每周主题模版（够用则截取、不够则留空）
     const weekThemeTemplates = {
@@ -4153,9 +4193,19 @@
       }
     });
     document.querySelector('#monthPlanCancelBtn')?.addEventListener('click', closeMonthPlanDrawer);
+    // 已写好的月/周计划：在文档内直接提供「编辑」入口，载入已有内容进行修改（而非重建）
+    document.querySelectorAll('[data-edit-month-plan]').forEach(btn => {
+      btn.addEventListener('click', () => openMonthPlanDrawer(btn.dataset.editMonthPlan));
+    });
+    document.querySelectorAll('[data-edit-week-plan]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const [m, w] = btn.dataset.editWeekPlan.split('-');
+        openWeekPlanDrawer(m, w);
+      });
+    });
 
     // ============== 提交周计划 抽屉 ==============
-    // 周计划确定后，标注为「主题相关」的活动将进入当月主题网络图（见 map.html）。
+    // 周计划确定后，标注为「主题相关」的活动将进入当月主题网络（见 themes.html 主题列表）。
     const weekPlanStoreKey = 'teacher-workbench-week-plan-drafts';
     const weekPlanDrafts = (() => { try { return JSON.parse(localStorage.getItem(weekPlanStoreKey) || '{}'); } catch { return {}; } })();
     // 月份 + 月内周次 → 已有周 doc id（3月第1周=week-1 … 4月第4周=week-8）
@@ -4172,16 +4222,17 @@
       { start: '16:30', end: '17:00', label: '离园整理', mode: 'unified' }
     ];
     const weekPlanDefaultCells = {
-      '1-0': { name: '主题集体活动：待定', type: '集体活动', kind: 'theme', note: '从月计划周次安排带出' },
+      '1-0': { name: '主题集体活动：待定', type: '集体活动', kind: 'theme', note: '从月计划周次安排带出', needLesson: true },
       '2-all': { name: '午餐、午睡、午间散步', type: '生活常规', kind: 'other', note: '餐前准备、安静进餐、自然过渡' },
       '3-2': { name: '区域：泥工区探究', type: '区域活动', kind: 'theme', note: '' },
       '4-all': { name: '离园整理', type: '生活常规', kind: 'other', note: '作品归位，向家长同步观察任务' }
     };
     const WEEK_DAY_NAMES = ['星期一', '星期二', '星期三', '星期四', '星期五'];
     let weekPlanSlots = [];
-    let weekPlanCells = {};      // `${slotIdx}-${dayIdx}` 或 `${slotIdx}-all` → {name,type,kind,note}
+    let weekPlanCells = {};      // `${slotIdx}-${dayIdx}` 或 `${slotIdx}-all` → {name,type,kind,note,needLesson}
     let selectedCellKey = null;
     let cellEditorKind = '';
+    let cellEditorLesson = '';   // 'need' | 'none' | ''
     function weekPlanKey() {
       const m = document.querySelector('#weekPlanMonth')?.value || '';
       const w = document.querySelector('#weekPlanWeek')?.value || '';
@@ -4215,8 +4266,10 @@
       const kindBadge = cell.kind === 'theme'
         ? '<span class="cell-kind-badge theme">主题相关</span>'
         : '<span class="cell-kind-badge other">其他活动</span>';
+      const lessonBadge = cell.needLesson ? '<span class="cell-kind-badge lesson">需教案</span>' : '';
       return `<div class="cell-filled"><strong>${escapeHtml(cell.name)}</strong>` +
-        `<span class="meta">${escapeHtml(cell.type || '')}${cell.note ? ' · ' + escapeHtml(cell.note) : ''}</span>${kindBadge}</div>`;
+        `<span class="meta">${escapeHtml(cell.type || '')}${cell.note ? ' · ' + escapeHtml(cell.note) : ''}</span>` +
+        `<span class="cell-badges">${kindBadge}${lessonBadge}</span></div>`;
     }
     function renderWeekPlanGrid() {
       const table = document.querySelector('#weekPlanGrid');
@@ -4241,7 +4294,8 @@
       if (cnt) {
         const acts = Object.values(weekPlanCells).filter(c => c && c.name);
         const n = acts.filter(c => c.kind === 'theme').length;
-        cnt.textContent = `主题相关活动 ${n} 项 · 其他活动 ${acts.length - n} 项`;
+        const needLesson = acts.filter(c => c.needLesson).length;
+        cnt.textContent = `主题相关 ${n} 项 · 其他 ${acts.length - n} 项 · 需教案 ${needLesson} 项`;
       }
     }
     function describeCellKey(key) {
@@ -4264,6 +4318,10 @@
       document.querySelectorAll('[data-cell-kind]').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.cellKind === cellEditorKind);
       });
+      cellEditorLesson = cell.name ? (cell.needLesson ? 'need' : 'none') : '';
+      document.querySelectorAll('[data-cell-lesson]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cellLesson === cellEditorLesson);
+      });
       renderWeekPlanGrid();
       editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
@@ -4272,6 +4330,31 @@
       const editor = document.querySelector('#weekPlanCellEditor');
       if (editor) editor.hidden = true;
       renderWeekPlanGrid();
+    }
+    // 周次（月内）由月计划的起止日期决定：优先读该月月计划草稿的日期，否则用默认校历。
+    // 例如 4 月默认 2026-03-30 ~ 2026-05-01，切分出 5 周，因此 4 月周计划可选 5 周。
+    function monthWeekRanges(month) {
+      const draft = readMonthPlanDraft(month);
+      const range = draft && draft.startDate && draft.endDate
+        ? { start: draft.startDate, end: draft.endDate }
+        : defaultMonthRange(month);
+      return splitWeeksByRange(range.start, range.end);
+    }
+    function rebuildWeekOptions(keepValue) {
+      const select = document.querySelector('#weekPlanWeek');
+      if (!select) return;
+      const m = document.querySelector('#weekPlanMonth')?.value;
+      const ranges = monthWeekRanges(m);
+      const count = Math.max(ranges.length, 1);
+      select.replaceChildren();
+      for (let i = 1; i <= count; i++) {
+        const opt = document.createElement('option');
+        opt.value = String(i);
+        const r = ranges[i - 1];
+        opt.textContent = r ? `第 ${i} 周（${r.start.slice(5).replace('-', '.')} ~ ${r.end.slice(5).replace('-', '.')}）` : `第 ${i} 周`;
+        select.appendChild(opt);
+      }
+      select.value = keepValue && Number(keepValue) <= count ? String(keepValue) : '1';
     }
     function loadWeekPlanIntoDrawer() {
       const draft = weekPlanDrafts[weekPlanKey()];
@@ -4293,15 +4376,21 @@
       renderWeekPlanSlots();
       renderWeekPlanGrid();
     }
-    function openWeekPlanDrawer() {
+    function openWeekPlanDrawer(month, week) {
+      if (month) { const ms = document.querySelector('#weekPlanMonth'); if (ms) ms.value = month; }
+      rebuildWeekOptions(week);
       loadWeekPlanIntoDrawer();
       document.querySelector('#weekPlanDrawer')?.classList?.add('open');
     }
     function closeWeekPlanDrawer() { document.querySelector('#weekPlanDrawer')?.classList?.remove('open'); }
-    document.querySelector('#openWeekPlanDrawerBtn')?.addEventListener('click', openWeekPlanDrawer);
+    document.querySelector('#openWeekPlanDrawerBtn')?.addEventListener('click', () => openWeekPlanDrawer());
     document.querySelector('#weekPlanCloseBtn')?.addEventListener('click', closeWeekPlanDrawer);
+    document.querySelector('#weekPlanBackBtn')?.addEventListener('click', closeWeekPlanDrawer);
     document.querySelector('#weekPlanCancelBtn')?.addEventListener('click', closeWeekPlanDrawer);
-    document.querySelector('#weekPlanMonth')?.addEventListener('change', loadWeekPlanIntoDrawer);
+    document.querySelector('#weekPlanMonth')?.addEventListener('change', () => {
+      rebuildWeekOptions();
+      loadWeekPlanIntoDrawer();
+    });
     document.querySelector('#weekPlanWeek')?.addEventListener('change', loadWeekPlanIntoDrawer);
     // 第一步：时段行编辑
     document.querySelector('#weekPlanAddSlotBtn')?.addEventListener('click', () => {
@@ -4361,16 +4450,24 @@
         document.querySelectorAll('[data-cell-kind]').forEach(b => b.classList.toggle('active', b === btn));
       });
     });
+    document.querySelectorAll('[data-cell-lesson]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        cellEditorLesson = btn.dataset.cellLesson;
+        document.querySelectorAll('[data-cell-lesson]').forEach(b => b.classList.toggle('active', b === btn));
+      });
+    });
     document.querySelector('#cellSaveBtn')?.addEventListener('click', () => {
       if (!selectedCellKey) { showToast('请先在表格中选择一个单元格'); return; }
       const name = document.querySelector('#cellActName')?.value.trim();
       if (!name) { showToast('请填写活动名称'); return; }
       if (!cellEditorKind) { showToast('请标注「主题相关」或「其他活动」'); return; }
+      if (!cellEditorLesson) { showToast('请标注该活动「需要教案」或「无需教案」'); return; }
       weekPlanCells[selectedCellKey] = {
         name,
         type: document.querySelector('#cellActType')?.value || '集体活动',
         kind: cellEditorKind,
-        note: document.querySelector('#cellActNote')?.value.trim() || ''
+        note: document.querySelector('#cellActNote')?.value.trim() || '',
+        needLesson: cellEditorLesson === 'need'
       };
       showToast(`已保存：${describeCellKey(selectedCellKey)}`);
       renderWeekPlanGrid();
@@ -4382,6 +4479,8 @@
       document.querySelector('#cellActNote').value = '';
       cellEditorKind = '';
       document.querySelectorAll('[data-cell-kind]').forEach(b => b.classList.remove('active'));
+      cellEditorLesson = '';
+      document.querySelectorAll('[data-cell-lesson]').forEach(b => b.classList.remove('active'));
       renderWeekPlanGrid();
     });
     document.querySelector('#cellCancelBtn')?.addEventListener('click', closeCellEditor);
@@ -4630,8 +4729,7 @@
       activityNodes.prepend(node);
       document.querySelector('#newNodeName').textContent = '活动：斜屋顶为什么存在';
       document.querySelector('#newNodeMeta').textContent = `${selected.length} 条过往儿童语料已作为证据关联，并标注领域：科学、语言、艺术`;
-      showToast('已从过往语料生成一个活动节点，并加入月主题网络图');
-      activateScreen('map');
+      showToast('已从过往语料生成一个活动节点，并加入当月主题网络');
     });
 
     const drawer = document.querySelector('#drawer');

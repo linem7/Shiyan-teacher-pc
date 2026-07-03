@@ -2091,11 +2091,10 @@
         <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
         <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
         <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
-        <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
-        <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">6</span></a>
-        <a class="nav-btn" href="materials.html">活动素材 <span class="meta">7</span></a>
-        <a class="nav-btn" href="story.html">课程故事 <span class="meta">8</span></a>
-        <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+        <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">5</span></a>
+        <a class="nav-btn" href="materials.html">活动素材 <span class="meta">6</span></a>
+        <a class="nav-btn" href="story.html">课程故事 <span class="meta">7</span></a>
+        <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
     </nav>
     <div class="sidebar-foot">
       <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
@@ -3873,8 +3872,7 @@
       activityNodes.prepend(node);
       document.querySelector('#newNodeName').textContent = '活动：斜屋顶为什么存在';
       document.querySelector('#newNodeMeta').textContent = `${selected.length} 条过往儿童语料已作为证据关联，并标注领域：科学、语言、艺术`;
-      showToast('已从过往语料生成一个活动节点，并加入月主题网络图');
-      activateScreen('map');
+      showToast('已从过往语料生成一个活动节点，并加入当月主题网络');
     });
 
     const drawer = document.querySelector('#drawer');

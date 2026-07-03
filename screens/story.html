@@ -193,6 +193,7 @@
     overflow-y: auto;
     padding: var(--space-6) var(--space-4);
   }
+  .story-doc[hidden] { display: none; } /* 预览器一次只展示当前所选月份的故事 */
   .story-doc {
     width: min(820px, 94vw);
     margin: 0 auto;
@@ -275,7 +276,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: min(420px, 92vw);
+    width: min(600px, 94vw);
     background: var(--surface);
     border-left: 1px solid var(--border);
     box-shadow: -12px 0 32px rgba(0, 0, 0, 0.12);
@@ -333,6 +334,32 @@
   .assist-item .assist-tags { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: 2px; }
   .assist-item .assist-tags .badge { font-size: 10px; }
   .assist-item .inserted-mark { color: var(--success); font-size: var(--text-xs); }
+  /* 活动素材类目：语料素材 / 图片素材 / 视频素材，需要更大的呈现空间 */
+  .assist-group-title .group-count {
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: var(--space-1);
+  }
+  .assist-item.assist-material {
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-3);
+    line-height: var(--leading-body);
+  }
+  .assist-item.assist-material .mat-date {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent);
+    margin-right: var(--space-1);
+  }
+  .assist-empty-month {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
+    color: var(--muted);
+    font-size: var(--text-sm);
+    text-align: center;
+    margin-bottom: var(--space-2);
+  }
   .assist-foot {
     border-top: 1px solid var(--border);
     padding: var(--space-3) var(--space-5);
@@ -358,11 +385,10 @@
       <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
       <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
       <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
-      <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
-      <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">6</span></a>
-      <a class="nav-btn" href="materials.html">活动素材 <span class="meta">7</span></a>
-      <a class="nav-btn active" href="story.html">课程故事 <span class="meta">8</span></a>
-      <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+      <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">5</span></a>
+      <a class="nav-btn" href="materials.html">活动素材 <span class="meta">6</span></a>
+      <a class="nav-btn active" href="story.html">课程故事 <span class="meta">7</span></a>
+      <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
     </nav>
     <div class="sidebar-foot">
       <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
@@ -723,7 +749,7 @@
 <aside aria-hidden="true" class="assist-panel" id="assistPanel" aria-label="编辑辅助面板">
   <div class="assist-head">
     <div class="row-between">
-      <div><div class="eyebrow">Writing assist</div><h2>调用计划素材，勾选即用</h2></div>
+      <div><div class="eyebrow">Writing assist</div><h2>调用本月计划素材，勾选即用</h2></div>
       <button class="btn btn-small" id="assistCloseBtn" type="button">收起</button>
     </div>
     <div class="assist-tabs">
@@ -773,6 +799,9 @@
     });
     var badge = document.getElementById('storyStatusBadge');
     if (badge && monthLabels[id]) badge.textContent = monthLabels[id];
+    // 辅助面板打开时，素材列表跟随月份切换
+    var panel = document.getElementById('assistPanel');
+    if (panel && panel.classList.contains('open') && typeof renderAssist === 'function') renderAssist();
   }
   document.querySelectorAll('[data-story-month]').forEach(function (chip) {
     chip.addEventListener('click', function () { activateStoryMonth(chip.dataset.storyMonth); });
@@ -865,21 +894,43 @@
       ]
     },
     materials: {
-      groups: [
-        { title: '活动素材（记录活动中孩子的表现，勾选插入完整描述）', items: [
-          { id: 'm-1', icon: '📷', text: '主题导入活动中，辰辰盯着老屋照片看了很久，指着屋顶问“为什么老房子的屋顶不是平的”，这是本主题的第一个关键问题。', meta: '03-03 · 照片 · 主题导入', tags: ['辰辰'] },
-          { id: 'm-2', icon: '📝', text: '乐乐把黏土搓成长条说想做屋檐，但泥条一弯就断，他发现“泥太干了会裂”，主动去加了一点水再试。', meta: '03-10 · 文字 · 泥土是什么', tags: ['乐乐'] },
-          { id: 'm-3', icon: '📷', text: '干湿泥土对比实验里，小禾把三种泥各捏了一个小球，按软硬排队，还给它们起名“石头泥、耳朵泥、粥泥”。', meta: '03-11 · 照片 · 干湿泥土的区别', tags: ['小禾'] },
-          { id: 'm-4', icon: '📝', text: '佑佑在泥工区尝试第三次搭斜屋顶，前两次塌了都没有放弃，最后垫了一根泥柱，回头喊“老师你看，它自己站住了！”', meta: '03-19 · 文字 · 捏一个斜屋顶', tags: ['佑佑'] },
-          { id: 'm-5', icon: '🎬', text: '户外散步时佑佑指着祠堂屋脊说“我见过祠堂门口也有这个尖尖”，引发同伴围观讨论屋脊上的装饰。', meta: '03-17 · 视频 00:47 · 户外散步', tags: ['佑佑', '辰辰'] },
-          { id: 'm-6', icon: '📝', text: '小禾在美工区捏了一排泥花，说要“种在墙上，像奶奶家门口”，还邀请安安帮她做花盆。', meta: '03-24 · 文字 · 美工区', tags: ['小禾', '安安'] },
-          { id: 'm-7', icon: '🧱', text: '做一块家乡花砖活动里，全班把作品拼在展示墙上，儿童自发按纹样分了类，还讨论“哪种花纹重复最多”。', meta: '03-26 · 照片 · 做一块家乡花砖', tags: ['全班'] },
-          { id: 'm-8', icon: '🎬', text: '辰辰和安安往自制斜坡上倒水，观察水流方向，安安说“斜的快，平的会积住”，两人重复了三次验证。', meta: '04-09 · 视频 01:24 · 滑水实验', tags: ['辰辰', '安安'] },
-          { id: 'm-9', icon: '🏮', text: '小禾反复调整泥片角度，直到纹样完整压出来，主动向同伴解释“要用力一样大”，还示范了两次。', meta: '04-16 · 照片 · 拓印门窗纹样', tags: ['小禾', '佑佑'] }
-        ] }
+      // 活动素材只展示当前所选月份，按 语料素材 / 图片素材 / 视频素材 三类分组，组内按时间排序
+      items: [
+        { id: 'm-2', month: 'mar', type: 'text', date: '03-10', icon: '📝', text: '乐乐把黏土搓成长条说想做屋檐，但泥条一弯就断，他发现“泥太干了会裂”，主动去加了一点水再试。', meta: '03-10 · 文字 · 泥土是什么', tags: ['乐乐'] },
+        { id: 'm-4', month: 'mar', type: 'text', date: '03-19', icon: '📝', text: '佑佑在泥工区尝试第三次搭斜屋顶，前两次塌了都没有放弃，最后垫了一根泥柱，回头喊“老师你看，它自己站住了！”', meta: '03-19 · 文字 · 捏一个斜屋顶', tags: ['佑佑'] },
+        { id: 'm-6', month: 'mar', type: 'text', date: '03-24', icon: '📝', text: '小禾在美工区捏了一排泥花，说要“种在墙上，像奶奶家门口”，还邀请安安帮她做花盆。', meta: '03-24 · 文字 · 美工区', tags: ['小禾', '安安'] },
+        { id: 'm-1', month: 'mar', type: 'photo', date: '03-03', icon: '📷', text: '主题导入活动中，辰辰盯着老屋照片看了很久，指着屋顶问“为什么老房子的屋顶不是平的”，这是本主题的第一个关键问题。', meta: '03-03 · 照片 · 主题导入', tags: ['辰辰'] },
+        { id: 'm-3', month: 'mar', type: 'photo', date: '03-11', icon: '📷', text: '干湿泥土对比实验里，小禾把三种泥各捏了一个小球，按软硬排队，还给它们起名“石头泥、耳朵泥、粥泥”。', meta: '03-11 · 照片 · 干湿泥土的区别', tags: ['小禾'] },
+        { id: 'm-7', month: 'mar', type: 'photo', date: '03-26', icon: '🧱', text: '做一块家乡花砖活动里，全班把作品拼在展示墙上，儿童自发按纹样分了类，还讨论“哪种花纹重复最多”。', meta: '03-26 · 照片 · 做一块家乡花砖', tags: ['全班'] },
+        { id: 'm-5', month: 'mar', type: 'video', date: '03-17', icon: '🎬', text: '户外散步时佑佑指着祠堂屋脊说“我见过祠堂门口也有这个尖尖”，引发同伴围观讨论屋脊上的装饰。', meta: '03-17 · 视频 00:47 · 户外散步', tags: ['佑佑', '辰辰'] },
+        { id: 'm-10', month: 'apr', type: 'text', date: '04-14', icon: '📝', text: '“我发现的屋顶线条”写生中，安安把瓦片画成一排排弧线并主动计数，“一共十一条，像波浪”，线条兴趣开始转向门窗花纹。', meta: '04-14 · 文字 · 我发现的屋顶线条', tags: ['安安'] },
+        { id: 'm-9', month: 'apr', type: 'photo', date: '04-16', icon: '🏮', text: '小禾反复调整泥片角度，直到纹样完整压出来，主动向同伴解释“要用力一样大”，还示范了两次。', meta: '04-16 · 照片 · 拓印门窗纹样', tags: ['小禾', '佑佑'] },
+        { id: 'm-11', month: 'apr', type: 'photo', date: '04-21', icon: '📷', text: '家乡花砖创作中，佑佑先把瓦当纹样画在纸上再压到泥板上，说“先画再压就不会歪”，被同组孩子学了去。', meta: '04-21 · 照片 · 做一块家乡花砖', tags: ['佑佑'] },
+        { id: 'm-8', month: 'apr', type: 'video', date: '04-09', icon: '🎬', text: '辰辰和安安往自制斜坡上倒水，观察水流方向，安安说“斜的快，平的会积住”，两人重复了三次验证。', meta: '04-09 · 视频 01:24 · 滑水实验', tags: ['辰辰', '安安'] },
+        { id: 'm-12', month: 'apr', type: 'video', date: '04-23', icon: '🎬', text: '“邀请家长讲家乡建筑”现场，辰辰追问“老房子的砖是自己做的吗”，家长现场演示了脱坯的动作，全班跟着比划。', meta: '04-23 · 视频 02:10 · 邀请家长讲家乡建筑', tags: ['辰辰', '全班'] }
       ]
     }
   };
+  var MATERIAL_TYPES = [
+    { key: 'text', label: '语料素材（文字记录）' },
+    { key: 'photo', label: '图片素材' },
+    { key: 'video', label: '视频素材' }
+  ];
+  var MONTH_NAMES = { mar: '3 月', apr: '4 月', may: '5 月', jun: '6 月' };
+  function currentStoryMonthKey() {
+    var activePanel = document.querySelector('.story-month-panel.active');
+    return activePanel ? activePanel.id.replace('story-', '') : 'apr';
+  }
+  // 把活动素材按当前月份过滤，并分成 语料/图片/视频 三组（组内按时间排序）
+  function materialGroupsForMonth(monthKey) {
+    var monthItems = assistData.materials.items.filter(function (item) { return item.month === monthKey; });
+    return MATERIAL_TYPES.map(function (t) {
+      var items = monthItems
+        .filter(function (item) { return item.type === t.key; })
+        .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+      return { title: (MONTH_NAMES[monthKey] || '') + t.label, count: items.length, items: items, material: true };
+    });
+  }
   var assistTab = 'corpus';
   var assistChecked = {};   // id -> true
   var assistInserted = {};  // id -> true
@@ -887,17 +938,29 @@
   function renderAssist() {
     var body = document.getElementById('assistBody');
     body.replaceChildren();
-    (assistData[assistTab].groups || []).forEach(function (group) {
+    var groups = assistTab === 'materials'
+      ? materialGroupsForMonth(currentStoryMonthKey())
+      : (assistData[assistTab].groups || []);
+    groups.forEach(function (group) {
       var title = document.createElement('div');
       title.className = 'assist-group-title';
-      title.textContent = group.title;
+      title.innerHTML = escapeHtml(group.title) +
+        (group.material ? '<span class="group-count">· ' + group.count + ' 条 · 按时间排序</span>' : '');
       body.appendChild(title);
+      if (group.material && !group.items.length) {
+        var empty = document.createElement('div');
+        empty.className = 'assist-empty-month';
+        empty.textContent = '本月暂无该类素材，可到「活动素材」上传。';
+        body.appendChild(empty);
+        return;
+      }
       group.items.forEach(function (item) {
         var row = document.createElement('label');
-        row.className = 'assist-item' + (assistInserted[item.id] ? ' inserted' : '');
+        row.className = 'assist-item' + (group.material ? ' assist-material' : '') + (assistInserted[item.id] ? ' inserted' : '');
         row.innerHTML =
           '<input type="checkbox" ' + (assistChecked[item.id] ? 'checked' : '') + ' data-assist-id="' + item.id + '" />' +
-          '<span><span>' + (item.icon ? item.icon + ' ' : '') + escapeHtml(item.text) + '</span>' +
+          '<span><span>' + (group.material && item.date ? '<span class="mat-date">' + escapeHtml(item.date) + '</span>' : '') +
+          (item.icon ? item.icon + ' ' : '') + escapeHtml(item.text) + '</span>' +
           '<span class="assist-meta">' + escapeHtml(item.meta || '') + (assistInserted[item.id] ? ' · <span class="inserted-mark">✓ 已插入</span>' : '') + '</span>' +
           (item.tags && item.tags.length ? '<span class="assist-tags">' + item.tags.map(function (t) { return '<span class="badge">' + escapeHtml(t) + '</span>'; }).join('') + '</span>' : '') +
           '</span>';
@@ -930,16 +993,19 @@
   document.getElementById('assistInsertBtn').addEventListener('click', function () {
     if (!activeEditor) { showToast('请先点击某一节的「编辑」，再插入素材'); return; }
     var texts = [];
+    var allItems = [];
     Object.keys(assistData).forEach(function (tabKey) {
-      assistData[tabKey].groups.forEach(function (group) {
-        group.items.forEach(function (item) {
-          if (assistChecked[item.id]) {
-            texts.push(item.text);
-            assistInserted[item.id] = true;
-            assistChecked[item.id] = false;
-          }
-        });
+      (assistData[tabKey].groups || []).forEach(function (group) {
+        allItems = allItems.concat(group.items);
       });
+      if (assistData[tabKey].items) allItems = allItems.concat(assistData[tabKey].items);
+    });
+    allItems.forEach(function (item) {
+      if (assistChecked[item.id]) {
+        texts.push(item.text);
+        assistInserted[item.id] = true;
+        assistChecked[item.id] = false;
+      }
     });
     if (!texts.length) { showToast('尚未勾选任何条目'); return; }
     var sep = activeEditor.value && !/\n$/.test(activeEditor.value) ? '\n' : '';
@@ -1019,7 +1085,13 @@
   }
   document.querySelectorAll('[data-preview-story]').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var month = btn.dataset.previewStory;
+      // 预览始终跟随标签栏当前选中的月份：选了 3 月就只预览 3 月
+      var activePanel = document.querySelector('.story-month-panel.active');
+      var month = activePanel ? activePanel.id.replace('story-', '') : btn.dataset.previewStory;
+      if (!document.getElementById('story-doc-' + month)) {
+        showToast('该月故事尚未开始，暂无可预览内容');
+        return;
+      }
       if (month === 'apr' && document.getElementById('reportStatusBadge').textContent === '未生成') {
         showToast('请先「自动生成图文报告」，再预览 4 月草稿');
         return;

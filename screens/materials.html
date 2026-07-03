@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>活动素材 · 主题探究教师工作台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/shared.css" />
+<style>
+  /* ── 活动素材屏特有样式 ─────────────────────────────── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .stat-strip .card { padding: var(--space-4) var(--space-5); }
+  .stat-strip strong { font-size: var(--text-xl); font-variant-numeric: tabular-nums; }
+
+  .source-type {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── 纵向时间轴 ─────────────────────────────── */
+  .timeline {
+    position: relative;
+    padding-left: 26px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 9px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-week {
+    position: relative;
+    margin-bottom: var(--space-6);
+  }
+  .timeline-week.hidden { display: none; }
+  .timeline-week-head {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .timeline-week-head::before {
+    content: "";
+    position: absolute;
+    left: -23px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .timeline-week-head h2 { font-size: var(--text-base); }
+  .timeline-week-head .meta { font-size: var(--text-xs); }
+  .timeline-week-head .badge { margin-left: auto; }
+
+  .timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin-bottom: var(--space-2);
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-standard);
+  }
+  .timeline-item:hover { border-color: var(--accent); }
+  .timeline-item.hidden { display: none; }
+  .timeline-item::before {
+    content: attr(data-date-label);
+    position: absolute;
+    left: -26px;
+    top: 14px;
+    transform: translateX(-100%);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .timeline-item::after {
+    content: "";
+    position: absolute;
+    left: -21px;
+    top: 18px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--muted);
+  }
+  .timeline-thumb {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-sm);
+    display: grid;
+    place-items: center;
+    font-size: 26px;
+    background: linear-gradient(135deg, color-mix(in oklab, var(--accent), transparent 85%), color-mix(in oklab, var(--accent), transparent 94%));
+    position: relative;
+    overflow: hidden;
+  }
+  .timeline-item[data-type="video"] .timeline-thumb {
+    background: linear-gradient(135deg, color-mix(in oklab, var(--warn), transparent 82%), color-mix(in oklab, var(--warn), transparent 93%));
+  }
+  .timeline-item[data-type="text"] .timeline-thumb {
+    background: linear-gradient(135deg, color-mix(in oklab, var(--success), transparent 85%), color-mix(in oklab, var(--success), transparent 94%));
+  }
+  .timeline-thumb .type-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 0 5px;
+  }
+  .timeline-body { display: grid; gap: var(--space-1); min-width: 0; }
+  .timeline-body .item-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .timeline-body .excerpt { font-size: var(--text-base); font-weight: 600; }
+  .timeline-body .item-meta { font-size: var(--text-xs); color: var(--muted); }
+  .child-tags { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+  .child-tags .badge { font-size: var(--text-xs); }
+  .timeline-detail {
+    display: none;
+    border-top: 1px dashed var(--border);
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-body);
+  }
+  .timeline-item.open .timeline-detail { display: block; }
+  .timeline-detail .detail-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .btn-added {
+    color: var(--success);
+    border-color: color-mix(in oklab, var(--success), transparent 60%);
+    background: color-mix(in oklab, var(--success), transparent 94%);
+  }
+
+  .sync-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-sm);
+  }
+  .sync-item:last-child { border-bottom: 0; }
+  .sync-item .sync-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--accent), transparent 92%);
+  }
+
+  .upload-dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    text-align: center;
+    color: var(--muted);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-standard);
+  }
+  .upload-dropzone:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 920px) {
+    .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .timeline { padding-left: 18px; }
+    .timeline-item::before { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">探</div>
+      <div>
+        <div>主题探究工作台</div>
+        <div class="meta">中一班 · 2026 春</div>
+      </div>
+    </div>
+    <nav class="nav-list" id="nav">
+      <a class="nav-btn" href="../index.html">工作台 <span class="meta">1</span></a>
+      <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
+      <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
+      <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
+      <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
+      <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">6</span></a>
+      <a class="nav-btn active" href="materials.html">活动素材 <span class="meta">7</span></a>
+      <a class="nav-btn" href="story.html">课程故事 <span class="meta">8</span></a>
+      <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
+      <input class="search" placeholder="检索素材摘要、活动或幼儿" type="search" id="materialSearch" />
+      <div class="row-between">
+        <span class="badge badge-dot success" id="syncBadge">手机端已同步</span>
+        <span class="meta">2026 春 · 中一班</span>
+      </div>
+    </header>
+    <div class="content">
+      <section class="screen active" id="materials">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Activity evidence</div>
+            <h1>活动素材：按时间轴记录幼儿在主题活动中的表现</h1>
+          </div>
+          <div class="tabs">
+            <button class="btn btn-primary" id="openUploadBtn">上传素材</button>
+            <a class="btn" href="story.html">进入课程故事</a>
+          </div>
+        </div>
+
+        <div class="stat-strip">
+          <div class="card stat"><span class="source-type">全部素材</span><strong id="statTotal">13</strong><p class="meta">3-4 月累计</p></div>
+          <div class="card stat"><span class="source-type">照片</span><strong id="statPhoto">6</strong><p class="meta">PC + 手机</p></div>
+          <div class="card stat"><span class="source-type">视频</span><strong id="statVideo">3</strong><p class="meta">手机端上传</p></div>
+          <div class="card stat"><span class="source-type">文字观察</span><strong id="statText">4</strong><p class="meta">教师随手记</p></div>
+        </div>
+
+        <div class="grid grid-main">
+          <div class="stack">
+            <div class="card stack-sm">
+              <div class="filters" id="typeFilters">
+                <button class="chip active" data-filter-type="all">全部类型</button>
+                <button class="chip" data-filter-type="photo">照片</button>
+                <button class="chip" data-filter-type="video">视频</button>
+                <button class="chip" data-filter-type="text">文字</button>
+              </div>
+              <div class="filters" id="monthFilters">
+                <button class="chip active" data-filter-month="all">全部月份</button>
+                <button class="chip" data-filter-month="3">3 月</button>
+                <button class="chip" data-filter-month="4">4 月</button>
+              </div>
+              <p class="meta">列表按纵向时间轴展示：摘要只取详细记录的前 10 个字符，点击任意一行展开完整内容。</p>
+            </div>
+
+            <div class="timeline" id="materialTimeline"></div>
+          </div>
+
+          <aside class="stack">
+            <div class="card stack-sm">
+              <div class="row-between"><h2>手机端最近同步</h2><span class="badge badge-dot success">在线</span></div>
+              <p class="meta">协同手机端拍摄的照片和视频会自动带上时间与活动标签，同步到时间轴。</p>
+              <div>
+                <div class="sync-item"><span class="sync-icon">📷</span><span>拓印花窗纹样 · 照片 3 张</span><span class="meta">10 分钟前</span></div>
+                <div class="sync-item"><span class="sync-icon">🎬</span><span>斜屋顶滑水实验 · 视频 1 段</span><span class="meta">昨天</span></div>
+                <div class="sync-item"><span class="sync-icon">📝</span><span>晨谈语音转文字 · 1 条</span><span class="meta">昨天</span></div>
+              </div>
+            </div>
+            <div class="card stack-sm">
+              <h2>素材沉淀去向</h2>
+              <p class="meta">「加入课程故事」的素材会按月份进入课程故事的证据池，撰写时可在编辑辅助面板中直接勾选调用。</p>
+              <a class="btn" href="story.html">查看课程故事</a>
+            </div>
+            <div class="card stack-sm">
+              <h2>记录小提示</h2>
+              <p class="meta">一段好的行为记录 = 情境（在哪个活动）＋ 行为（幼儿做了什么）＋ 原话（幼儿说了什么）。避免只存照片不写情境。</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div aria-hidden="true" class="drawer" id="uploadDrawer">
+  <div class="drawer-panel">
+    <div class="row-between">
+      <div><div class="eyebrow">New material</div><h2>上传活动素材</h2></div>
+      <button class="btn btn-small" id="closeUploadBtn">关闭</button>
+    </div>
+    <div class="stack">
+      <div class="upload-dropzone" id="uploadDropzone">拖拽或点击选择照片 / 视频文件<br /><span class="meta">也可以只填写下方文字观察，不附文件</span></div>
+      <div class="field">
+        <label for="materialType">素材类型</label>
+        <select id="materialType">
+          <option value="photo">照片</option>
+          <option value="video">视频</option>
+          <option value="text">文字观察</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="materialWeek">关联周次</label>
+        <select id="materialWeek">
+          <option value="w1">3 月第 1 周 · 启动探究</option>
+          <option value="w2">3 月第 2 周 · 泥塑材料初识</option>
+          <option value="w3">3 月第 3 周 · 屋顶形状</option>
+          <option value="w4">3 月第 4 周 · 花窗纹样</option>
+          <option value="w5" selected>4 月 · 社区街巷</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="materialActivity">关联活动</label>
+        <select id="materialActivity">
+          <option>拓印门窗纹样</option>
+          <option>做一块家乡花砖</option>
+          <option>我发现的屋顶线条</option>
+          <option>区角活动</option>
+          <option>户外散步</option>
+          <option>其他 / 待归类</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="materialDesc">幼儿行为描述（详细记录）</label>
+        <textarea id="materialDesc" placeholder="情境 + 行为 + 原话：孩子在什么活动里做了什么、说了什么。列表中将展示前 10 个字符。"></textarea>
+      </div>
+      <div class="field">
+        <label>涉及幼儿（标签）</label>
+        <div class="tag-picker">
+          <label class="tag-option"><input type="checkbox" value="辰辰" />辰辰</label>
+          <label class="tag-option"><input type="checkbox" value="安安" />安安</label>
+          <label class="tag-option"><input type="checkbox" value="小禾" />小禾</label>
+          <label class="tag-option"><input type="checkbox" value="佑佑" />佑佑</label>
+          <label class="tag-option"><input type="checkbox" value="乐乐" />乐乐</label>
+          <label class="tag-option"><input type="checkbox" value="全班" />全班</label>
+        </div>
+      </div>
+      <div class="row-between">
+        <span class="meta">保存后会插入时间轴对应周次</span>
+        <button class="btn btn-primary" id="submitMaterialBtn">保存素材</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div aria-hidden="true" class="toast" id="toast"></div>
+
+<script src="../assets/shared.js"></script>
+<script>
+  // 移动端菜单
+  var sidebar = document.querySelector('#sidebar');
+  var menuBtn = document.getElementById('menuBtn');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function () { sidebar.classList.toggle('open'); });
+  }
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('#sidebar') && !event.target.closest('#menuBtn')) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+  var showToast = window.workbenchShared.showToast;
+  var escapeHtml = window.workbenchShared.escapeHtml;
+
+  // ============== 数据：按周分组的素材（时间正序，方便看进度） ==============
+  var typeMeta = {
+    photo: { label: '照片', icon: '📷' },
+    video: { label: '视频', icon: '🎬' },
+    text: { label: '文字', icon: '📝' }
+  };
+  var weekGroups = [
+    { key: 'w1', month: '3', title: '3 月第 1 周 · 启动探究', range: '3.2 - 3.6', status: '已归档' },
+    { key: 'w2', month: '3', title: '3 月第 2 周 · 泥塑材料初识', range: '3.9 - 3.13', status: '已归档' },
+    { key: 'w3', month: '3', title: '3 月第 3 周 · 屋顶形状', range: '3.16 - 3.20', status: '已归档' },
+    { key: 'w4', month: '3', title: '3 月第 4 周 · 花窗纹样', range: '3.23 - 3.27', status: '已归档' },
+    { key: 'w5', month: '4', title: '4 月 · 社区街巷（进行中）', range: '3.30 - 4.24', status: '进行中' }
+  ];
+  var materials = [
+    { id: 'mat-w1-01', week: 'w1', type: 'photo', icon: '🏠', date: '03-03',
+      desc: '主题导入活动中，辰辰盯着老屋照片看了很久，指着屋顶问“为什么老房子的屋顶不是平的”，这是本主题的第一个关键问题。',
+      activity: '主题导入：泥塑里的家乡', source: '手机端', tags: ['辰辰'], used: 1 },
+    { id: 'mat-w1-02', week: 'w1', type: 'text', icon: '📝', date: '03-04',
+      desc: '一起看老房子时，安安说“我奶奶家的屋顶上面有小草”，随后五六个孩子开始比较自己家屋顶的样子，话题持续了十多分钟。',
+      activity: '一起看老房子', source: 'PC 端', tags: ['安安', '全班'], used: 0 },
+    { id: 'mat-w1-03', week: 'w1', type: 'photo', icon: '🖍️', date: '03-05',
+      desc: '共同绘制主题网络图时，乐乐主动把“屋顶”“花窗”“泥巴”三个词连在一起，说“它们都是老房子身上的”。',
+      activity: '主题网络图：一起画', source: '手机端', tags: ['乐乐'], used: 1 },
+    { id: 'mat-w2-01', week: 'w2', type: 'text', icon: '📝', date: '03-10',
+      desc: '乐乐把黏土搓成长条说想做屋檐，但泥条一弯就断，他发现“泥太干了会裂”，主动去加了一点水再试。',
+      activity: '泥土是什么', source: 'PC 端', tags: ['乐乐'], used: 1 },
+    { id: 'mat-w2-02', week: 'w2', type: 'photo', icon: '🤲', date: '03-11',
+      desc: '干湿泥土对比实验里，小禾把三种泥各捏了一个小球，按软硬排队，还给它们起名“石头泥、耳朵泥、粥泥”。',
+      activity: '干湿泥土的区别', source: '手机端', tags: ['小禾'], used: 0 },
+    { id: 'mat-w2-03', week: 'w2', type: 'video', icon: '🎬', duration: '00:52', date: '03-13',
+      desc: '介绍我的泥塑环节，佑佑举着自己的“家”说“门要开在中间，客人才找得到”，同伴报以掌声。',
+      activity: '介绍我的泥塑', source: '手机端', tags: ['佑佑'], used: 0 },
+    { id: 'mat-w3-01', week: 'w3', type: 'photo', icon: '🏠', date: '03-16',
+      desc: '观察老房子屋顶时，辰辰用手比划坡度，问“为什么老房子的屋顶不是平的”，并把坡度画进了记录板。',
+      activity: '屋顶为什么是斜的', source: '手机端', tags: ['辰辰'], used: 3 },
+    { id: 'mat-w3-02', week: 'w3', type: 'video', icon: '🎬', duration: '00:47', date: '03-17',
+      desc: '户外散步时佑佑指着祠堂屋脊说“我见过祠堂门口也有这个尖尖”，引发同伴围观讨论屋脊上的装饰。',
+      activity: '户外散步', source: '手机端', tags: ['佑佑', '辰辰'], used: 1 },
+    { id: 'mat-w3-03', week: 'w3', type: 'text', icon: '📝', date: '03-19',
+      desc: '佑佑在泥工区尝试第三次搭斜屋顶，前两次塌了都没有放弃，最后垫了一根泥柱，回头喊“老师你看，它自己站住了！”',
+      activity: '捏一个斜屋顶', source: 'PC 端', tags: ['佑佑'], used: 0 },
+    { id: 'mat-w4-01', week: 'w4', type: 'text', icon: '📝', date: '03-24',
+      desc: '小禾在美工区捏了一排泥花，说要“种在墙上，像奶奶家门口”，还邀请安安帮她做花盆。',
+      activity: '美工区', source: 'PC 端', tags: ['小禾', '安安'], used: 1 },
+    { id: 'mat-w4-02', week: 'w4', type: 'photo', icon: '🧱', date: '03-26',
+      desc: '做一块家乡花砖活动里，全班把作品拼在展示墙上，儿童自发按纹样分了类，还讨论“哪种花纹重复最多”。',
+      activity: '做一块家乡花砖', source: 'PC 端', tags: ['全班'], used: 0 },
+    { id: 'mat-w5-01', week: 'w5', type: 'video', icon: '🎬', duration: '01:24', date: '04-09',
+      desc: '辰辰和安安往自制斜坡上倒水，观察水流方向，安安说“斜的快，平的会积住”，两人重复了三次验证。',
+      activity: '屋顶为什么是斜的（复验）', source: '手机端', tags: ['辰辰', '安安'], used: 2 },
+    { id: 'mat-w5-02', week: 'w5', type: 'photo', icon: '🏮', date: '04-16',
+      desc: '小禾反复调整泥片角度，直到纹样完整压出来，主动向同伴解释“要用力一样大”，还示范了两次。',
+      activity: '拓印门窗纹样', source: '手机端', tags: ['小禾', '佑佑'], used: 1 },
+    { id: 'mat-w5-03', week: 'w5', type: 'photo', icon: '🖌️', date: '04-14',
+      desc: '“我发现的屋顶线条”活动中，安安把瓦片画成一排排弧线并数了数量，说“一共十一条，像波浪”。',
+      activity: '我发现的屋顶线条', source: 'PC 端', tags: ['安安'], used: 0 }
+  ];
+
+  // ============== 渲染时间轴 ==============
+  function excerptOf(desc) {
+    var clean = desc.replace(/^[“”"']+/, '');
+    return clean.length > 10 ? clean.slice(0, 10) + '…' : clean;
+  }
+  function renderItem(m) {
+    var item = document.createElement('article');
+    item.className = 'timeline-item';
+    item.id = m.id;
+    item.dataset.type = m.type;
+    item.dataset.week = m.week;
+    var group = weekGroups.find(function (g) { return g.key === m.week; });
+    item.dataset.month = group ? group.month : '4';
+    item.dataset.dateLabel = m.date;
+    item.setAttribute('data-date-label', m.date);
+    var tagHtml = m.tags.map(function (t) { return '<span class="badge">' + escapeHtml(t) + '</span>'; }).join('');
+    var usedLabel = m.used > 0 ? '已引用 ' + m.used + ' 次' : '未引用';
+    var addBtn = m.used > 0
+      ? '<button class="btn btn-small btn-added" data-add-story disabled>已加入课程故事</button>'
+      : '<button class="btn btn-small" data-add-story>加入课程故事</button>';
+    item.innerHTML =
+      '<div class="timeline-thumb">' + m.icon +
+        '<span class="type-badge">' + typeMeta[m.type].label + '</span>' +
+      '</div>' +
+      '<div class="timeline-body">' +
+        '<div class="item-line">' +
+          '<span class="excerpt">' + escapeHtml(excerptOf(m.desc)) + '</span>' +
+          (m.duration ? '<span class="badge mono">' + m.duration + '</span>' : '') +
+        '</div>' +
+        '<div class="child-tags">' + tagHtml + '</div>' +
+        '<span class="item-meta">2026-' + m.date + ' · ' + escapeHtml(m.activity) + ' · ' + m.source + '</span>' +
+        '<div class="timeline-detail">' +
+          '<p>' + escapeHtml(m.desc) + '</p>' +
+          '<div class="detail-foot"><span class="meta">' + usedLabel + '</span>' + addBtn + '</div>' +
+        '</div>' +
+      '</div>';
+    item.addEventListener('click', function (event) {
+      if (event.target.closest('[data-add-story]')) return;
+      item.classList.toggle('open');
+    });
+    var btn = item.querySelector('[data-add-story]');
+    if (btn) bindAddStory(btn);
+    return item;
+  }
+  function renderTimeline() {
+    var wrap = document.getElementById('materialTimeline');
+    wrap.replaceChildren();
+    weekGroups.forEach(function (g) {
+      var section = document.createElement('section');
+      section.className = 'timeline-week';
+      section.dataset.week = g.key;
+      section.dataset.month = g.month;
+      var items = materials.filter(function (m) { return m.week === g.key; });
+      section.innerHTML =
+        '<div class="timeline-week-head">' +
+          '<h2>' + escapeHtml(g.title) + '</h2>' +
+          '<span class="meta mono">' + g.range + '</span>' +
+          '<span class="badge' + (g.status === '进行中' ? ' badge-dot warn' : '') + '">' + g.status + ' · ' + items.length + ' 条</span>' +
+        '</div>';
+      items.forEach(function (m) { section.appendChild(renderItem(m)); });
+      wrap.appendChild(section);
+    });
+    applyFilters();
+  }
+
+  // ============== 类型 / 月份筛选 + 搜索 ==============
+  var activeType = 'all';
+  var activeMonth = 'all';
+  var keyword = '';
+  function applyFilters() {
+    document.querySelectorAll('.timeline-item').forEach(function (item) {
+      var typeOk = activeType === 'all' || item.dataset.type === activeType;
+      var monthOk = activeMonth === 'all' || item.dataset.month === activeMonth;
+      var textOk = !keyword || item.textContent.toLowerCase().indexOf(keyword) !== -1;
+      item.classList.toggle('hidden', !(typeOk && monthOk && textOk));
+    });
+    document.querySelectorAll('.timeline-week').forEach(function (section) {
+      var anyVisible = section.querySelector('.timeline-item:not(.hidden)');
+      var monthOk = activeMonth === 'all' || section.dataset.month === activeMonth;
+      section.classList.toggle('hidden', !monthOk || !anyVisible);
+    });
+  }
+  document.querySelectorAll('[data-filter-type]').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      activeType = chip.dataset.filterType;
+      document.querySelectorAll('[data-filter-type]').forEach(function (c) { c.classList.toggle('active', c === chip); });
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('[data-filter-month]').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      activeMonth = chip.dataset.filterMonth;
+      document.querySelectorAll('[data-filter-month]').forEach(function (c) { c.classList.toggle('active', c === chip); });
+      applyFilters();
+    });
+  });
+  document.getElementById('materialSearch').addEventListener('input', function (event) {
+    keyword = event.target.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  // ============== 加入课程故事 ==============
+  function bindAddStory(btn) {
+    btn.addEventListener('click', function () {
+      if (btn.disabled) return;
+      btn.textContent = '已加入课程故事';
+      btn.classList.add('btn-added');
+      btn.disabled = true;
+      var item = btn.closest('.timeline-item');
+      showToast('已加入 ' + (item ? item.dataset.month : '4') + ' 月课程故事的证据池');
+    });
+  }
+
+  // ============== 上传抽屉 ==============
+  var uploadDrawer = document.getElementById('uploadDrawer');
+  document.getElementById('openUploadBtn').addEventListener('click', function () {
+    uploadDrawer.classList.add('open');
+    uploadDrawer.setAttribute('aria-hidden', 'false');
+  });
+  function closeUpload() {
+    uploadDrawer.classList.remove('open');
+    uploadDrawer.setAttribute('aria-hidden', 'true');
+  }
+  document.getElementById('closeUploadBtn').addEventListener('click', closeUpload);
+  uploadDrawer.addEventListener('click', function (event) {
+    if (event.target === uploadDrawer) closeUpload();
+  });
+  document.getElementById('uploadDropzone').addEventListener('click', function () {
+    showToast('原型阶段：文件选择留待后端接入');
+  });
+
+  var matSeq = 100;
+  document.getElementById('submitMaterialBtn').addEventListener('click', function () {
+    var type = document.getElementById('materialType').value;
+    var week = document.getElementById('materialWeek').value;
+    var activity = document.getElementById('materialActivity').value;
+    var desc = document.getElementById('materialDesc').value.trim();
+    var children = [];
+    document.querySelectorAll('#uploadDrawer .tag-option input:checked').forEach(function (input) {
+      children.push(input.value);
+    });
+    if (!desc) { showToast('请填写幼儿行为描述（列表将展示前 10 个字符）'); return; }
+    var group = weekGroups.find(function (g) { return g.key === week; });
+    var m = {
+      id: 'mat-new-' + (matSeq++),
+      week: week, type: type,
+      icon: typeMeta[type].icon,
+      date: group && group.month === '3' ? '03-27' : '04-20',
+      desc: desc, activity: activity, source: 'PC 端',
+      tags: children.length ? children : ['待补标签'], used: 0
+    };
+    materials.push(m);
+    var section = document.querySelector('.timeline-week[data-week="' + week + '"]');
+    if (section) {
+      section.appendChild(renderItem(m));
+      var badge = section.querySelector('.timeline-week-head .badge');
+      if (badge) {
+        var count = section.querySelectorAll('.timeline-item').length;
+        badge.textContent = badge.textContent.replace(/\d+ 条/, count + ' 条');
+      }
+    }
+    var totalEl = document.getElementById('statTotal');
+    totalEl.textContent = String(Number(totalEl.textContent) + 1);
+    var byType = { photo: 'statPhoto', video: 'statVideo', text: 'statText' };
+    var el = document.getElementById(byType[type]);
+    if (el) el.textContent = String(Number(el.textContent) + 1);
+    document.getElementById('materialDesc').value = '';
+    document.querySelectorAll('#uploadDrawer .tag-option input:checked').forEach(function (input) { input.checked = false; });
+    closeUpload();
+    applyFilters();
+    showToast('素材已插入时间轴：' + (group ? group.title : ''));
+  });
+
+  renderTimeline();
+</script>
+</body>
+</html>

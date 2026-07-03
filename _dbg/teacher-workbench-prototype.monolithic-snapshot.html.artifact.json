@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "_dbg/teacher-workbench-prototype.monolithic-snapshot.html",
+  "entry": "_dbg/teacher-workbench-prototype.monolithic-snapshot.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-02T15:00:25.030Z",
+  "updatedAt": "2026-07-02T15:00:25.030Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

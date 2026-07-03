@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "screens/review.html",
+  "entry": "screens/review.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-02T15:09:24.956Z",
+  "updatedAt": "2026-07-02T15:09:24.956Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "screens/themes.html",
+  "entry": "screens/themes.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-02T15:09:24.876Z",
+  "updatedAt": "2026-07-02T15:09:24.876Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

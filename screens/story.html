@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>课程故事 · 主题探究教师工作台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/shared.css" />
+<style>
+  /* ── 课程故事屏特有样式 ─────────────────────────────── */
+  .source-type {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .story-month-panel { display: none; }
+  .story-month-panel.active { display: block; }
+
+  .story-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .story-section + .story-section { margin-top: var(--space-4); }
+  .story-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .story-section-head .step-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--accent), transparent 88%);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    margin-right: var(--space-2);
+  }
+  .story-section h2 { display: inline; vertical-align: middle; }
+
+  .quote-list { display: grid; gap: var(--space-2); }
+  .quote-item {
+    border-left: 3px solid var(--accent);
+    background: color-mix(in oklab, var(--accent), transparent 95%);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+  }
+  .quote-item strong { display: block; color: var(--fg); font-style: italic; }
+  .quote-item .meta { font-style: normal; }
+
+  .story-timeline { display: grid; gap: 0; }
+  .story-week {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-4);
+    position: relative;
+    padding-bottom: var(--space-5);
+  }
+  .story-week:last-child { padding-bottom: 0; }
+  .story-week .week-dot {
+    width: 12px;
+    height: 12px;
+    margin-top: 6px;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    position: relative;
+    z-index: 1;
+  }
+  .story-week::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 16px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .story-week:last-child::before { display: none; }
+  .story-week h3 { font-size: var(--text-base); }
+  .evidence-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+  .evidence-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    padding: 4px 10px;
+    font-size: var(--text-xs);
+    color: var(--muted);
+  }
+
+  .reflect-block {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    padding: var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  .reflect-block strong { color: var(--fg); }
+
+  .source-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-sm);
+  }
+  .source-row:last-child { border-bottom: 0; }
+  .source-row .mono { color: var(--fg); }
+
+  .report-preview {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    display: grid;
+    gap: var(--space-3);
+    background: var(--bg);
+  }
+  .report-preview.generating { border-color: var(--accent); }
+  .report-line {
+    height: 10px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--border), transparent 20%);
+  }
+  .report-line.short { width: 60%; }
+  .report-img-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+  .report-img {
+    height: 56px;
+    border-radius: var(--radius-sm);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--accent), transparent 92%);
+    font-size: var(--text-lg);
+  }
+
+  .story-empty {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-12) var(--space-6);
+    text-align: center;
+    color: var(--muted);
+  }
+
+  /* ── 课程故事 HTML 预览器（连续网页排版，不再分页/导出 PDF） ── */
+  .story-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: none;
+    flex-direction: column;
+    background: color-mix(in oklab, var(--fg), transparent 30%);
+  }
+  .story-viewer.open { display: flex; }
+  .story-viewer-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-sm);
+    flex-wrap: wrap;
+  }
+  .story-viewer-toolbar .doc-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 46ch;
+  }
+  .story-viewer-toolbar .spacer { flex: 1; }
+  .story-viewer-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-6) var(--space-4);
+  }
+  .story-doc {
+    width: min(820px, 94vw);
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--elev-raised);
+    padding: clamp(var(--space-6), 6vw, var(--space-12));
+    display: grid;
+    gap: var(--space-4);
+    line-height: 1.8;
+  }
+  .story-doc .doc-cover {
+    text-align: center;
+    display: grid;
+    gap: var(--space-3);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border);
+  }
+  .story-doc .doc-cover h1 { font-size: clamp(var(--text-xl), 4vw, var(--text-3xl)); }
+  .story-doc .doc-cover .meta { display: grid; gap: 2px; }
+  .story-doc h2 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 4px solid var(--accent);
+  }
+  .story-doc h3 { font-size: var(--text-base); margin-top: var(--space-2); }
+  .story-doc p { color: var(--fg); font-size: var(--text-sm); text-align: justify; }
+  .story-doc .doc-quote {
+    border-left: 3px solid var(--accent);
+    background: color-mix(in oklab, var(--accent), transparent 95%);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-2) var(--space-4);
+    font-style: italic;
+    font-size: var(--text-sm);
+  }
+  .story-doc .doc-figure {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    height: 96px;
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+  }
+  .story-doc .doc-figure-caption {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    text-align: center;
+    margin-top: calc(-1 * var(--space-2));
+  }
+  .story-doc .doc-foot {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-3);
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  /* ── 编辑辅助面板 ─────────────────────────────── */
+  .story-section.editing { border-color: var(--accent); }
+  .story-editor {
+    width: 100%;
+    min-height: 220px;
+    font: inherit;
+    font-size: var(--text-sm);
+    line-height: var(--leading-body);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+    background: var(--bg);
+    color: var(--fg);
+    resize: vertical;
+  }
+  .editor-actions { display: flex; gap: var(--space-2); justify-content: flex-end; }
+  .assist-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(420px, 92vw);
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    box-shadow: -12px 0 32px rgba(0, 0, 0, 0.12);
+    transform: translateX(105%);
+    transition: transform var(--motion-fast, 0.2s) var(--ease-standard, ease);
+    z-index: 80;
+    display: flex;
+    flex-direction: column;
+  }
+  .assist-panel.open { transform: translateX(0); }
+  .assist-head {
+    padding: var(--space-4) var(--space-5) var(--space-3);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    gap: var(--space-2);
+  }
+  .assist-head .row-between h2 { font-size: var(--text-base); }
+  .assist-tabs { display: flex; gap: var(--space-1); }
+  .assist-tab {
+    flex: 1;
+    font-size: var(--text-xs);
+    padding: 6px 4px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .assist-tab.active { background: var(--accent); border-color: var(--accent); color: var(--accent-on); }
+  .assist-body { flex: 1; overflow-y: auto; padding: var(--space-3) var(--space-5); }
+  .assist-group-title {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: var(--space-3) 0 var(--space-2);
+  }
+  .assist-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-2);
+    align-items: start;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+  .assist-item:hover { border-color: var(--accent); }
+  .assist-item.inserted { border-color: color-mix(in oklab, var(--success), transparent 40%); background: color-mix(in oklab, var(--success), transparent 95%); }
+  .assist-item input[type="checkbox"] { margin-top: 3px; }
+  .assist-item .assist-meta { font-size: var(--text-xs); color: var(--muted); display: block; }
+  .assist-item .assist-tags { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: 2px; }
+  .assist-item .assist-tags .badge { font-size: 10px; }
+  .assist-item .inserted-mark { color: var(--success); font-size: var(--text-xs); }
+  .assist-foot {
+    border-top: 1px solid var(--border);
+    padding: var(--space-3) var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">探</div>
+      <div>
+        <div>主题探究工作台</div>
+        <div class="meta">中一班 · 2026 春</div>
+      </div>
+    </div>
+    <nav class="nav-list" id="nav">
+      <a class="nav-btn" href="../index.html">工作台 <span class="meta">1</span></a>
+      <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
+      <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
+      <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
+      <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
+      <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">6</span></a>
+      <a class="nav-btn" href="materials.html">活动素材 <span class="meta">7</span></a>
+      <a class="nav-btn active" href="story.html">课程故事 <span class="meta">8</span></a>
+      <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
+      <input class="search" placeholder="检索课程故事、活动或反思关键词" type="search" />
+      <div class="row-between">
+        <span class="badge badge-dot accent" id="storyStatusBadge">4 月故事 · 草稿</span>
+        <span class="meta">2026 春 · 中一班</span>
+      </div>
+    </header>
+    <div class="content">
+      <section class="screen active" id="story">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Curriculum story</div>
+            <h1>课程故事：梳理起点、过程与反思，形成当月汇报</h1>
+          </div>
+          <div class="tabs">
+            <button class="btn btn-primary" id="generateReportBtn">自动生成图文报告</button>
+          </div>
+        </div>
+
+        <div class="card stack-sm" style="margin-bottom: var(--space-6);">
+          <div class="filters">
+            <button class="chip" data-story-month="story-mar">3 月 · 已生成</button>
+            <button class="chip active" data-story-month="story-apr">4 月 · 草稿</button>
+            <button class="chip" data-story-month="story-may">5 月 · 未开始</button>
+            <button class="chip" data-story-month="story-jun">6 月 · 未开始</button>
+          </div>
+        </div>
+
+        <!-- ============ 4 月（当前草稿） ============ -->
+        <div class="story-month-panel active" id="story-apr">
+          <div class="grid grid-main">
+            <div>
+              <section class="story-section">
+                <div class="story-section-head">
+                  <div><span class="step-mark">1</span><h2>起点 · 主题从哪里来</h2></div>
+                  <button class="btn btn-small" data-edit-section>编辑</button>
+                </div>
+                <p>3 月“泥塑里的家乡”推进到月末时，儿童的兴趣从屋顶坡度自然延伸到门窗纹样与街巷布局。4 月的探究起点来自持续出现的儿童原话：</p>
+                <div class="quote-list">
+                  <div class="quote-item"><strong>“为什么老房子的屋顶不是平的？”</strong><span class="meta">辰辰 · 集体讨论 · 2026-03-12</span></div>
+                  <div class="quote-item"><strong>“我见过祠堂门口也有这个尖尖。”</strong><span class="meta">佑佑 · 户外散步 · 2026-03-15</span></div>
+                  <div class="quote-item"><strong>“泥花可以种在墙上，像奶奶家门口。”</strong><span class="meta">小禾 · 美工区 · 2026-03-14</span></div>
+                </div>
+                <p class="meta">课程依据：《指南》科学探究与艺术表现 · 园本泥塑课程 · 社区街巷与家长资源（详见 <a href="plans.html#month-apr">4 月月计划</a>）</p>
+              </section>
+
+              <section class="story-section">
+                <div class="story-section-head">
+                  <div><span class="step-mark">2</span><h2>过程 · 探究如何推进</h2></div>
+                  <button class="btn btn-small" data-edit-section>编辑</button>
+                </div>
+                <div class="story-timeline">
+                  <div class="story-week">
+                    <span class="week-dot"></span>
+                    <div>
+                      <h3>第 1 周 · 屋顶问题的延续与验证</h3>
+                      <p class="meta">“屋顶为什么是斜的”集体活动中，儿童用自制斜坡做滑水实验，验证了“斜的快，平的会积住”的猜想。</p>
+                      <div class="evidence-chips">
+                        <span class="evidence-chip">🎬 斜屋顶滑水实验 01:24</span>
+                        <span class="evidence-chip">📷 社区老屋屋顶观察</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="story-week">
+                    <span class="week-dot"></span>
+                    <div>
+                      <h3>第 2 周 · 从屋顶到纹样</h3>
+                      <p class="meta">“我发现的屋顶线条”写生中，安安把瓦片画成一排排弧线并主动计数，线条兴趣转向门窗花纹。</p>
+                      <div class="evidence-chips">
+                        <span class="evidence-chip">📷 屋顶线条写生作品</span>
+                        <span class="evidence-chip">📝 泥工区坚持行为记录</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="story-week">
+                    <span class="week-dot"></span>
+                    <div>
+                      <h3>第 3 周 · 拓印与花砖创作</h3>
+                      <p class="meta">“拓印门窗纹样”“做一块家乡花砖”两个活动串联，小禾向同伴解释“要用力一样大”，出现明显的经验分享行为。</p>
+                      <div class="evidence-chips">
+                        <span class="evidence-chip">📷 拓印花窗纹样的专注时刻</span>
+                        <span class="evidence-chip">📷 家乡花砖作品墙合影</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="meta">证据来自<a href="materials.html">活动素材</a>中已加入证据池的条目；周脉络对应 <a href="plans.html#month-apr">4 月月计划</a> 的周次安排。</p>
+              </section>
+
+              <section class="story-section">
+                <div class="story-section-head">
+                  <div><span class="step-mark">3</span><h2>反思 · 我们看见了什么</h2></div>
+                  <button class="btn btn-small" data-edit-section>编辑</button>
+                </div>
+                <div class="reflect-block">
+                  <strong>儿童的学习</strong>
+                  <span>从“提出问题”到“设计验证”，因果推理行为在滑水实验中集中出现；纹样活动中出现了主动的同伴教学（小禾），合作水平高于 3 月。</span>
+                </div>
+                <div class="reflect-block">
+                  <strong>教师的支持与调整</strong>
+                  <span>本月两次把儿童原话转化为活动起点，减少了预设活动的比例；但花砖分类的数学机会捕捉偏晚，下次可在活动中即时回应。</span>
+                </div>
+                <div class="reflect-block">
+                  <strong>下一步</strong>
+                  <span>5 月顺着“家乡的桥”延伸：桥拱与屋顶同属弧线经验，可迁移；需要提前联系社区走访路线与家长职业资源。</span>
+                </div>
+              </section>
+            </div>
+
+            <aside class="stack">
+              <div class="card stack-sm">
+                <div class="row-between"><h2>素材调用</h2><span class="badge badge-dot accent">自动汇聚</span></div>
+                <p class="meta">生成图文报告时，系统按当月主题自动调用以下过往信息：</p>
+                <div>
+                  <div class="source-row"><span><span class="source-type">语料</span> 儿童语料库</span><span class="mono">18 条</span></div>
+                  <div class="source-row"><span><span class="source-type">素材</span> 活动素材（证据池）</span><span class="mono">6 份</span></div>
+                  <div class="source-row"><span><span class="source-type">计划</span> 月计划 + 周计划</span><span class="mono">3 份</span></div>
+                  <div class="source-row"><span><span class="source-type">批注</span> 审核意见</span><span class="mono">5 条</span></div>
+                </div>
+                <div class="tabs">
+                  <a class="btn btn-small" href="corpus.html">语料库</a>
+                  <a class="btn btn-small" href="materials.html">活动素材</a>
+                  <a class="btn btn-small" href="plans.html#month-apr">月计划</a>
+                </div>
+              </div>
+
+              <div class="card stack-sm">
+                <div class="row-between"><h2>图文报告</h2><span class="badge" id="reportStatusBadge">未生成</span></div>
+                <div class="report-preview" id="reportPreview">
+                  <p class="meta" id="reportHint">点击「自动生成图文报告」，系统将按 起点 → 过程 → 反思 结构，把上方素材整合成当月汇报初稿。</p>
+                </div>
+                <div class="tabs">
+                  <button class="btn btn-small" data-preview-story="apr" id="previewAprBtn">预览草稿（HTML）</button>
+                  <button class="btn btn-small" id="shareBtn">分享给园长</button>
+                  <button class="btn btn-small" id="submitStoryBtn">提交审阅</button>
+                </div>
+              </div>
+
+              <div class="card stack-sm">
+                <h2>写作小提示</h2>
+                <p class="meta">课程故事不是活动流水账：起点讲“兴趣与依据”，过程讲“关键转折与证据”，反思讲“儿童的发展与教师的调整”。</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <!-- ============ 3 月（已生成） ============ -->
+        <div class="story-month-panel" id="story-mar">
+          <div class="grid grid-main">
+            <div>
+              <section class="story-section">
+                <div class="story-section-head">
+                  <div><span class="step-mark">1</span><h2>起点 · 主题从哪里来</h2></div>
+                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section>编辑</button></div>
+                </div>
+                <p>春季开学后，泥工区持续高热度。教师在晨谈中投放家乡老房子照片，孩子们的话题从“我家住几楼”转向“老房子长什么样”。结合园本泥塑课程与社区老屋资源，“泥塑里的家乡 · 屋顶与花窗”正式启动，主题网络由儿童语料生成 7 个子探究点。</p>
+                <div class="quote-list">
+                  <div class="quote-item"><strong>“为什么老房子的屋顶不是平的？”</strong><span class="meta">辰辰 · 集体讨论 · 2026-03-12</span></div>
+                  <div class="quote-item"><strong>“下雨会从斜斜的地方滑下来。”</strong><span class="meta">安安 · 区角活动 · 2026-03-13</span></div>
+                  <div class="quote-item"><strong>“我奶奶家的屋顶上面有小草。”</strong><span class="meta">安安 · 一起看老房子 · 2026-03-04</span></div>
+                </div>
+              </section>
+              <section class="story-section">
+                <div class="story-section-head">
+                  <div><span class="step-mark">2</span><h2>过程 · 探究如何推进（第 1-4 周）</h2></div>
+                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section>编辑</button></div>
+                </div>
+                <div class="story-timeline">
+                  <div class="story-week" data-story-week="w1">
+                    <span class="week-dot"></span>
+                    <div>
+                      <h3>第 1 周 · 启动探究：老房子进入班级</h3>
+                      <p class="meta">主题导入活动中，孩子们围着家乡老房子的照片七嘴八舌。辰辰盯着照片问“为什么老房子的屋顶不是平的”，乐乐在共同绘制主题网络图时，把“屋顶”“花窗”“泥巴”三个词连在一起，说“它们都是老房子身上的”。教师把这些原话记进语料库，和孩子们一起生成了第一版主题网络：从“老房子”发散出屋顶、门窗、材料三条线索。周五的谈话里，大家共同生成了下周要研究的问题——“泥从哪里来”。</p>
+                      <div class="evidence-chips">
+                        <span class="evidence-chip">📷 主题导入 · 辰辰的屋顶之问</span>
+                        <span class="evidence-chip">📝 “屋顶上有小草”的晨谈记录</span>
+                        <span class="evidence-chip">📷 第一版主题网络图</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="story-week" data-story-week="w2">
+                    <span class="week-dot"></span>
+                    <div>
+                      <h3>第 2 周 · 泥塑材料初识：泥太干会裂</h3>
+                      <p class="meta">孩子们第一次系统地和泥打交道：看、闻、捏，比较干泥、湿泥、稀泥。乐乐把黏土搓成长条想做屋檐，泥条一弯就断，他发现“泥太干了会裂”，主动加水再试；小禾把三种泥各捏一个小球按软硬排队，起名“石头泥、耳朵泥、粥泥”。周五“介绍我的泥塑”，佑佑举着自己的“家”说“门要开在中间，客人才找得到”。教师反思：材料经验是后续屋顶塑形的基础，孩子们的失败尝试比成功作品更值得记录。</p>
+                      <div class="evidence-chips">
+                        <span class="evidence-chip">📝 乐乐的“泥太干会裂”发现</span>
+                        <span class="evidence-chip">📷 小禾的软硬排队实验</span>
+                        <span class="evidence-chip">🎬 介绍我的泥塑 00:52</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="story-week" data-story-week="w3">
+                    <span class="week-dot"></span>
+                    <div>
+                      <h3>第 3 周 · 屋顶形状</h3>
+                      <p class="meta">观察老房子屋顶，围绕“斜屋顶”形成三个平行小组活动。户外散步时佑佑指着祠堂屋脊说“我见过祠堂门口也有这个尖尖”；泥工区里他三次尝试搭斜屋顶，塌了两次不放弃，最后垫了一根泥柱。</p>
+                      <div class="evidence-chips"><span class="evidence-chip">🎬 户外散步发现祠堂屋脊 00:47</span><span class="evidence-chip">📝 泥工区的坚持行为记录</span></div>
+                    </div>
+                  </div>
+                  <div class="story-week" data-story-week="w4">
+                    <span class="week-dot"></span>
+                    <div>
+                      <h3>第 4 周 · 花窗纹样</h3>
+                      <p class="meta">泥片压印与拓印，儿童开始关注重复图案与对称。小禾捏了一排泥花说要“种在墙上，像奶奶家门口”；花砖作品墙合影时，孩子们自发按纹样分类。</p>
+                      <div class="evidence-chips"><span class="evidence-chip">📝 美工区的想象与合作</span><span class="evidence-chip">📷 家乡花砖作品墙合影</span></div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section class="story-section">
+                <div class="story-section-head">
+                  <div><span class="step-mark">3</span><h2>反思 · 我们看见了什么</h2></div>
+                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section>编辑</button></div>
+                </div>
+                <div class="reflect-block">
+                  <strong>月度小结</strong>
+                  <span>主题从材料兴趣走向真实问题；退回意见提示“在周计划中持续标注五大领域”，已在 4 月执行。3 月报告已归档，可在汇报时直接调用。</span>
+                </div>
+              </section>
+            </div>
+            <aside class="stack">
+              <div class="card stack-sm">
+                <div class="row-between"><h2>图文报告</h2><span class="badge badge-dot success">已生成</span></div>
+                <div class="report-preview">
+                  <div class="report-line"></div>
+                  <div class="report-line short"></div>
+                  <div class="report-img-row"><span class="report-img">🏠</span><span class="report-img">🎬</span><span class="report-img">🏮</span></div>
+                  <div class="report-line"></div>
+                  <div class="report-line short"></div>
+                </div>
+                <div class="tabs">
+                  <button class="btn btn-small btn-primary" data-preview-story="mar">预览 3 月故事（HTML）</button>
+                  <button class="btn btn-small" data-archived-action>查看归档</button>
+                </div>
+                <p class="meta">课程故事始终以 HTML 网页版式呈现与分享，不提供 PDF 导出。</p>
+              </div>
+              <div class="card stack-sm">
+                <h2>审核记录</h2>
+                <p class="meta">3 月课程故事随月计划一并通过审阅，园长批注 1 条：“过程部分的证据链完整，建议保留原话引用格式。”</p>
+                <a class="btn btn-small" href="review.html#review-mar">查看 3 月审核意见</a>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <!-- ============ 5 月 / 6 月（未开始） ============ -->
+        <div class="story-month-panel" id="story-may">
+          <div class="story-empty">
+            <p><strong>5 月「家乡的桥」尚未开始。</strong></p>
+            <p class="meta">主题推进后，儿童语料与活动素材会自动汇入本月故事的证据池。</p>
+            <p style="margin-top: var(--space-4);"><a class="btn" href="plans.html#month-may">先去准备 5 月月计划</a></p>
+          </div>
+        </div>
+        <div class="story-month-panel" id="story-jun">
+          <div class="story-empty">
+            <p><strong>6 月「我们的小展」尚未开始。</strong></p>
+            <p class="meta">展示月的课程故事可复用整学期素材，形成学期级汇报。</p>
+            <p style="margin-top: var(--space-4);"><a class="btn" href="plans.html#month-jun">先去准备 6 月月计划</a></p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- ============ 课程故事 HTML 预览器（连续网页排版） ============ -->
+<div aria-hidden="true" class="story-viewer" id="storyViewer" role="dialog" aria-label="课程故事预览">
+  <div class="story-viewer-toolbar">
+    <button class="btn btn-small" id="storyViewerCloseBtn" type="button">← 关闭</button>
+    <span class="doc-name" id="storyViewerName">课程故事预览.html</span>
+    <span class="spacer"></span>
+    <span class="badge">HTML 版式 · 不提供 PDF 导出</span>
+    <button class="btn btn-small" id="storyViewerShareBtn" type="button">复制分享链接</button>
+  </div>
+  <div class="story-viewer-scroll" id="storyViewerScroll">
+
+    <!-- 3 月 · 已通过的完整故事 -->
+    <article class="story-doc" id="story-doc-mar" hidden>
+      <div class="doc-cover">
+        <span class="meta">实验幼儿园 · 中一班 · 2026 春</span>
+        <h1>泥塑里的家乡 · 屋顶与花窗</h1>
+        <p class="meta">3 月课程故事（第 1-4 周）</p>
+        <span class="meta">班级教师 编写 · 2026 年 3 月 30 日</span>
+      </div>
+
+      <h2>一、起点 · 主题从哪里来</h2>
+      <p>春季开学后，泥工区持续保持高热度。教师在晨谈中投放家乡老房子的照片，孩子们的话题从“我家住几楼”转向“老房子长什么样”。结合园本泥塑课程与社区老屋资源，“泥塑里的家乡 · 屋顶与花窗”主题正式启动。</p>
+      <div class="doc-quote">“为什么老房子的屋顶不是平的？”——辰辰 · 集体讨论 · 3 月 12 日</div>
+      <div class="doc-quote">“下雨会从斜斜的地方滑下来。”——安安 · 区角活动 · 3 月 13 日</div>
+      <div class="doc-quote">“我奶奶家的屋顶上面有小草。”——安安 · 一起看老房子 · 3 月 4 日</div>
+      <p>主题网络由儿童语料生成 7 个子探究点，覆盖屋顶、门窗、材料三条线索；课程依据对应《3-6 岁儿童学习与发展指南》的科学探究与艺术表现领域、园本泥塑课程与社区资源。</p>
+      <div class="doc-figure">🏠</div>
+      <div class="doc-figure-caption">图 1 · 老房子照片引发的晨谈</div>
+
+      <h2>二、过程 · 探究如何推进</h2>
+      <h3>第 1 周 · 启动探究：老房子进入班级</h3>
+      <p>主题导入活动中，孩子们围着家乡老房子的照片七嘴八舌。乐乐在共同绘制主题网络图时，把“屋顶”“花窗”“泥巴”三个词连在一起，说“它们都是老房子身上的”。教师把这些原话记进语料库，和孩子们一起生成了第一版主题网络。周五的谈话里，大家共同确定了下周要研究的问题——“泥从哪里来”。</p>
+      <div class="doc-figure">🖍️</div>
+      <div class="doc-figure-caption">图 2 · 与儿童共同绘制的第一版主题网络</div>
+      <h3>第 2 周 · 泥塑材料初识：泥太干会裂</h3>
+      <p>孩子们第一次系统地和泥打交道：看、闻、捏，比较干泥、湿泥、稀泥。乐乐把黏土搓成长条想做屋檐，泥条一弯就断，他发现“泥太干了会裂”，主动加水再试；小禾把三种泥各捏一个小球，按软硬排队，还给它们起名“石头泥、耳朵泥、粥泥”。</p>
+      <div class="doc-quote">“门要开在中间，客人才找得到。”——佑佑 · 介绍我的泥塑 · 3 月 13 日</div>
+      <h3>第 3 周 · 屋顶形状</h3>
+      <p>围绕“斜屋顶”形成三个平行小组活动。户外散步时佑佑指着祠堂屋脊说“我见过祠堂门口也有这个尖尖”；泥工区里他三次尝试搭斜屋顶，塌了两次都没有放弃，最后垫了一根泥柱，回头喊“老师你看，它自己站住了！”</p>
+      <div class="doc-figure">🏘️</div>
+      <div class="doc-figure-caption">图 3 · 户外观察祠堂屋脊 / 泥工区第三次尝试</div>
+      <h3>第 4 周 · 花窗纹样</h3>
+      <p>泥片压印与拓印中，儿童开始关注重复图案与对称。小禾捏了一排泥花，说要“种在墙上，像奶奶家门口”；花砖作品墙合影时，孩子们自发按纹样分了类，还讨论“哪种花纹重复最多”。</p>
+      <div class="doc-figure">🏮</div>
+      <div class="doc-figure-caption">图 4 · 家乡花砖作品墙</div>
+
+      <h2>三、反思 · 我们看见了什么</h2>
+      <h3>儿童的学习</h3>
+      <p>主题从材料兴趣走向真实问题：第 1-2 周的“玩泥”经验，在第 3 周转化为有目的的塑形尝试；佑佑的三次搭建显示出坚持性与问题解决策略的萌芽，小禾与安安的合作行为频次明显增加。</p>
+      <h3>教师的支持与调整</h3>
+      <p>本月把儿童原话作为活动生成的主要来源，共记录语料 18 条，其中 7 条转化为主题网络节点。退回意见提示“在周计划中持续标注五大领域”，已在 4 月计划中执行。</p>
+      <h3>下一步</h3>
+      <p>4 月顺着花窗纹样延伸到社区街巷：纹样经验可迁移到瓦当、门楣与窗花符号；需要提前梳理社区走访路线与家长资源。</p>
+      <div class="doc-foot"><span>实验幼儿园 · 中一班</span><span>3 月课程故事 · 完</span></div>
+    </article>
+
+    <!-- 4 月 · 草稿预览 -->
+    <article class="story-doc" id="story-doc-apr" hidden>
+      <div class="doc-cover">
+        <span class="meta">实验幼儿园 · 中一班 · 2026 春</span>
+        <h1>泥塑里的家乡 · 社区街巷</h1>
+        <p class="meta">4 月课程故事（草稿预览）</p>
+        <span class="meta">草稿由「自动生成图文报告」汇聚，提交审阅前可继续逐节编辑</span>
+      </div>
+      <h2>一、起点 · 主题从哪里来</h2>
+      <p>3 月“泥塑里的家乡”推进到月末时，儿童的兴趣从屋顶坡度自然延伸到门窗纹样与街巷布局。4 月的探究起点来自持续出现的儿童原话。</p>
+      <div class="doc-quote">“为什么老房子的屋顶不是平的？”——辰辰 · 集体讨论 · 3 月 12 日</div>
+      <div class="doc-quote">“我见过祠堂门口也有这个尖尖。”——佑佑 · 户外散步 · 3 月 15 日</div>
+      <div class="doc-quote">“泥花可以种在墙上，像奶奶家门口。”——小禾 · 美工区 · 3 月 14 日</div>
+      <h2>二、过程 · 探究如何推进</h2>
+      <h3>第 1 周 · 屋顶问题的延续与验证</h3>
+      <p>“屋顶为什么是斜的”集体活动中，儿童用自制斜坡做滑水实验，安安总结“斜的快，平的会积住”，两人重复了三次验证。</p>
+      <h3>第 2 周 · 从屋顶到纹样</h3>
+      <p>“我发现的屋顶线条”写生中，安安把瓦片画成一排排弧线并主动计数，“一共十一条，像波浪”。线条兴趣转向门窗花纹。</p>
+      <h3>第 3 周 · 拓印与花砖创作</h3>
+      <p>“拓印门窗纹样”“做一块家乡花砖”两个活动串联，小禾向同伴解释“要用力一样大”，出现明显的经验分享行为。</p>
+      <h2>三、反思 · 我们看见了什么</h2>
+      <p>从“提出问题”到“设计验证”，因果推理行为在滑水实验中集中出现；纹样活动中出现主动的同伴教学，合作水平高于 3 月。教师需要更及时地捕捉活动中的数学机会。</p>
+      <div class="doc-foot"><span>实验幼儿园 · 中一班</span><span>4 月课程故事 · 草稿</span></div>
+    </article>
+  </div>
+</div>
+
+<!-- ============ 编辑辅助面板：抓取语料 / 网络节点 / 活动素材 ============ -->
+<aside aria-hidden="true" class="assist-panel" id="assistPanel" aria-label="编辑辅助面板">
+  <div class="assist-head">
+    <div class="row-between">
+      <div><div class="eyebrow">Writing assist</div><h2>调用计划素材，勾选即用</h2></div>
+      <button class="btn btn-small" id="assistCloseBtn" type="button">收起</button>
+    </div>
+    <div class="assist-tabs">
+      <button class="assist-tab active" data-assist-tab="corpus" type="button">语料库</button>
+      <button class="assist-tab" data-assist-tab="network" type="button">主题网络</button>
+      <button class="assist-tab" data-assist-tab="materials" type="button">活动素材</button>
+    </div>
+  </div>
+  <div class="assist-body" id="assistBody"></div>
+  <div class="assist-foot">
+    <span class="meta" id="assistCount">已勾选 0 条</span>
+    <button class="btn btn-primary btn-small" id="assistInsertBtn" type="button">插入所选到编辑区</button>
+  </div>
+</aside>
+
+<div aria-hidden="true" class="toast" id="toast"></div>
+
+<script src="../assets/shared.js"></script>
+<script>
+  // 移动端菜单
+  var sidebar = document.querySelector('#sidebar');
+  var menuBtn = document.getElementById('menuBtn');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function () { sidebar.classList.toggle('open'); });
+  }
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('#sidebar') && !event.target.closest('#menuBtn')) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+  var showToast = window.workbenchShared.showToast;
+
+  // ============== 月份切换 ==============
+  var monthLabels = {
+    'story-mar': '3 月故事 · 已通过',
+    'story-apr': '4 月故事 · 草稿',
+    'story-may': '5 月故事 · 未开始',
+    'story-jun': '6 月故事 · 未开始'
+  };
+  function activateStoryMonth(id) {
+    document.querySelectorAll('.story-month-panel').forEach(function (panel) {
+      panel.classList.toggle('active', panel.id === id);
+    });
+    document.querySelectorAll('[data-story-month]').forEach(function (chip) {
+      chip.classList.toggle('active', chip.dataset.storyMonth === id);
+    });
+    var badge = document.getElementById('storyStatusBadge');
+    if (badge && monthLabels[id]) badge.textContent = monthLabels[id];
+  }
+  document.querySelectorAll('[data-story-month]').forEach(function (chip) {
+    chip.addEventListener('click', function () { activateStoryMonth(chip.dataset.storyMonth); });
+  });
+  // hash 深链：如 story.html#story-mar
+  if (window.location.hash && /^#story-/.test(window.location.hash)) {
+    var targetId = window.location.hash.slice(1);
+    if (document.getElementById(targetId)) activateStoryMonth(targetId);
+  }
+
+  // ============== 自动生成图文报告（模拟） ==============
+  var generating = false;
+  document.getElementById('generateReportBtn').addEventListener('click', function () {
+    var activePanel = document.querySelector('.story-month-panel.active');
+    if (!activePanel || activePanel.id !== 'story-apr') {
+      showToast('请切换到 4 月草稿后再生成报告');
+      return;
+    }
+    if (generating) return;
+    generating = true;
+    var preview = document.getElementById('reportPreview');
+    var badge = document.getElementById('reportStatusBadge');
+    preview.classList.add('generating');
+    preview.innerHTML = '<p class="meta">正在调用 4 月语料 18 条、素材 6 份、计划 3 份…</p>';
+    badge.textContent = '生成中';
+    setTimeout(function () {
+      preview.classList.remove('generating');
+      preview.innerHTML =
+        '<div class="report-line"></div>' +
+        '<div class="report-line short"></div>' +
+        '<div class="report-img-row"><span class="report-img">🎬</span><span class="report-img">📷</span><span class="report-img">🏮</span></div>' +
+        '<div class="report-line"></div>' +
+        '<div class="report-line short"></div>' +
+        '<p class="meta">《泥塑里的家乡 · 社区街巷》4 月课程故事初稿：起点（3 段）· 过程（3 周脉络 + 6 份图文证据）· 反思（3 条）。可继续在左侧逐节编辑。</p>';
+      badge.textContent = '草稿已生成';
+      generating = false;
+      showToast('图文报告初稿已生成，可逐节编辑后提交');
+    }, 1400);
+  });
+
+  // ============== 其他动作（原型演示） ==============
+  document.getElementById('shareBtn').addEventListener('click', function () {
+    showToast('已生成分享链接（模拟），园长可在线查看');
+  });
+  document.getElementById('submitStoryBtn').addEventListener('click', function () {
+    var badge = document.getElementById('reportStatusBadge');
+    if (badge.textContent === '未生成') {
+      showToast('请先生成图文报告，再提交审阅');
+      return;
+    }
+    badge.textContent = '已提交（submitted）';
+    document.getElementById('storyStatusBadge').textContent = '4 月故事 · 审阅中';
+    showToast('4 月课程故事已提交审阅');
+  });
+  // ============== 分节编辑 + 编辑辅助面板（抓取就用） ==============
+  var escapeHtml = window.workbenchShared.escapeHtml;
+  var activeEditor = null; // 当前正在编辑的 textarea
+
+  var assistData = {
+    corpus: {
+      groups: [
+        { title: '主题来源（已写好的来源与价值分析，可直接调用）', items: [
+          { id: 'src-1', text: '本主题源于儿童对家乡老房子的持续兴趣：泥工区高热度 + 晨谈中反复出现的屋顶、花窗话题，对应《指南》科学探究与艺术表现领域的目标。', meta: '主题来源 · 月计划引用', tags: ['政策要求', '儿童需求'] },
+          { id: 'src-2', text: '园本“家乡文化与泥塑材料”课程线索为本主题提供了材料与文化依据；社区老屋、家长访谈与老照片是可直接调用的在地资源。', meta: '主题来源 · 月计划引用', tags: ['园所文化', '可用资源'] }
+        ] },
+        { title: '儿童语料（勾选后以引用格式插入）', items: [
+          { id: 'q-1', text: '辰辰：“为什么老房子的屋顶不是平的？”（3月12日）', meta: '集体讨论', tags: ['建筑', '提出问题'] },
+          { id: 'q-2', text: '安安：“下雨会从斜斜的地方滑下来。”（3月13日）', meta: '区角活动', tags: ['建筑', '因果推理'] },
+          { id: 'q-3', text: '小禾：“泥花可以种在墙上，像奶奶家门口。”（3月14日）', meta: '美工区', tags: ['花朵', '想象联想'] },
+          { id: 'q-4', text: '佑佑：“我见过祠堂门口也有这个尖尖。”（3月15日）', meta: '户外散步', tags: ['建筑', '经验迁移'] },
+          { id: 'q-5', text: '乐乐：“泥太干了会裂。”（3月10日）', meta: '泥土是什么', tags: ['材料', '发现问题'] },
+          { id: 'q-6', text: '佑佑：“门要开在中间，客人才找得到。”（3月13日）', meta: '介绍我的泥塑', tags: ['建筑', '空间'] },
+          { id: 'q-7', text: '安安：“我奶奶家的屋顶上面有小草。”（3月4日）', meta: '一起看老房子', tags: ['建筑', '生活经验'] },
+          { id: 'q-8', text: '安安：“斜的快，平的会积住。”（4月9日）', meta: '滑水实验', tags: ['科学', '因果推理'] },
+          { id: 'q-9', text: '小禾：“要用力一样大。”（4月16日）', meta: '拓印门窗纹样', tags: ['艺术', '经验分享'] },
+          { id: 'q-10', text: '安安：“一共十一条，像波浪。”（4月14日）', meta: '我发现的屋顶线条', tags: ['数学', '观察'] }
+        ] }
+      ]
+    },
+    network: {
+      groups: [
+        { title: '3 月 · 泥塑里的家乡（周主题 → 核心活动）', items: [
+          { id: 'n-w1', text: '第1周 启动探究：主题导入「泥塑里的家乡」、主题网络图共绘', meta: '周主题节点', tags: ['启动'] },
+          { id: 'n-w1a', text: '核心活动：一起看老房子', meta: '第1周', tags: ['语言', '社会'] },
+          { id: 'n-w2', text: '第2周 泥塑材料初识：泥土是什么、干湿泥土的区别', meta: '周主题节点', tags: ['科学'] },
+          { id: 'n-w2a', text: '核心活动：介绍我的泥塑', meta: '第2周', tags: ['语言'] },
+          { id: 'n-w3', text: '第3周 屋顶形状：屋顶为什么是斜的、捏一个斜屋顶', meta: '周主题节点', tags: ['科学', '泥工'] },
+          { id: 'n-w4', text: '第4周 花窗纹样：拓印门窗纹样、做一块家乡花砖', meta: '周主题节点', tags: ['艺术', '数学'] }
+        ] }
+      ]
+    },
+    materials: {
+      groups: [
+        { title: '活动素材（记录活动中孩子的表现，勾选插入完整描述）', items: [
+          { id: 'm-1', icon: '📷', text: '主题导入活动中，辰辰盯着老屋照片看了很久，指着屋顶问“为什么老房子的屋顶不是平的”，这是本主题的第一个关键问题。', meta: '03-03 · 照片 · 主题导入', tags: ['辰辰'] },
+          { id: 'm-2', icon: '📝', text: '乐乐把黏土搓成长条说想做屋檐，但泥条一弯就断，他发现“泥太干了会裂”，主动去加了一点水再试。', meta: '03-10 · 文字 · 泥土是什么', tags: ['乐乐'] },
+          { id: 'm-3', icon: '📷', text: '干湿泥土对比实验里，小禾把三种泥各捏了一个小球，按软硬排队，还给它们起名“石头泥、耳朵泥、粥泥”。', meta: '03-11 · 照片 · 干湿泥土的区别', tags: ['小禾'] },
+          { id: 'm-4', icon: '📝', text: '佑佑在泥工区尝试第三次搭斜屋顶，前两次塌了都没有放弃，最后垫了一根泥柱，回头喊“老师你看，它自己站住了！”', meta: '03-19 · 文字 · 捏一个斜屋顶', tags: ['佑佑'] },
+          { id: 'm-5', icon: '🎬', text: '户外散步时佑佑指着祠堂屋脊说“我见过祠堂门口也有这个尖尖”，引发同伴围观讨论屋脊上的装饰。', meta: '03-17 · 视频 00:47 · 户外散步', tags: ['佑佑', '辰辰'] },
+          { id: 'm-6', icon: '📝', text: '小禾在美工区捏了一排泥花，说要“种在墙上，像奶奶家门口”，还邀请安安帮她做花盆。', meta: '03-24 · 文字 · 美工区', tags: ['小禾', '安安'] },
+          { id: 'm-7', icon: '🧱', text: '做一块家乡花砖活动里，全班把作品拼在展示墙上，儿童自发按纹样分了类，还讨论“哪种花纹重复最多”。', meta: '03-26 · 照片 · 做一块家乡花砖', tags: ['全班'] },
+          { id: 'm-8', icon: '🎬', text: '辰辰和安安往自制斜坡上倒水，观察水流方向，安安说“斜的快，平的会积住”，两人重复了三次验证。', meta: '04-09 · 视频 01:24 · 滑水实验', tags: ['辰辰', '安安'] },
+          { id: 'm-9', icon: '🏮', text: '小禾反复调整泥片角度，直到纹样完整压出来，主动向同伴解释“要用力一样大”，还示范了两次。', meta: '04-16 · 照片 · 拓印门窗纹样', tags: ['小禾', '佑佑'] }
+        ] }
+      ]
+    }
+  };
+  var assistTab = 'corpus';
+  var assistChecked = {};   // id -> true
+  var assistInserted = {};  // id -> true
+
+  function renderAssist() {
+    var body = document.getElementById('assistBody');
+    body.replaceChildren();
+    (assistData[assistTab].groups || []).forEach(function (group) {
+      var title = document.createElement('div');
+      title.className = 'assist-group-title';
+      title.textContent = group.title;
+      body.appendChild(title);
+      group.items.forEach(function (item) {
+        var row = document.createElement('label');
+        row.className = 'assist-item' + (assistInserted[item.id] ? ' inserted' : '');
+        row.innerHTML =
+          '<input type="checkbox" ' + (assistChecked[item.id] ? 'checked' : '') + ' data-assist-id="' + item.id + '" />' +
+          '<span><span>' + (item.icon ? item.icon + ' ' : '') + escapeHtml(item.text) + '</span>' +
+          '<span class="assist-meta">' + escapeHtml(item.meta || '') + (assistInserted[item.id] ? ' · <span class="inserted-mark">✓ 已插入</span>' : '') + '</span>' +
+          (item.tags && item.tags.length ? '<span class="assist-tags">' + item.tags.map(function (t) { return '<span class="badge">' + escapeHtml(t) + '</span>'; }).join('') + '</span>' : '') +
+          '</span>';
+        row.querySelector('input').addEventListener('change', function (event) {
+          assistChecked[item.id] = event.target.checked;
+          updateAssistCount();
+        });
+        body.appendChild(row);
+      });
+    });
+    updateAssistCount();
+  }
+  function updateAssistCount() {
+    var n = Object.keys(assistChecked).filter(function (id) { return assistChecked[id]; }).length;
+    document.getElementById('assistCount').textContent = '已勾选 ' + n + ' 条';
+  }
+  document.querySelectorAll('[data-assist-tab]').forEach(function (tabBtn) {
+    tabBtn.addEventListener('click', function () {
+      assistTab = tabBtn.dataset.assistTab;
+      document.querySelectorAll('[data-assist-tab]').forEach(function (b) { b.classList.toggle('active', b === tabBtn); });
+      renderAssist();
+    });
+  });
+  function openAssist() {
+    document.getElementById('assistPanel').classList.add('open');
+    renderAssist();
+  }
+  function closeAssist() { document.getElementById('assistPanel').classList.remove('open'); }
+  document.getElementById('assistCloseBtn').addEventListener('click', closeAssist);
+  document.getElementById('assistInsertBtn').addEventListener('click', function () {
+    if (!activeEditor) { showToast('请先点击某一节的「编辑」，再插入素材'); return; }
+    var texts = [];
+    Object.keys(assistData).forEach(function (tabKey) {
+      assistData[tabKey].groups.forEach(function (group) {
+        group.items.forEach(function (item) {
+          if (assistChecked[item.id]) {
+            texts.push(item.text);
+            assistInserted[item.id] = true;
+            assistChecked[item.id] = false;
+          }
+        });
+      });
+    });
+    if (!texts.length) { showToast('尚未勾选任何条目'); return; }
+    var sep = activeEditor.value && !/\n$/.test(activeEditor.value) ? '\n' : '';
+    activeEditor.value += sep + texts.join('\n');
+    activeEditor.focus();
+    renderAssist();
+    showToast('已插入 ' + texts.length + ' 条到编辑区');
+  });
+
+  // 分节编辑：正文变为可编辑文本域，右侧弹出辅助面板
+  document.querySelectorAll('[data-edit-section]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var section = btn.closest('.story-section');
+      if (!section || section.classList.contains('editing')) return;
+      section.classList.add('editing');
+      var head = section.querySelector('.story-section-head');
+      var contentNodes = [];
+      Array.prototype.forEach.call(section.children, function (node) {
+        if (node !== head) contentNodes.push(node);
+      });
+      var plain = contentNodes.map(function (node) { return node.textContent.replace(/\s+/g, ' ').trim(); }).filter(Boolean).join('\n\n');
+      contentNodes.forEach(function (node) { node.style.display = 'none'; });
+
+      var editor = document.createElement('textarea');
+      editor.className = 'story-editor';
+      editor.value = plain;
+      var actions = document.createElement('div');
+      actions.className = 'editor-actions';
+      actions.innerHTML = '<button class="btn btn-small" type="button" data-editor-cancel>取消</button><button class="btn btn-primary btn-small" type="button" data-editor-save>保存本节</button>';
+      section.appendChild(editor);
+      section.appendChild(actions);
+      activeEditor = editor;
+      openAssist();
+
+      function finish(save) {
+        if (save) {
+          var kept = editor.value.trim();
+          contentNodes.forEach(function (node) { node.remove(); });
+          kept.split(/\n{2,}/).forEach(function (paragraph) {
+            var p = document.createElement('p');
+            p.textContent = paragraph.replace(/\n/g, ' ');
+            section.insertBefore(p, editor);
+          });
+          showToast('本节已保存（草稿）');
+        } else {
+          contentNodes.forEach(function (node) { node.style.display = ''; });
+        }
+        editor.remove();
+        actions.remove();
+        section.classList.remove('editing');
+        if (activeEditor === editor) activeEditor = null;
+        closeAssist();
+      }
+      actions.querySelector('[data-editor-save]').addEventListener('click', function () { finish(true); });
+      actions.querySelector('[data-editor-cancel]').addEventListener('click', function () { finish(false); });
+    });
+  });
+
+  // ============== 课程故事 HTML 预览器 ==============
+  var storyViewer = document.getElementById('storyViewer');
+  var storyDocNames = {
+    mar: '泥塑里的家乡·屋顶与花窗_3月课程故事.html',
+    apr: '泥塑里的家乡·社区街巷_4月课程故事（草稿）.html'
+  };
+  function openStoryViewer(month) {
+    document.querySelectorAll('.story-doc').forEach(function (doc) {
+      doc.hidden = doc.id !== 'story-doc-' + month;
+    });
+    document.getElementById('storyViewerName').textContent = storyDocNames[month] || '课程故事预览.html';
+    storyViewer.classList.add('open');
+    storyViewer.setAttribute('aria-hidden', 'false');
+    document.getElementById('storyViewerScroll').scrollTop = 0;
+  }
+  function closeStoryViewer() {
+    storyViewer.classList.remove('open');
+    storyViewer.setAttribute('aria-hidden', 'true');
+  }
+  document.querySelectorAll('[data-preview-story]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var month = btn.dataset.previewStory;
+      if (month === 'apr' && document.getElementById('reportStatusBadge').textContent === '未生成') {
+        showToast('请先「自动生成图文报告」，再预览 4 月草稿');
+        return;
+      }
+      openStoryViewer(month);
+    });
+  });
+  document.getElementById('storyViewerCloseBtn').addEventListener('click', closeStoryViewer);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && storyViewer.classList.contains('open')) closeStoryViewer();
+  });
+  document.getElementById('storyViewerShareBtn').addEventListener('click', function () {
+    showToast('已复制 HTML 分享链接（模拟），园长可直接在线查看');
+  });
+  document.querySelectorAll('[data-archived-action]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showToast('3 月报告已归档（模拟）');
+    });
+  });
+</script>
+</body>
+</html>

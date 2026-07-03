@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>教研培训 · 主题探究教师工作台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/shared.css" />
+<style>
+  /* ── 教研培训屏特有样式 ─────────────────────────────── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .stat-strip .card { padding: var(--space-4) var(--space-5); }
+  .stat-strip strong { font-size: var(--text-xl); font-variant-numeric: tabular-nums; }
+
+  .source-type {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .training-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .training-card.hidden { display: none; }
+  .training-card-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    align-items: start;
+  }
+  .training-card-head h2 { font-size: var(--text-lg); }
+  .training-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    color: var(--muted);
+    font-size: var(--text-sm);
+  }
+  .training-brief {
+    border-left: 3px solid var(--accent);
+    background: color-mix(in oklab, var(--accent), transparent 95%);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--fg);
+  }
+  .training-brief .meta { display: block; margin-top: var(--space-1); }
+
+  .material-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-sm);
+  }
+  .material-row:last-child { border-bottom: 0; }
+  .material-row .mat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--accent), transparent 92%);
+  }
+  .material-row .mat-name { color: var(--fg); }
+  .material-row .mat-actions { display: flex; gap: var(--space-2); }
+
+  .training-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    border-top: 1px dashed var(--border);
+    padding-top: var(--space-4);
+  }
+  .deadline { color: var(--warn); font-size: var(--text-sm); }
+
+  /* 教研成果 → 活动修改（线下审阅批注） */
+  .outcome-list { display: grid; gap: var(--space-2); }
+  .outcome-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: start;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+  }
+  .outcome-item .outcome-no {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--accent), transparent 88%);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+  .outcome-item.done { border-color: color-mix(in oklab, var(--success), transparent 55%); background: color-mix(in oklab, var(--success), transparent 95%); }
+  .outcome-item.done .outcome-no { background: color-mix(in oklab, var(--success), transparent 85%); color: var(--success); }
+  .outcome-body { display: grid; gap: var(--space-2); }
+  .outcome-body strong { color: var(--fg); }
+  .outcome-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+
+  .reflect-status {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+  .reflect-status.submitted {
+    border-style: solid;
+    border-color: color-mix(in oklab, var(--success), transparent 55%);
+    background: color-mix(in oklab, var(--success), transparent 95%);
+    color: var(--fg);
+  }
+
+  .upload-dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    text-align: center;
+    color: var(--muted);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-standard);
+  }
+  .upload-dropzone:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── 材料预览器（HTML 文档浮层） ─────────────────────── */
+  .doc-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: none;
+    flex-direction: column;
+    background: color-mix(in oklab, var(--fg), transparent 30%);
+  }
+  .doc-viewer.open { display: flex; }
+  .doc-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-sm);
+  }
+  .doc-toolbar .doc-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .doc-toolbar .spacer { flex: 1; }
+  .doc-scroll { flex: 1; overflow-y: auto; padding: var(--space-6) var(--space-4); }
+  .doc-page {
+    width: min(760px, 94vw);
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--elev-raised);
+    padding: var(--space-8);
+    display: grid;
+    gap: var(--space-4);
+    line-height: var(--leading-body);
+  }
+  .doc-page h2 { font-size: var(--text-xl); }
+  .doc-page h3 { font-size: var(--text-base); margin-top: var(--space-2); }
+  .doc-page p, .doc-page li { color: var(--fg); font-size: var(--text-sm); }
+  .doc-page .meta { color: var(--muted); }
+
+  @media (max-width: 920px) {
+    .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .training-card-head { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">探</div>
+      <div>
+        <div>主题探究工作台</div>
+        <div class="meta">中一班 · 2026 春</div>
+      </div>
+    </div>
+    <nav class="nav-list" id="nav">
+      <a class="nav-btn" href="../index.html">工作台 <span class="meta">1</span></a>
+      <a class="nav-btn active" href="training.html">教研培训 <span class="meta">2</span></a>
+      <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
+      <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
+      <a class="nav-btn" href="map.html">主题网络图 <span class="meta">5</span></a>
+      <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">6</span></a>
+      <a class="nav-btn" href="materials.html">活动素材 <span class="meta">7</span></a>
+      <a class="nav-btn" href="story.html">课程故事 <span class="meta">8</span></a>
+      <a class="nav-btn" href="review.html">审阅批注 <span class="meta">9</span></a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
+      <input class="search" placeholder="检索培训、教研主题或材料" type="search" id="trainingSearch" />
+      <div class="row-between">
+        <span class="badge badge-dot warn" id="trainingTopBadge">1 项培训待报名 · 1 份反思待提交</span>
+        <span class="meta">2026 春 · 中一班</span>
+      </div>
+    </header>
+    <div class="content">
+      <section class="screen active" id="training">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Professional development</div>
+            <h1>教研培训：接收园所培训、报名参加、提交反思并转化到活动</h1>
+          </div>
+        </div>
+
+        <div class="stat-strip">
+          <div class="card stat"><span class="source-type">待报名</span><strong id="statOpen">1</strong><p class="meta">园所新发布</p></div>
+          <div class="card stat"><span class="source-type">已报名</span><strong id="statEnrolled">1</strong><p class="meta">待参加</p></div>
+          <div class="card stat"><span class="source-type">待提交反思</span><strong id="statReflect">1</strong><p class="meta">已参加教研</p></div>
+          <div class="card stat"><span class="source-type">已完成</span><strong id="statDone">1</strong><p class="meta">反思与转化闭环</p></div>
+        </div>
+
+        <div class="grid grid-main">
+          <div class="stack">
+            <div class="card stack-sm">
+              <div class="filters" id="statusFilters">
+                <button class="chip active" data-filter-status="all">全部</button>
+                <button class="chip" data-filter-status="open">待报名</button>
+                <button class="chip" data-filter-status="enrolled">已报名</button>
+                <button class="chip" data-filter-status="reflect">待提交反思</button>
+                <button class="chip" data-filter-status="done">已完成</button>
+              </div>
+              <p class="meta">园所发布的培训会出现在这里；已参加的教研需要提交反思与材料，教研结论会生成「活动修改建议」，点击链接可直接跳到要修改的计划或故事。</p>
+            </div>
+
+            <!-- ① 待报名 -->
+            <article class="training-card" data-status="open" id="training-network">
+              <div class="training-card-head">
+                <div class="stack-sm">
+                  <h2>园本教研：主题网络图的生成与运用</h2>
+                  <div class="training-meta">
+                    <span>📅 2026-07-10（周五）14:00-16:00</span>
+                    <span>📍 园部三楼会议室</span>
+                    <span>🎓 主讲：保教主任</span>
+                    <span>👥 面向：中大班教师</span>
+                  </div>
+                </div>
+                <span class="badge badge-dot warn" data-status-badge>待报名</span>
+              </div>
+              <div class="training-brief">
+                <strong>培训背景</strong>
+                <span class="meta">近两个月各班主题网络图质量差异较大：部分班级的网络图与儿童语料脱节，活动节点没有对应课程依据。本次教研以中一班「泥塑里的家乡」为案例，练习从儿童语料生成子探究点、再落到周计划活动的完整路径。</span>
+              </div>
+              <div>
+                <div class="row-between"><h3>相关材料</h3><span class="meta">报名前可先预习</span></div>
+                <div class="material-row">
+                  <span class="mat-icon">📄</span>
+                  <span><span class="mat-name">主题网络图工作坊 · 预读材料</span><br /><span class="meta">HTML · 6 页 · 园所教研组编</span></span>
+                  <span class="mat-actions"><button class="btn btn-small" data-preview-doc="doc-network">预览</button><button class="btn btn-small" data-download>下载</button></span>
+                </div>
+                <div class="material-row">
+                  <span class="mat-icon">📑</span>
+                  <span><span class="mat-name">《指南》五大领域目标摘编</span><br /><span class="meta">HTML · 摘编版 · 附各年龄段典型表现</span></span>
+                  <span class="mat-actions"><button class="btn btn-small" data-preview-doc="doc-guide">预览</button><button class="btn btn-small" data-download>下载</button></span>
+                </div>
+                <div class="material-row">
+                  <span class="mat-icon">🎬</span>
+                  <span><span class="mat-name">示范课视频：与儿童共绘主题网络</span><br /><span class="meta">视频 · 18 分钟 · 培训现场回放用</span></span>
+                  <span class="mat-actions"><button class="btn btn-small" data-download>下载</button></span>
+                </div>
+              </div>
+              <div class="training-foot">
+                <span class="deadline">报名截止：2026-07-06 17:00 · 剩余 12 个名额</span>
+                <span class="mat-actions">
+                  <button class="btn btn-primary" data-enroll>报名参加</button>
+                </span>
+              </div>
+            </article>
+
+            <!-- ② 已报名 -->
+            <article class="training-card" data-status="enrolled" id="training-observe">
+              <div class="training-card-head">
+                <div class="stack-sm">
+                  <h2>区级培训：幼儿行为观察与记录（进阶）</h2>
+                  <div class="training-meta">
+                    <span>📅 2026-07-17（周五）9:00-11:30</span>
+                    <span>💻 线上直播 · 会议号培训前一天下发</span>
+                    <span>🎓 主讲：区教研员</span>
+                  </div>
+                </div>
+                <span class="badge badge-dot accent" data-status-badge>已报名</span>
+              </div>
+              <div class="training-brief">
+                <strong>培训背景</strong>
+                <span class="meta">区教研室针对「行为记录多、分析少」的普遍问题组织进阶培训，聚焦如何从白描记录走向发展解读，与本工作台「活动素材 → 课程故事」链路直接相关。</span>
+              </div>
+              <div>
+                <div class="row-between"><h3>相关材料</h3><span class="meta">1 份</span></div>
+                <div class="material-row">
+                  <span class="mat-icon">📄</span>
+                  <span><span class="mat-name">课前任务单：带一段自己的观察记录</span><br /><span class="meta">HTML · 1 页 · 需在培训当天展示</span></span>
+                  <span class="mat-actions"><button class="btn btn-small" data-preview-doc="doc-task">预览</button><button class="btn btn-small" data-download>下载</button></span>
+                </div>
+              </div>
+              <div class="training-foot">
+                <span class="meta">已报名 · 2026-07-01 提交</span>
+                <span class="mat-actions">
+                  <a class="btn btn-small" href="materials.html">去准备观察记录</a>
+                  <button class="btn btn-small" data-cancel-enroll>取消报名</button>
+                </span>
+              </div>
+            </article>
+
+            <!-- ③ 已参加 · 待提交反思 -->
+            <article class="training-card" data-status="reflect" id="training-story">
+              <div class="training-card-head">
+                <div class="stack-sm">
+                  <h2>课程故事撰写工作坊（已参加）</h2>
+                  <div class="training-meta">
+                    <span>📅 2026-06-19 已参加</span>
+                    <span>📍 园部三楼会议室</span>
+                    <span>🎓 主讲：园长 · 特邀教研员</span>
+                  </div>
+                </div>
+                <span class="badge badge-dot warn" data-status-badge>待提交反思</span>
+              </div>
+              <div class="training-brief">
+                <strong>教研要点回顾</strong>
+                <span class="meta">课程故事不是活动流水账：起点讲兴趣与依据，过程讲关键转折与证据，反思讲儿童发展与教师调整。工作坊上以各班 5 月故事为样本做了互评。</span>
+              </div>
+              <div class="reflect-status" id="storyReflectStatus">
+                📝 需提交：结合工作坊意见，写一篇针对本班课程故事的修改反思，并附修改前后的对比材料。<strong>截止 2026-07-08</strong>。
+              </div>
+              <div class="training-foot">
+                <span class="meta">提交后园所教研组会回执确认</span>
+                <span class="mat-actions">
+                  <a class="btn btn-small" href="story.html#story-mar">回看 3 月课程故事</a>
+                  <button class="btn btn-primary" data-open-reflect>提交反思与材料</button>
+                </span>
+              </div>
+            </article>
+
+            <!-- ④ 已完成 · 教研成果转化 -->
+            <article class="training-card" data-status="done" id="training-audit">
+              <div class="training-card-head">
+                <div class="stack-sm">
+                  <h2>月计划联合审议：4 月计划面对面（已完成）</h2>
+                  <div class="training-meta">
+                    <span>📅 2026-04-26 已参加</span>
+                    <span>📍 园部会议室 · 线下审议</span>
+                    <span>👥 园长 · 保教主任 · 平行班教师</span>
+                  </div>
+                </div>
+                <span class="badge badge-dot success" data-status-badge>已完成</span>
+              </div>
+              <div class="reflect-status submitted">
+                ✅ 反思与材料已于 2026-04-28 提交，园所教研组已确认归档。
+              </div>
+              <div>
+                <div class="row-between">
+                  <h3>教研成果 · 活动修改建议</h3>
+                  <span class="badge">线下审议生成 · 3 条</span>
+                </div>
+                <p class="meta" style="margin-bottom: var(--space-2);">现场审议结论已转成可执行的修改建议——相当于一次线下的审阅批注。点击链接直接跳到要修改的文档，改完回来标记「已处理」。</p>
+                <div class="outcome-list">
+                  <div class="outcome-item done" data-outcome>
+                    <span class="outcome-no">1</span>
+                    <div class="outcome-body">
+                      <strong>周计划需持续标注五大领域，避免只写活动名</strong>
+                      <span class="meta">来源：审议结论第 2 条 · 指向 4 月各周计划</span>
+                      <span class="outcome-actions">
+                        <a class="btn btn-small" href="plans.html#week-8">打开第 8 周周计划</a>
+                        <button class="btn btn-small" data-outcome-toggle>已处理 ✓</button>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="outcome-item" data-outcome>
+                    <span class="outcome-no">2</span>
+                    <div class="outcome-body">
+                      <strong>主题网络图补充「社区资源」分支，与走访活动对应</strong>
+                      <span class="meta">来源：审议结论第 3 条 · 指向当月主题网络图</span>
+                      <span class="outcome-actions">
+                        <a class="btn btn-small" href="map.html">打开主题网络图</a>
+                        <button class="btn btn-small" data-outcome-toggle>标记已处理</button>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="outcome-item" data-outcome>
+                    <span class="outcome-no">3</span>
+                    <div class="outcome-body">
+                      <strong>课程故事保留儿童原话引用格式，证据链到活动素材</strong>
+                      <span class="meta">来源：审议结论第 5 条 · 指向 4 月课程故事</span>
+                      <span class="outcome-actions">
+                        <a class="btn btn-small" href="story.html#story-apr">打开 4 月课程故事</a>
+                        <button class="btn btn-small" data-outcome-toggle>标记已处理</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="stack">
+            <div class="card stack-sm">
+              <div class="row-between"><h2>成果转化进度</h2><span class="badge badge-dot accent">本月</span></div>
+              <p class="meta">已完成教研生成的修改建议：</p>
+              <div class="stack-sm">
+                <div class="row-between"><span class="meta">修改建议</span><span class="mono" id="outcomeTotal">3 条</span></div>
+                <div class="row-between"><span class="meta">已处理</span><span class="mono success" id="outcomeDone">1 条</span></div>
+                <div class="progress"><span id="outcomeBar" style="width: 33%;"></span></div>
+              </div>
+              <p class="meta">线上退回意见在<a href="review.html">审阅批注</a>处理；这里只汇总线下教研产生的修改任务。</p>
+            </div>
+            <div class="card stack-sm">
+              <h2>反思提交小提示</h2>
+              <p class="meta">一篇有效的教研反思 = 我原来怎么做 ＋ 教研中听到/看到了什么 ＋ 我准备改哪里（落到具体的计划、教案或故事）。附上修改前后的对比材料最有说服力。</p>
+            </div>
+            <div class="card stack-sm">
+              <h2>培训日历</h2>
+              <div class="stack-sm">
+                <div class="row-between"><span class="meta">07-10 主题网络图工作坊</span><span class="badge badge-dot warn">待报名</span></div>
+                <div class="row-between"><span class="meta">07-17 行为观察进阶（线上）</span><span class="badge badge-dot accent">已报名</span></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- ============ 提交反思与材料抽屉 ============ -->
+<div aria-hidden="true" class="drawer" id="reflectDrawer">
+  <div class="drawer-panel">
+    <div class="row-between">
+      <div><div class="eyebrow">Reflection</div><h2>提交教研反思与材料</h2></div>
+      <button class="btn btn-small" id="closeReflectBtn">关闭</button>
+    </div>
+    <div class="stack">
+      <div class="field">
+        <label for="reflectTraining">关联教研</label>
+        <select id="reflectTraining">
+          <option selected>课程故事撰写工作坊 · 2026-06-19</option>
+          <option>月计划联合审议：4 月计划面对面 · 2026-04-26</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="reflectText">反思正文</label>
+        <textarea id="reflectText" style="min-height: 160px;" placeholder="我原来怎么做 ＋ 教研中听到/看到了什么 ＋ 我准备改哪里（落到具体计划、教案或故事）。"></textarea>
+      </div>
+      <div class="field">
+        <label>相关材料（修改前后对比最有说服力）</label>
+        <div class="upload-dropzone" id="reflectDropzone">拖拽或点击选择文件<br /><span class="meta">支持修改稿、照片、录音等</span></div>
+      </div>
+      <div class="field">
+        <label>本次反思会落到哪些文档（可多选）</label>
+        <div class="tag-picker">
+          <label class="tag-option"><input type="checkbox" value="story-mar" checked />3 月课程故事</label>
+          <label class="tag-option"><input type="checkbox" value="story-apr" />4 月课程故事</label>
+          <label class="tag-option"><input type="checkbox" value="week-8" />第 8 周周计划</label>
+          <label class="tag-option"><input type="checkbox" value="map" />主题网络图</label>
+        </div>
+      </div>
+      <div class="row-between">
+        <span class="meta">提交后园所教研组会回执确认</span>
+        <button class="btn btn-primary" id="submitReflectBtn">提交反思</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 材料预览浮层（HTML 文档） ============ -->
+<div aria-hidden="true" class="doc-viewer" id="docViewer" role="dialog" aria-label="材料预览">
+  <div class="doc-toolbar">
+    <button class="btn btn-small" id="docCloseBtn" type="button">← 关闭</button>
+    <span class="doc-name" id="docName">材料预览</span>
+    <span class="spacer"></span>
+    <button class="btn btn-small" id="docDownloadBtn" type="button">下载</button>
+  </div>
+  <div class="doc-scroll">
+    <article class="doc-page" id="docPage"></article>
+  </div>
+</div>
+
+<div aria-hidden="true" class="toast" id="toast"></div>
+
+<script src="../assets/shared.js"></script>
+<script>
+  // 移动端菜单
+  var sidebar = document.querySelector('#sidebar');
+  var menuBtn = document.getElementById('menuBtn');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function () { sidebar.classList.toggle('open'); });
+  }
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('#sidebar') && !event.target.closest('#menuBtn')) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+  var showToast = window.workbenchShared.showToast;
+
+  // ============== 状态筛选 + 搜索 ==============
+  var activeStatus = 'all';
+  var keyword = '';
+  function applyFilters() {
+    document.querySelectorAll('.training-card').forEach(function (card) {
+      var statusOk = activeStatus === 'all' || card.dataset.status === activeStatus;
+      var textOk = !keyword || card.textContent.toLowerCase().indexOf(keyword) !== -1;
+      card.classList.toggle('hidden', !(statusOk && textOk));
+    });
+  }
+  document.querySelectorAll('[data-filter-status]').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      activeStatus = chip.dataset.filterStatus;
+      document.querySelectorAll('[data-filter-status]').forEach(function (c) { c.classList.toggle('active', c === chip); });
+      applyFilters();
+    });
+  });
+  document.getElementById('trainingSearch').addEventListener('input', function (event) {
+    keyword = event.target.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  // ============== 报名 / 取消报名 ==============
+  document.querySelectorAll('[data-enroll]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var card = btn.closest('.training-card');
+      card.dataset.status = 'enrolled';
+      var badge = card.querySelector('[data-status-badge]');
+      badge.textContent = '已报名';
+      badge.className = 'badge badge-dot accent';
+      btn.textContent = '已报名 ✓';
+      btn.disabled = true;
+      btn.classList.remove('btn-primary');
+      bumpStat('statOpen', -1); bumpStat('statEnrolled', 1);
+      document.getElementById('trainingTopBadge').textContent = '1 份反思待提交';
+      showToast('已报名「主题网络图的生成与运用」，开课前一天会收到提醒');
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('[data-cancel-enroll]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showToast('原型阶段：取消报名需园所端确认，此处仅演示');
+    });
+  });
+  function bumpStat(id, delta) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = String(Math.max(0, Number(el.textContent) + delta));
+  }
+
+  // ============== 提交反思抽屉 ==============
+  var reflectDrawer = document.getElementById('reflectDrawer');
+  document.querySelectorAll('[data-open-reflect]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      reflectDrawer.classList.add('open');
+      reflectDrawer.setAttribute('aria-hidden', 'false');
+    });
+  });
+  function closeReflect() {
+    reflectDrawer.classList.remove('open');
+    reflectDrawer.setAttribute('aria-hidden', 'true');
+  }
+  document.getElementById('closeReflectBtn').addEventListener('click', closeReflect);
+  reflectDrawer.addEventListener('click', function (event) {
+    if (event.target === reflectDrawer) closeReflect();
+  });
+  document.getElementById('reflectDropzone').addEventListener('click', function () {
+    showToast('原型阶段：文件选择留待后端接入');
+  });
+  document.getElementById('submitReflectBtn').addEventListener('click', function () {
+    var text = document.getElementById('reflectText').value.trim();
+    if (!text) { showToast('请先填写反思正文'); return; }
+    var card = document.getElementById('training-story');
+    card.dataset.status = 'done';
+    var badge = card.querySelector('[data-status-badge]');
+    badge.textContent = '反思已提交';
+    badge.className = 'badge badge-dot success';
+    var status = document.getElementById('storyReflectStatus');
+    status.classList.add('submitted');
+    status.innerHTML = '✅ 反思与材料已提交（' + new Date().toISOString().slice(0, 10) + '），等待园所教研组回执确认。';
+    var openBtn = card.querySelector('[data-open-reflect]');
+    if (openBtn) { openBtn.textContent = '已提交 ✓'; openBtn.disabled = true; openBtn.classList.remove('btn-primary'); }
+    bumpStat('statReflect', -1); bumpStat('statDone', 1);
+    document.getElementById('trainingTopBadge').textContent = '培训事项已清空';
+    closeReflect();
+    applyFilters();
+    showToast('反思与材料已提交，园所确认后本条教研进入「已完成」');
+  });
+
+  // ============== 教研成果 · 已处理标记 ==============
+  function refreshOutcomeStats() {
+    var items = document.querySelectorAll('[data-outcome]');
+    var done = document.querySelectorAll('[data-outcome].done').length;
+    document.getElementById('outcomeTotal').textContent = items.length + ' 条';
+    document.getElementById('outcomeDone').textContent = done + ' 条';
+    document.getElementById('outcomeBar').style.width = Math.round(done / items.length * 100) + '%';
+  }
+  document.querySelectorAll('[data-outcome-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('[data-outcome]');
+      var nowDone = !item.classList.contains('done');
+      item.classList.toggle('done', nowDone);
+      btn.textContent = nowDone ? '已处理 ✓' : '标记已处理';
+      refreshOutcomeStats();
+      showToast(nowDone ? '已标记为已处理' : '已恢复为待处理');
+    });
+  });
+
+  // ============== 材料预览 ==============
+  var docContents = {
+    'doc-network': {
+      name: '主题网络图工作坊_预读材料.html',
+      html: '<div class="meta">园所教研组 · 2026-07 · 预读材料</div>' +
+        '<h2>主题网络图的生成与运用 · 预读材料</h2>' +
+        '<h3>一、为什么要重新讨论主题网络图</h3>' +
+        '<p>主题网络图不是装饰品，而是把「儿童的兴趣」翻译成「可执行的活动」的中间层。近两个月的巡班发现两类问题：一是网络图与儿童语料脱节，分支来自教师预设；二是活动节点没有对应课程依据，审阅时无法追溯。</p>' +
+        '<h3>二、一条完整的生成路径</h3>' +
+        '<p>儿童语料 → 归纳子探究点 → 对照《指南》确认发展价值 → 落到周计划活动 → 活动证据回流网络图。工作坊将以中一班「泥塑里的家乡」为案例逐步演示。</p>' +
+        '<h3>三、请带着这些问题来</h3>' +
+        '<p>1. 你班当前主题网络图里，哪个分支来自儿童原话？2. 哪个活动节点说不清它的课程依据？3. 网络图多久更新一次、由谁更新？</p>' +
+        '<div class="meta">完整版共 6 页，此处为预览摘要。</div>'
+    },
+    'doc-guide': {
+      name: '指南五大领域目标摘编.html',
+      html: '<div class="meta">摘编自《3-6 岁儿童学习与发展指南》</div>' +
+        '<h2>《指南》五大领域目标摘编（4-5 岁段）</h2>' +
+        '<h3>科学</h3><p>亲近自然，喜欢探究；能对事物或现象进行观察比较，发现其相同与不同。</p>' +
+        '<h3>艺术</h3><p>喜欢自然界与生活中美的事物；能用绘画、手工制作等表现自己观察到或想象的事物。</p>' +
+        '<h3>语言</h3><p>愿意讲话并能清楚地表达；能基本完整地讲述自己的所见所闻。</p>' +
+        '<h3>社会</h3><p>喜欢并适应群体生活；能感受家乡的变化与发展，萌发爱家乡的情感。</p>' +
+        '<h3>健康</h3><p>具有一定的平衡能力，动作协调、灵敏；具有基本的安全知识和自我保护能力。</p>' +
+        '<div class="meta">摘编版仅供教研使用，完整目标以原文为准。</div>'
+    },
+    'doc-task': {
+      name: '课前任务单_行为观察进阶.html',
+      html: '<div class="meta">区教研室 · 课前任务单</div>' +
+        '<h2>课前任务：带一段自己的观察记录</h2>' +
+        '<p>请从近一个月的活动素材中选出一段你认为「记得最好」的幼儿行为观察记录，培训当天将在小组内互评。</p>' +
+        '<h3>选择标准</h3>' +
+        '<p>1. 有具体情境（在哪个活动里）；2. 有行为白描（幼儿做了什么）；3. 有幼儿原话；4. 最好已经尝试写过一句发展解读。</p>' +
+        '<p class="meta">提示：可直接从工作台「活动素材」时间轴导出。</p>'
+    }
+  };
+  var docViewer = document.getElementById('docViewer');
+  document.querySelectorAll('[data-preview-doc]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var doc = docContents[btn.dataset.previewDoc];
+      if (!doc) return;
+      document.getElementById('docName').textContent = doc.name;
+      document.getElementById('docPage').innerHTML = doc.html;
+      docViewer.classList.add('open');
+      docViewer.setAttribute('aria-hidden', 'false');
+    });
+  });
+  function closeDoc() {
+    docViewer.classList.remove('open');
+    docViewer.setAttribute('aria-hidden', 'true');
+  }
+  document.getElementById('docCloseBtn').addEventListener('click', closeDoc);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      if (docViewer.classList.contains('open')) closeDoc();
+      else if (reflectDrawer.classList.contains('open')) closeReflect();
+    }
+  });
+  document.getElementById('docDownloadBtn').addEventListener('click', function () {
+    showToast('原型阶段：真实文件下载留待后端接入');
+  });
+  document.querySelectorAll('[data-download]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showToast('原型阶段：真实文件下载留待后端接入');
+    });
+  });
+
+  refreshOutcomeStats();
+</script>
+</body>
+</html>

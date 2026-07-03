@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>主题探究教师工作台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="assets/tokens.css" />
+<link rel="stylesheet" href="assets/shared.css" />
+<style>
+  .launcher-hero {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+  }
+  .launcher-hero .eyebrow { margin-bottom: 0; }
+  .launcher-hero h1 { font-size: clamp(var(--text-2xl), 5vw, var(--text-3xl)); }
+  .launcher-hero p {
+    color: var(--fg);
+    font-size: var(--text-base);
+    max-width: 680px;
+  }
+  .launcher-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+  }
+  .launcher-card {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    text-decoration: none;
+    color: var(--fg);
+    transition: border-color var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+  }
+  .launcher-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .launcher-card .cat-index {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .launcher-card h3 {
+    font-size: var(--text-lg);
+    color: var(--fg);
+  }
+  .launcher-card .meta {
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+  .launcher-foot {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: var(--text-sm);
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">探</div>
+      <div>
+        <div>主题探究工作台</div>
+        <div class="meta">中一班 · 2026 春</div>
+      </div>
+    </div>
+    <nav class="nav-list" id="nav">
+      <a class="nav-btn active" href="index.html">工作台 <span class="meta">1</span></a>
+      <a class="nav-btn" href="screens/training.html">教研培训 <span class="meta">2</span></a>
+      <a class="nav-btn" href="screens/themes.html">主题列表 <span class="meta">3</span></a>
+      <a class="nav-btn" href="screens/corpus.html">儿童语料库 <span class="meta">4</span></a>
+      <a class="nav-btn" href="screens/map.html">主题网络图 <span class="meta">5</span></a>
+      <a class="nav-btn" href="screens/plans.html">月/周计划 <span class="meta">6</span></a>
+      <a class="nav-btn" href="screens/materials.html">活动素材 <span class="meta">7</span></a>
+      <a class="nav-btn" href="screens/story.html">课程故事 <span class="meta">8</span></a>
+      <a class="nav-btn" href="screens/review.html">审阅批注 <span class="meta">9</span></a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
+      <input class="search" placeholder="检索主题、儿童语料、计划或批注" type="search" />
+      <div class="row-between">
+        <span class="badge badge-dot success">当前主题进行中</span>
+        <span class="meta">2026 春 · 中一班</span>
+      </div>
+    </header>
+    <div class="content">
+      <section class="launcher-hero">
+        <div class="eyebrow">Workbench launcher</div>
+        <h1>主题探究教师工作台</h1>
+        <p>本概览页只承载导航与概览信息。每个具体流程已拆分为独立屏幕文件，便于后续单独修改某一屏而不必动其他部分。点击下方卡片进入对应屏。</p>
+      </section>
+
+      <div class="launcher-grid">
+        <a class="launcher-card" href="screens/dashboard.html" data-od-id="launcher-card-dashboard">
+          <span class="cat-index">01 · 工作台</span>
+          <h3>工作台 Dashboard</h3>
+          <p class="meta">当月焦点卡、待办动作、当前主题进度、最近活动。打开即看到老师今天该处理的事。</p>
+        </a>
+        <a class="launcher-card" href="screens/training.html" data-od-id="launcher-card-training">
+          <span class="cat-index">02 · 教研培训</span>
+          <h3>教研培训 Training</h3>
+          <p class="meta">接收园所培训通知、报名参加；提交已参加教研的反思与材料，并把教研成果应用到活动修改。</p>
+        </a>
+        <a class="launcher-card" href="screens/themes.html" data-od-id="launcher-card-themes">
+          <span class="cat-index">03 · 主题列表与详情</span>
+          <h3>主题列表 Themes</h3>
+          <p class="meta">3–6 月四张焦点卡。每卡呈现月主题、探究脉络、课程依据、沉淀数据、入口。</p>
+        </a>
+        <a class="launcher-card" href="screens/corpus.html" data-od-id="launcher-card-corpus">
+          <span class="cat-index">04 · 儿童语料库</span>
+          <h3>儿童语料 Corpus</h3>
+          <p class="meta">老师日常记录的儿童话语、标签、来源儿童。可勾选提升到主题网络。</p>
+        </a>
+        <a class="launcher-card" href="screens/map.html" data-od-id="launcher-card-map">
+          <span class="cat-index">05 · 主题网络图</span>
+          <h3>主题网络图 Map</h3>
+          <p class="meta">主主题发散到子探究点，再落到具体活动的左→右思维导图。活动直接标注五大领域。</p>
+        </a>
+        <a class="launcher-card" href="screens/plans.html" data-od-id="launcher-card-plans">
+          <span class="cat-index">06 · 月/周计划</span>
+          <h3>月/周计划 Plans</h3>
+          <p class="meta">月计划父级、周计划子级。教案可右侧滑入面板预览，或直接进入填写/编辑。</p>
+        </a>
+        <a class="launcher-card" href="screens/materials.html" data-od-id="launcher-card-materials">
+          <span class="cat-index">07 · 活动素材</span>
+          <h3>活动素材 Materials</h3>
+          <p class="meta">教师在 PC 或手机端上传文字、照片、视频，记录主题活动中幼儿的行为表现，沉淀为课程故事素材。</p>
+        </a>
+        <a class="launcher-card" href="screens/story.html" data-od-id="launcher-card-story">
+          <span class="cat-index">08 · 课程故事</span>
+          <h3>课程故事 Story</h3>
+          <p class="meta">梳理主题探究的起点、过程与反思，调用过往语料、素材与计划，自动生成当月图文汇报。</p>
+        </a>
+        <a class="launcher-card" href="screens/review.html" data-od-id="launcher-card-review">
+          <span class="cat-index">09 · 审阅批注</span>
+          <h3>审阅批注 Review</h3>
+          <p class="meta">退回意见按四类来源归类：儿童语料库、月主题及计划、周主题及计划、教案内容。</p>
+        </a>
+      </div>
+
+      <p class="launcher-foot">修改提示：每个屏幕文件位于 <code>screens/*.html</code>。每屏的样式仅与该屏相关；布局、按钮、卡片、徽章等通用样式集中在 <code>assets/shared.css</code>，token 在 <code>assets/tokens.css</code>。</p>
+    </div>
+  </main>
+</div>
+
+<div aria-hidden="true" class="toast" id="toast"></div>
+
+<script src="assets/shared.js"></script>
+<script>
+  // 移动端菜单
+  var sidebar = document.querySelector('#sidebar');
+  var menuBtn = document.getElementById('menuBtn');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function () { sidebar.classList.toggle('open'); });
+  }
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('#sidebar') && !event.target.closest('#menuBtn')) {
+      sidebar.classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>

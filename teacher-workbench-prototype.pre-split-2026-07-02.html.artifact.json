@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "teacher-workbench-prototype.pre-split-2026-07-02.html",
+  "entry": "teacher-workbench-prototype.pre-split-2026-07-02.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-02T15:00:16.232Z",
+  "updatedAt": "2026-07-02T15:00:16.232Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

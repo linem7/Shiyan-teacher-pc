@@ -267,7 +267,7 @@ tr:last-child td { border-bottom: 0; }
   padding: 10px 12px;
   min-height: 42px;
 }
-.field textarea { min-height: 104px; resize: vertical; }
+.field textarea { min-height: 80px; resize: vertical; }
 .tag-picker { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .tag-option {
   display: inline-flex;

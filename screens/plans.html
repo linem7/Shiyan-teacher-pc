@@ -323,6 +323,8 @@
     }
 
     .field { display: grid; gap: var(--space-2); }
+    .grid-start { align-items: start; }
+
     .field label { font-weight: 600; font-size: var(--text-sm); }
     .field input, .field select, .field textarea {
       width: 100%;
@@ -1240,6 +1242,22 @@
       border-color: var(--accent);
       box-shadow: var(--focus-ring);
     }
+    .lesson-drawer-section input, .lesson-drawer-section select {
+      width: 100%;
+      padding: 10px 12px;
+      min-height: 42px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--fg);
+      font: inherit;
+    }
+    .lesson-drawer-section input:focus, .lesson-drawer-section select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: var(--focus-ring);
+    }
+
     .lesson-drawer-section .readonly-block {
       padding: var(--space-3);
       border: 1px solid var(--border);
@@ -1780,6 +1798,7 @@
       font-style: italic;
     }
     .node-picker {
+      min-height: 84px;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       background: var(--surface);
@@ -2158,6 +2177,8 @@
       line-height: var(--leading-tight);
     }
     .source-category-results {
+      max-height: 140px;
+      overflow: auto;
       display: grid;
       gap: var(--space-2);
     }
@@ -2211,7 +2232,7 @@
       </div>
     </div>
     <nav class="nav-list" id="nav">
-        <a class="nav-btn" href="../index.html">工作台 <span class="meta">1</span></a>
+        <a class="nav-btn" href="dashboard.html">工作台
         <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
         <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
         <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
@@ -2632,7 +2653,7 @@
 <form class="month-drawer-body" id="monthPlanForm" onsubmit="return false;">
 
 <div class="month-drawer-section">
-<div class="grid grid-2">
+<div class="grid grid-2 grid-start">
 <div class="field">
 <label for="monthPlanMonth">月份</label>
 <select id="monthPlanMonth">
@@ -2652,13 +2673,8 @@
 <span class="field-hint meta">选择 8 月即表示本学期包含 8 月；进入新学期（如 9 月-次年 1 月）时，请为新学期月份分别新建月计划。</span>
 </div>
 <div class="field">
-<label for="monthPlanThemeSelect">本月主题</label>
-<select id="monthPlanThemeSelect">
-<option value="泥塑里的家乡 · 屋顶与花窗">泥塑里的家乡 · 屋顶与花窗</option>
-<option value="泥塑里的家乡 · 社区街巷">泥塑里的家乡 · 社区街巷</option>
-<option value="家乡的桥">家乡的桥</option>
-<option value="我们的小展 · 作品整理与讲述">我们的小展 · 作品整理与讲述</option>
-</select>
+<label for="monthPlanTheme">本月主题</label>
+<input id="monthPlanTheme" type="text" placeholder="本月主题"/>
 </div>
 </div>
 <div class="grid grid-2" style="margin-top: var(--space-3);">
@@ -2738,7 +2754,7 @@
 </div>
 <form class="month-drawer-body" id="weekPlanForm" onsubmit="return false;">
 <div class="month-drawer-section">
-<div class="grid grid-2">
+<div class="grid grid-2 grid-start">
 <div class="field">
 <label for="weekPlanMonth">所属月份</label>
 <select id="weekPlanMonth">
@@ -3917,12 +3933,6 @@
 
 
     // ============== 提交月计划 抽屉 ==============
-    const monthThemes = [
-      { value: '泥塑里的家乡 · 屋顶与花窗', month: '3' },
-      { value: '泥塑里的家乡 · 社区街巷', month: '4' },
-      { value: '家乡的桥', month: '5' },
-      { value: '我们的小展 · 作品整理与讲述', month: '6' }
-    ];
     // 儿童视角：来自儿童语料库（与 corpus 屏幕共享同一份原话数据）
     const childCorpus = [
       { id: 'u1', quote: '“为什么老房子的屋顶不是平的？”', child: '辰辰 · 集体讨论', date: '2026-03-12', tags: ['建筑', '提出问题'] },
@@ -4089,7 +4099,7 @@
     }
     function collectMonthPlanForm() {
       const month = document.querySelector('#monthPlanMonth')?.value;
-      const theme = document.querySelector('#monthPlanThemeSelect')?.value;
+      const theme = document.querySelector('#monthPlanTheme')?.value.trim() || '';
       const startDate = document.querySelector('#monthPlanStartDate')?.value;
       const endDate = document.querySelector('#monthPlanEndDate')?.value;
       const weeks = monthPlanWeeks.map((w, idx) => ({
@@ -4108,24 +4118,17 @@
       };
     }
     function validateMonthPlanForm(data) {
-      if (!data.theme) return '请选择本月主题';
+      if (!data.theme) return '请填写本月主题';
       if (!data.startDate || !data.endDate) return '请选择月计划的开始与结束日期';
       if (data.startDate > data.endDate) return '开始日期不能晚于结束日期';
       return null;
-    }
-    function syncThemeToMonth() {
-      const month = document.querySelector('#monthPlanMonth')?.value;
-      const themeSelect = document.querySelector('#monthPlanThemeSelect');
-      const found = monthThemes.find(t => t.month === month);
-      if (found) themeSelect.value = found.value;
     }
     function loadMonthIntoDrawer(month) {
       const monthSelect = document.querySelector('#monthPlanMonth');
       if (monthSelect) monthSelect.value = month;
       const draft = readMonthPlanDraft(month);
-      syncThemeToMonth();
-      const themeSelect = document.querySelector('#monthPlanThemeSelect');
-      if (draft && draft.theme) themeSelect.value = draft.theme;
+      const themeInput = document.querySelector('#monthPlanTheme');
+      if (themeInput) themeInput.value = (draft && draft.theme) || '';
       const range = draft && draft.startDate && draft.endDate ? { start: draft.startDate, end: draft.endDate } : defaultMonthRange(month);
       document.querySelector('#monthPlanStartDate').value = range.start;
       document.querySelector('#monthPlanEndDate').value = range.end;

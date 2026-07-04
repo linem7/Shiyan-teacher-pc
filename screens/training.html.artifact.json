@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "screens/training.html",
+  "entry": "screens/training.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-04T14:27:16.917Z",
+  "updatedAt": "2026-07-04T14:27:16.917Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

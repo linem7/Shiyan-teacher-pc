@@ -1,13 +1,12 @@
-<!doctype html>
+
+<!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<title>工作台 · 主题探究教师工作台</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="../assets/tokens.css" />
-<link rel="stylesheet" href="../assets/shared.css" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>主题探究教师工作台 Prototype</title>
 <style>
-
     :root {
       --bg: #fafafa;
       --surface: #ffffff;
@@ -380,55 +379,6 @@
       padding: var(--space-4);
       background: var(--surface);
       min-height: 120px;
-    }
-
-    .section-h {
-      margin: 0;
-      font-size: var(--text-base);
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-    .progress-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: var(--space-2);
-    }
-    .progress-list li {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: var(--space-3);
-      padding: var(--space-3) var(--space-4);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--surface);
-    }
-    .progress-list li a {
-      color: var(--fg);
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .progress-list li a:hover { color: var(--accent); }
-    .progress-list li .meta {
-      color: var(--muted);
-      font-size: var(--text-sm);
-      text-align: right;
-    }
-    .todo-group {
-      display: grid;
-      gap: var(--space-2);
-      padding: var(--space-3);
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-    }
-    .todo-group .todo-label {
-      font-size: var(--text-xs);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
     }
 
     .month-progress {
@@ -2122,46 +2072,48 @@
       .month-form-head { grid-template-columns: 1fr; }
       .week-row .grid-2 { grid-template-columns: 1fr; }
     }
-  
-</style>
+  </style>
 </head>
 <body>
 <div class="app-shell">
-<aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="brand-mark">探</div>
-      <div>
-        <div>主题探究工作台</div>
-        <div class="meta">中一班 · 2026 春</div>
-      </div>
-    </div>
-    <nav class="nav-list" id="nav">
-        <a class="nav-btn active" href="dashboard.html">工作台
-        <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
-        <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
-        <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
-        <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">5</span></a>
-        <a class="nav-btn" href="materials.html">活动素材 <span class="meta">6</span></a>
-        <a class="nav-btn" href="story.html">课程故事 <span class="meta">7</span></a>
-        <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
-    </nav>
-  </aside>
+<aside aria-label="主导航" class="sidebar" id="sidebar">
+<div class="brand">
+<div class="brand-mark">探</div>
+<div>
+<div>主题探究工作台</div>
+<div class="meta">中一班 · 2026 春</div>
+</div>
+</div>
+<nav class="nav-list" id="nav">
+<button class="nav-btn active" data-screen="dashboard">工作台 <span class="meta">1</span></button>
+<button class="nav-btn" data-screen="themes">主题列表 <span class="meta">2</span></button>
+
+<button class="nav-btn" data-screen="corpus">儿童语料库 <span class="meta">3</span></button>
+<button class="nav-btn" data-screen="map">主题网络图 <span class="meta">4</span></button>
+<button class="nav-btn" data-screen="plans">月/周计划 <span class="meta">5</span></button>
+<button class="nav-btn" data-screen="review">审阅批注 <span class="meta">7</span></button>
+</nav>
+<div class="sidebar-foot">
+<div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
+</div>
+</aside>
 <main class="main">
 <header class="topbar">
-      <button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
-      <input class="search" placeholder="检索主题、儿童语料、计划或批注" type="search" />
-      <div class="row-between">
-        <span class="badge badge-dot success">当前主题进行中</span>
-        <button class="btn btn-primary btn-small" data-open-drawer="">新增语料</button>
-      </div>
-    </header>
+<button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
+<input class="search" placeholder="检索主题、儿童语料、计划或批注" type="search"/>
+<div class="row-between">
+<span class="badge badge-dot success">当前主题进行中</span>
+<button class="btn btn-primary btn-small" data-open-drawer="">新增语料</button>
+</div>
+</header>
 <div class="content">
-<section class="screen active active" data-od-id="screen-dashboard" id="dashboard">
+<section class="screen active" data-od-id="screen-dashboard" id="dashboard">
 <div class="page-head">
 <div>
-<h1>工作台</h1>
+<div class="eyebrow">Teacher workspace</div>
+<h1>把主题探究从素材沉淀推进到文档提交</h1>
 </div>
-<a class="btn btn-primary" href="themes.html">进入当前主题</a>
+<button class="btn btn-primary" data-screen-link="themes">进入当前主题</button>
 </div>
 <div class="grid hero-workbench">
 <div class="card stack">
@@ -2172,28 +2124,28 @@
 </div>
 <span class="badge badge-dot accent">进行中</span>
 </div>
-<h3 class="section-h">工作进度</h3>
-<ul class="progress-list">
-<li><a href="materials.html">活动素材</a><span class="meta">18 条新语料 · 42 张照片</span></li>
-<li><a href="themes.html">主题网络</a><span class="meta">7 个子探究点</span></li>
-<li><a href="plans.html">计划撰写</a><span class="meta">月计划草稿 · 周计划 2 份</span></li>
-<li><a href="review.html">审阅批注</a><span class="meta">1 份教案退回修改</span></li>
-</ul>
+<div class="timeline">
+<div class="timeline-step"><strong>素材补录</strong><p>新增 18 条儿童语料，照片 42 张</p></div>
+<div class="timeline-step"><strong>整理打标</strong><p>对象标签 6 个，思维类型覆盖 5 类</p></div>
+<div class="timeline-step"><strong>生成网络</strong><p>生成版已有 7 个子探究点</p></div>
+<div class="timeline-step"><strong>计划撰写</strong><p>月计划草稿，周计划 2 份</p></div>
+<div class="timeline-step"><strong>提交审阅</strong><p>1 份教案退回修改</p></div>
+</div>
 </div>
 <div class="card stack">
-<div class="card-head"><h2>本周待办</h2><span class="badge badge-dot warn">2 项</span></div>
+<div class="card-head"><h2>本周待办</h2><span class="badge badge-dot warn">3 项</span></div>
 <div class="stack-sm">
-<div class="todo-group">
-<span class="meta todo-label">审阅批注意见</span>
-<a class="nav-btn" href="review.html">处理教研主任批注 2 条</a>
-</div>
-<div class="todo-group">
-<span class="meta todo-label">即将到来的月计划 / 周计划</span>
-<a class="nav-btn" href="plans.html#month-may">5 月月计划（4 月底启动）</a>
-<a class="nav-btn" href="plans.html#week-5">第 5 周周计划（5 月第 1 周）</a>
+<button class="nav-btn" data-screen-link="corpus">整理“建筑”标签下的 6 条语料</button>
+<button class="nav-btn" data-screen-link="plans">提交 3 月月计划草稿</button>
+<button class="nav-btn" data-screen-link="review">处理教研主任批注 2 条</button>
 </div>
 </div>
 </div>
+<div class="grid grid-4" style="margin-top: var(--space-4);">
+<div class="card stat"><span class="meta">儿童语料</span><strong>86</strong><div class="progress"><span style="width: 72%"></span></div></div>
+<div class="card stat"><span class="meta">网络节点</span><strong>18</strong><div class="progress"><span style="width: 60%"></span></div></div>
+<div class="card stat"><span class="meta">文档草稿</span><strong>4</strong><div class="progress"><span style="width: 44%"></span></div></div>
+<div class="card stat"><span class="meta">待处理批注</span><strong>2</strong><div class="progress"><span style="width: 30%"></span></div></div>
 </div>
 <div class="card month-progress">
 <div class="row-between">
@@ -2249,50 +2201,670 @@
 </div>
 </div>
 </section>
-</div>
-</main>
-</div>
+<section class="screen" data-od-id="screen-themes" id="themes">
+          <div class="page-head">
+            <div><h1>本学期主题探究 · 3-6 月</h1></div>
+            <button class="btn btn-primary">新建主题</button>
+          </div>
+          <div class="theme-stack">
 
-<div aria-hidden="true" class="drawer" id="drawer">
-<div class="drawer-panel">
-<div class="row-between">
-<div><h2>新增儿童语料</h2></div>
-<button class="btn btn-small" id="closeDrawer">关闭</button>
+            <article class="theme-card" id="theme-mar" data-theme-card="mar">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>3月</strong><span>已通过 · 起始月</span></div>
+                <div>
+                  <h2>泥塑里的家乡 · 屋顶与花窗</h2>
+                  <p class="meta">大一班 · 2026-03-04 至 2026-03-29</p>
+                </div>
+                <span class="badge badge-dot success">已通过</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>老屋照片、屋顶形状、花窗纹样、泥塑材料。</p>
+                  <div class="theme-domains"><span class="domain-tag">科学</span><span class="domain-tag">艺术</span><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《指南》科学探究、艺术表现</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>园本泥塑课程 · 岭南老屋</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>社区老屋照片 · 家庭建筑照片</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>屋顶/窗格语料 11 条</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>已通过</p></div>
+                  <div><span class="source-type">周计划</span><strong>2 份</strong><p>第 3-4 周</p></div>
+                  <div><span class="source-type">教案</span><strong>6 份</strong><p>主题活动与区域延伸</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-plan-link="month-plan">查看 3 月月计划</button>
+                  <button class="btn" data-review-link="review-mar">查看审核意见</button>
+                  <button class="btn" data-screen-link="map">查看主题网络图</button>
+                </div>
+              </section>
+            </article>
+
+            <article class="theme-card" id="theme-apr" data-theme-card="apr">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>4月</strong><span>进行中 · 当前月</span></div>
+                <div>
+                  <h2>泥塑里的家乡 · 社区街巷</h2>
+                  <p class="meta">大一班 · 2026-04-01 至 2026-04-30</p>
+                </div>
+                <span class="badge badge-dot accent">进行中</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>花窗纹样、门楣瓦当、街巷路线、家乡故事。</p>
+                  <ul class="theme-goals">
+                    <li>补齐四类证据。</li>
+                    <li>完成第 4 周待填写教案。</li>
+                  </ul>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《纲要》生活化、综合化活动</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>岭南水乡街巷 · 园本泥塑</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>走访路线 · 家长访谈 · 社区纹样</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>花窗/路线/故事语料 18 条</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>退回修改中</p></div>
+                  <div><span class="source-type">周计划</span><strong>2 份</strong><p>第 7-8 周</p></div>
+                  <div><span class="source-type">教案</span><strong>5 份</strong><p>4 已填 · 1 待填</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-plan-link="month-apr">进入 4 月月计划</button>
+                  <button class="btn" data-review-link="review-apr">查看退回意见</button>
+                  <button class="btn" data-screen-link="corpus">提取儿童语料</button>
+                </div>
+              </section>
+            </article>
+
+            <article class="theme-card" id="theme-bridge" data-theme-card="bridge">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>5月</strong><span>预排 · 延伸月</span></div>
+                <div>
+                  <h2>家乡的桥</h2>
+                  <p class="meta">大一班 · 2026-05-04 至 2026-05-29</p>
+                </div>
+                <span class="badge">预排</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>桥拱、栏杆、桥墩、水乡交通、建造者故事。</p>
+                  <div class="theme-domains"><span class="domain-tag">社会</span><span class="domain-tag">语言</span><span class="domain-tag">科学</span><span class="domain-tag">艺术</span><span class="domain-tag">数学</span></div>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《指南》社会适应、科学观察</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>水乡建筑文化 · 桥作为地标</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>社区两座桥 · 老照片 · 家长职业资源</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>路桥提问 6 条（待沉淀）</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>预排</p></div>
+                  <div><span class="source-type">周计划</span><strong>0 份</strong><p>待拆解</p></div>
+                  <div><span class="source-type">教案</span><strong>0 份</strong><p>待撰写</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-screen-link="plans">进入 5 月月计划</button>
+                  <button class="btn" data-screen-link="map">规划主题网络图</button>
+                  <button class="btn" data-screen-link="corpus">补充儿童语料</button>
+                </div>
+              </section>
+            </article>
+
+            <article class="theme-card" id="theme-exhibition" data-theme-card="exhibition">
+              <header class="theme-card-head">
+                <div class="theme-month"><strong>6月</strong><span>未开始 · 展示月</span></div>
+                <div>
+                  <h2>我们的小展 · 作品整理与讲述</h2>
+                  <p class="meta">大一班 · 2026-06-01 至 2026-06-26</p>
+                </div>
+                <span class="badge">未开始</span>
+              </header>
+
+              <div class="theme-grid">
+                <section class="theme-block">
+                  <h3>探究脉络</h3>
+                  <p>作品整理、照片录音、儿童讲述、班级小展。</p>
+                  <div class="theme-domains"><span class="domain-tag">艺术</span><span class="domain-tag">语言</span><span class="domain-tag">社会</span><span class="domain-tag">健康</span></div>
+                </section>
+                <section class="theme-block">
+                  <h3>课程依据</h3>
+                  <div class="theme-evidence">
+                    <span class="evidence-chip"><span class="source-type">政策</span>《指南》表现与创造</span>
+                    <span class="evidence-chip"><span class="source-type">文化</span>园所每学期一次"小展"传统</span>
+                    <span class="evidence-chip"><span class="source-type">资源</span>儿童作品 · 录音 · 家庭邀请函</span>
+                    <span class="evidence-chip"><span class="source-type">儿童</span>分享意愿语料 4 条</span>
+                  </div>
+                </section>
+              </div>
+
+              <section class="theme-block">
+                <h3>相关文档</h3>
+                <div class="plan-summary">
+                  <div><span class="source-type">月计划</span><strong>1 份</strong><p>未开始</p></div>
+                  <div><span class="source-type">周计划</span><strong>0 份</strong><p>待拆解</p></div>
+                  <div><span class="source-type">档案</span><strong>4 份</strong><p>可复用</p></div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-screen-link="plans">进入 6 月月计划</button>
+                  <button class="btn" data-screen-link="corpus">检索历史语料</button>
+                </div>
+              </section>
+            </article>
+
+          </div>
+        </section>
+
+<section class="screen" data-od-id="screen-corpus" id="corpus">
+<div class="page-head">
+<div><div class="eyebrow">Utterance corpus</div><h1>儿童语料库：筛选、打标、提升为子探究点</h1></div>
+<div class="tabs">
+<button class="btn" data-open-drawer="">提交儿童语料</button>
+<button class="btn btn-primary" id="promoteBtn">提升为子探究点</button>
 </div>
+</div>
+<div class="grid grid-main">
 <div class="stack">
-<div class="field">
-<label for="childName">孩子姓名</label>
-<select id="childName">
-<option>孩子1</option>
-<option>孩子2</option>
-<option>孩子3</option>
-<option value="custom">手动输入</option>
-</select>
-</div>
-<div class="field" hidden="" id="customChildField">
-<label for="customChildName">真实姓名或临时称呼</label>
-<input id="customChildName" placeholder="选填"/>
-</div>
-<div class="field">
-<label for="utteranceText">原话</label>
-<textarea id="utteranceText" placeholder="孩子的原话"></textarea>
-</div>
-<div class="field">
-<label>话语标签</label>
-<div class="tag-picker" id="tagPicker"></div>
-<div class="field" style="margin-top: var(--space-2);">
-<input id="newTagInput" placeholder="新建标签"/>
+<div class="card stack-sm">
+<div class="filters">
+<button class="chip active" data-filter="all">全部语料</button>
+<button class="chip" data-filter="建筑">建筑</button>
+<button class="chip" data-filter="花朵">花朵</button>
+<button class="chip" data-filter="questioning">提出问题</button>
+<button class="chip" data-filter="causal_reasoning">因果推理</button>
 </div>
 </div>
+<div class="stack" id="utteranceList">
+<label class="utterance-item" data-tags="建筑 questioning">
+<input type="checkbox" value="u1"/>
+<span><strong>“为什么老房子的屋顶不是平的？”</strong><p>辰辰 · 集体讨论 · 2026-03-12</p><span class="badge">建筑</span> <span class="badge">提出问题</span></span>
+<span class="badge badge-dot accent">可提升</span>
+</label>
+<label class="utterance-item" data-tags="建筑 causal_reasoning">
+<input type="checkbox" value="u2"/>
+<span><strong>“下雨会从斜斜的地方滑下来。”</strong><p>安安 · 区角活动 · 2026-03-13</p><span class="badge">建筑</span> <span class="badge">因果推理</span></span>
+<span class="badge badge-dot accent">可提升</span>
+</label>
+<label class="utterance-item" data-tags="花朵 imagination">
+<input type="checkbox" value="u3"/>
+<span><strong>“泥花可以种在墙上，像奶奶家门口。”</strong><p>小禾 · 美工区 · 2026-03-14</p><span class="badge">花朵</span> <span class="badge">想象联想</span></span>
+<span class="badge">已关联</span>
+</label>
+<label class="utterance-item" data-tags="建筑 transfer">
+<input type="checkbox" value="u4"/>
+<span><strong>“我见过祠堂门口也有这个尖尖。”</strong><p>佑佑 · 户外散步 · 2026-03-15</p><span class="badge">建筑</span> <span class="badge">经验迁移</span></span>
+<span class="badge badge-dot accent">可提升</span>
+</label>
 </div>
-<div class="row-between" style="margin-top: var(--space-5);">
-<button class="btn" id="closeDrawer2">取消</button>
-<button class="btn btn-primary" id="saveUtterance">保存语料</button>
+</div>
+<aside class="card stack">
+<h2>过往数据调用</h2>
+<p>制定主题网络时，教师可以从当前主题资料库与跨主题总库提取儿童原话。系统保留原始场景、日期、对象标签和思维类型，作为节点证据。</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>来源</th><th>命中</th></tr></thead>
+<tbody>
+<tr><td>当前主题</td><td class="mono">86</td></tr>
+<tr><td>春天的种子</td><td class="mono">12</td></tr>
+<tr><td>桥从哪里来</td><td class="mono">9</td></tr>
+</tbody>
+</table>
+</div>
+</aside>
+</div>
+</section>
+<section class="screen" data-od-id="screen-map" id="map">
+<div class="page-head">
+<div><div class="eyebrow">Theme map</div><h1>主题网络图：预设版与生成版双轨</h1></div>
+<div class="tabs"><button class="chip">预设版</button><button class="chip active">生成版</button><button class="chip">对照视图</button></div>
+</div>
+<div class="grid grid-main">
+<div aria-label="一个月主题网络图画布" class="canvas" id="mapCanvas">
+<div class="mindmap" id="themeMindmap">
+<div class="mindmap-column">
+<div class="node theme">
+<strong>月主题：泥塑里的家乡</strong>
+<span class="meta">4 周主题探究 · 中一班</span>
+</div>
+</div>
+<div class="mindmap-column">
+<div class="node branch"><strong>家乡建筑</strong><span class="meta">8 条语料 · 2 张照片</span></div>
+<div class="node branch"><strong>花朵纹样</strong><span class="meta">5 条语料 · 作品观察</span></div>
+<div class="node branch"><strong>人物故事</strong><span class="meta">4 条语料 · 访谈记录</span></div>
+</div>
+<div class="mindmap-column">
+<div class="activity-stack" id="activityNodes">
+<div class="node activity-node">
+<strong>活动：屋顶为什么是斜的</strong>
+<span class="meta">观察斜屋顶、搭建屋顶模型</span>
+<div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">语言</span><span class="domain-tag">艺术</span></div>
+</div>
+<div class="node activity-node">
+<strong>活动：我家的门牌和窗格</strong>
+<span class="meta">拓印门窗纹样，制作泥板</span>
+<div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">社会</span><span class="domain-tag">数学</span></div>
+</div>
+<div class="node activity-node">
+<strong>活动：花纹从哪里来</strong>
+<span class="meta">比较花朵、瓦当和衣物纹样</span>
+<div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">科学</span><span class="domain-tag">语言</span></div>
+</div>
+<div class="node activity-node">
+<strong>活动：家乡故事小剧场</strong>
+<span class="meta">用泥偶复述家乡人物故事</span>
+<div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span><span class="domain-tag">健康</span></div>
 </div>
 </div>
 </div>
-
-
+</div>
+</div>
+<aside class="card stack">
+<h2>节点证据</h2>
+<div class="annotation"><strong>家乡建筑</strong><span class="meta">作为发散方向，向右落地为 2 个具体活动</span></div>
+<div class="annotation"><strong id="newNodeName">等待提升</strong><span class="meta" id="newNodeMeta">从语料库选择语料后生成节点</span></div>
+<button class="btn" data-screen-link="corpus">返回语料库提取</button>
+</aside>
+</div>
+</section>
+<section class="screen" data-od-id="screen-plans" id="plans">
+<div class="page-head">
+<div><div class="eyebrow">Plans</div><h1>月计划与周计划编辑</h1></div>
+<button class="btn btn-primary" id="openMonthPlanDrawerBtn" type="button">提交月计划</button>
+</div>
+<div class="planner">
+<aside class="doc-nav">
+<div class="plan-nav-group" data-month-group="month-plan">
+<button class="nav-btn plan-tab plan-month" data-plan-tab="month-plan">
+<span aria-hidden="true" class="plan-caret">▶</span>
+<span class="plan-label">3 月月计划</span>
+<span class="badge">草稿</span>
+</button>
+<div class="plan-week-children" hidden="">
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-1">第 1 周：启动探究 <span class="badge badge-dot success">已提交</span></button>
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-2">第 2 周：泥塑材料初识 <span class="badge badge-dot success">已提交</span></button>
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-3">第 3 周：屋顶形状 <span class="badge badge-dot success">已提交</span></button>
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-4">第 4 周：花窗纹样 <span class="badge badge-dot success">已提交</span></button>
+</div>
+</div>
+<div class="plan-nav-group" data-month-group="month-apr">
+<button class="nav-btn plan-tab plan-month" data-plan-tab="month-apr">
+<span aria-hidden="true" class="plan-caret">▶</span>
+<span class="plan-label">4 月月计划</span>
+<span class="badge badge-dot warn">月末</span>
+</button>
+<div class="plan-week-children" hidden="">
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-5">第 5 周：花窗再观察 <span class="badge badge-dot success">已提交</span></button>
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-6">第 6 周：街巷纹样 <span class="badge badge-dot success">已提交</span></button>
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-7">第 7 周：社区资源 <span class="badge badge-dot success">已提交</span></button>
+<button class="nav-btn plan-tab plan-week" data-plan-tab="week-8">第 8 周：月末整理 <span class="badge badge-dot warn">进行中</span></button>
+</div>
+</div>
+<div class="plan-nav-group" data-month-group="month-may">
+<button class="nav-btn plan-tab plan-month" data-plan-tab="month-may">
+<span aria-hidden="true" class="plan-caret">▶</span>
+<span class="plan-label">5 月月计划</span>
+<span class="badge">预排</span>
+</button>
+<div class="plan-week-children" hidden="">
+<span class="plan-week-empty">暂未拆解周计划</span>
+</div>
+</div>
+<div class="plan-nav-group" data-month-group="month-jun">
+<button class="nav-btn plan-tab plan-month" data-plan-tab="month-jun">
+<span aria-hidden="true" class="plan-caret">▶</span>
+<span class="plan-label">6 月月计划</span>
+<span class="badge">未开始</span>
+</button>
+<div class="plan-week-children" hidden="">
+<span class="plan-week-empty">暂未拆解周计划</span>
+</div>
+</div>
+<div class="plan-nav-group" data-month-group="month-jul">
+<button class="nav-btn plan-tab plan-month" data-plan-tab="month-jul">
+<span aria-hidden="true" class="plan-caret">▶</span>
+<span class="plan-label">7 月月计划</span>
+<span class="badge">未开始</span>
+</button>
+<div class="plan-week-children" hidden="">
+<span class="plan-week-empty">暂未拆解周计划</span>
+</div>
+</div>
+</aside>
+<div class="stack">
+<div class="reference-chain">
+<button class="reference-card active" data-screen-link="themes">
+<span class="source-type">Theme</span>
+<strong>月主题：泥塑里的家乡</strong>
+<span class="meta">承载课程依据矩阵与主题价值</span>
+</button>
+<button class="reference-card active" data-plan-link="month-plan">
+<span class="source-type">Month plan</span>
+<strong>3 月月计划</strong>
+<span class="meta">引用主题网络图，拆解到第 3-4 周</span>
+</button>
+<button class="reference-card" data-plan-link="week-4">
+<span class="source-type">Week plan</span>
+<strong>第 4 周：花窗纹样</strong>
+<span class="meta">上承月计划，下接教案与区域活动</span>
+</button>
+</div>
+<div class="plan-doc active stack" id="month-plan">
+<div class="doc-section">
+<div class="row-between"><h2>主题来源与价值分析</h2><span class="badge">多源依据</span></div>
+<div class="source-grid">
+<article class="source-card"><span class="source-type">政策要求</span><strong>指南 / 纲要</strong><p>科学探究、艺术表现、语言表达和社会经验整合，不只服务单一领域。</p></article>
+<article class="source-card"><span class="source-type">园所文化</span><strong>园本课程与近期课题</strong><p>延续“家乡文化与泥塑材料”园本线索，回应本土课程资源转化课题。</p></article>
+<article class="source-card"><span class="source-type">可用资源</span><strong>社区 / 家长资源</strong><p>可调用老屋照片、家长访谈、家乡建筑路线和可带入材料。</p></article>
+<article class="source-card"><span class="source-type">儿童需求</span><strong>语料 / 作品 / 行为</strong><p>儿童持续提到斜屋顶、排水、门窗纹样，并在泥工区反复尝试建构。</p></article>
+</div>
+</div>
+<div class="doc-section">
+<div class="row-between"><h2>主题网络图</h2><button class="btn btn-small" data-screen-link="map">查看嵌入图</button></div>
+<div class="rich-placeholder">嵌入当前主题生成版网络图快照，提交时记录版本；每个活动节点都显示它引用的月计划条目与课程依据类型。</div>
+</div>
+<div class="doc-section">
+<div class="row-between"><h2>周次安排</h2><span class="badge">从月计划拆解</span></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>周次</th><th>子主题</th><th>上承依据</th><th>核心活动</th><th>教案</th></tr></thead>
+<tbody>
+<tr><td>第 1 周</td><td>启动探究</td><td>政策要求 + 园所文化</td><td>主题网络搭建、材料熟悉</td><td><button class="btn btn-small" data-plan-link="week-1">打开周计划</button></td></tr>
+<tr><td>第 2 周</td><td>泥塑材料初识</td><td>可用资源 + 儿童需求</td><td>玩泥土、初步塑形</td><td><button class="btn btn-small" data-plan-link="week-2">打开周计划</button></td></tr>
+<tr><td>第 3 周</td><td>屋顶形状</td><td>政策要求 + 儿童需求 + 社区资源</td><td>观察老房子屋顶</td><td><button class="btn btn-small" data-plan-link="week-3">打开周计划</button></td></tr>
+<tr><td>第 4 周</td><td>花窗纹样</td><td>园所文化 + 家长资源 + 儿童作品</td><td>泥片压印与拓印</td><td><button class="btn btn-small" data-plan-link="week-4">打开周计划</button></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="month-apr">
+<div class="doc-section">
+<div class="row-between"><h2>4 月月计划：花窗纹样与社区延伸</h2><span class="badge badge-dot warn">当前月末</span></div>
+<p>承接 3 月“屋顶形状”和“花窗纹样”两个分支，4 月末重点是补齐多源课程依据，并根据审核意见调整第 4 周活动和教案。</p>
+<div class="month-plan-grid">
+<article class="month-plan-card"><span class="source-type">主题引用</span><strong>泥塑里的家乡 / 花窗纹样</strong><p>引用主题网络图中的“家乡建筑”和“花窗纹样”分支。</p></article>
+<article class="month-plan-card"><span class="source-type">周计划引用</span><strong>第 4 周：花窗纹样</strong><p>重点回看上午/下午活动是否覆盖艺术、科学、语言、社会、数学。</p></article>
+<article class="month-plan-card"><span class="source-type">审核状态</span><strong>收到 2 条退回意见</strong><p>需补政策要求、社区资源和儿童需求之间的对应关系。</p></article>
+</div>
+</div>
+<div class="doc-section">
+<div class="row-between"><h2>4 月计划条目</h2><button class="btn btn-small" data-review-link="review-apr">查看本月审核意见</button></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>周次</th><th>推进重点</th><th>引用来源</th><th>当前处理</th></tr></thead>
+<tbody>
+<tr><td>第 5 周</td><td>花窗再观察（4.1-4.3 实际跨 3 月末-4 月初）</td><td>儿童语料 + 老屋照片</td><td>已提交</td></tr>
+<tr><td>第 6 周</td><td>街巷纹样：路线与符号</td><td>社区资源 + 儿童作品</td><td>已提交</td></tr>
+<tr><td>第 7 周</td><td>社区资源：家长口述与老照片</td><td>家长访谈 + 社区资源</td><td>已提交</td></tr>
+<tr><td>第 8 周</td><td>月末整理：作品说明 + 审核修订</td><td>儿童语料 + 政策要求 + 社区资源</td><td>进行中（含 2 份待填教案）</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="month-may">
+<div class="doc-section">
+<div class="row-between"><h2>5 月月计划：家乡街巷走访</h2><span class="badge">预排</span></div>
+<p>从 4 月花窗纹样延伸到街巷观察、社区资源走访和家庭访谈，等待 4 月审核通过后正式生成周计划。</p>
+<div class="month-plan-grid">
+<article class="month-plan-card"><span class="source-type">上承主题</span><strong>花窗纹样 → 街巷符号</strong><p>将儿童对门窗、瓦当、纹样的兴趣带入真实社区观察。</p></article>
+<article class="month-plan-card"><span class="source-type">可用资源</span><strong>社区路线 / 家长访谈</strong><p>预留家长职业资源、社区老照片和走访路线。</p></article>
+<article class="month-plan-card"><span class="source-type">审核状态</span><strong>未收到意见</strong><p>当前仅为预排计划，尚未进入上级审阅。</p></article>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="month-jun">
+<div class="doc-section">
+<div class="row-between"><h2>6 月月计划：作品整理与表达</h2><span class="badge">未开始</span></div>
+<p>计划收集儿童作品、口述记录和家园资源，形成主题档案与阶段性展示。</p>
+<div class="month-plan-grid">
+<article class="month-plan-card"><span class="source-type">计划重点</span><strong>作品档案 / 儿童讲述</strong><p>以儿童表达和作品演变为主线。</p></article>
+<article class="month-plan-card"><span class="source-type">引用关系</span><strong>承接 3-5 月活动</strong><p>回收月计划、周计划和教案中的证据链。</p></article>
+<article class="month-plan-card"><span class="source-type">审核状态</span><strong>未开始</strong><p>暂无提交记录和批注意见。</p></article>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="month-jul">
+<div class="doc-section">
+<div class="row-between"><h2>7 月月计划：学期复盘与成长档案</h2><span class="badge">未开始</span></div>
+<p>用于学期末回顾：整理主题成果、儿童发展证据、家园共育材料和后续课程建议。</p>
+<div class="month-plan-grid">
+<article class="month-plan-card"><span class="source-type">复盘对象</span><strong>主题网络 / 月周计划 / 教案</strong><p>把前期文档互相引用，形成可追溯课程链。</p></article>
+<article class="month-plan-card"><span class="source-type">输出材料</span><strong>成长档案 / 学期报告</strong><p>为儿童发展评价和家长沟通提供材料索引。</p></article>
+<article class="month-plan-card"><span class="source-type">审核状态</span><strong>未开始</strong><p>暂无提交记录和批注意见。</p></article>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-1">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 1 周活动计划：启动探究</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.3.2 - 3.6</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr><td class="time-slot">7:45-8:45</td><td><div class="activity-cell"><strong>晨间自主：签到与新书</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：认识班级</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：积木区探玩</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：泥工区安全</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：家庭照片翻看</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">8:45-11:40</td><td><div class="activity-cell"><div class="activity-title"><strong>主题导入：泥塑里的家乡</strong><button class="lesson-link" data-lesson-link="lesson-intro-theme">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">通过照片和故事引出家乡的泥塑传统。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>一起看老房子</strong><button class="lesson-link" data-lesson-link="lesson-old-house">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">教师展示岭南老屋照片，记录儿童提问。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>主题网络图：一起画</strong><button class="lesson-link" data-lesson-link="lesson-theme-network">查看教案</button></div><div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">语言</span></div><span class="meta">与儿童共同画出初步主题网络图。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>我的家乡在哪里</strong><button class="lesson-link" data-lesson-link="lesson-my-hometown">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">儿童用简笔画或照片介绍自己的家乡。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>下周问题：泥从哪里来</strong><button class="lesson-link" data-lesson-link="lesson-clay-from-where">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">语言</span></div><span class="meta">共同生成下周要探究的问题。</span></div></td></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><td><div class="activity-cell"><strong>区域：语言区故事盒</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：建构区老屋搭建</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：美工区自由涂鸦</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：科学区泥塑材料</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域延伸：家乡照片墙</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-2">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 2 周活动计划：泥塑材料初识</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.3.9 - 3.13</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr><td class="time-slot">7:45-8:45</td><td><div class="activity-cell"><strong>晨间自主：泥土触感</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：搓团圆</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：压扁游戏</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：搓长条</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：工具尝试</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">8:45-11:40</td><td><div class="activity-cell"><div class="activity-title"><strong>泥土是什么</strong><button class="lesson-link" data-lesson-link="lesson-clay-what">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">语言</span></div><span class="meta">观察泥土的颜色、干湿和气味。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>干湿泥土的区别</strong><button class="lesson-link" data-lesson-link="lesson-clay-dry-wet">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span></div><span class="meta">比较干泥、湿泥、稀泥的塑形差异。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>团圆与压扁</strong><button class="lesson-link" data-lesson-link="lesson-clay-ball-flat">查看教案</button></div><div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">数学</span></div><span class="meta">练习基本泥工动作：团圆、压扁、搓条。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>建一个我家</strong><button class="lesson-link" data-lesson-link="lesson-clay-my-house">查看教案</button></div><div class="domain-tags"><span class="domain-tag">艺术</span><span class="domain-tag">社会</span></div><span class="meta">用基本泥工动作做自己的家。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>介绍我的泥塑</strong><button class="lesson-link" data-lesson-link="lesson-clay-intro">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">同伴面前介绍作品，录音记录。</span></div></td></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><td><div class="activity-cell"><strong>区域：泥工区继续</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：建构区配合</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：美工区纹样</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：科学区干燥实验</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域延伸：作品晾晒</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-3">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 3 周活动计划：屋顶形状</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.3.16 - 3.20</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr>
+<td class="time-slot">7:45-8:45</td>
+<td><div class="activity-cell"><strong>晨间自主：建筑照片拼图</strong><span class="meta">入园、签到、桌面材料。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：屋顶积木</strong><span class="meta">尝试不同坡度。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：问题卡整理</strong><span class="meta">教师记录儿童原话。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：家庭照片分享</strong><span class="meta">同伴介绍带来的照片。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：作品整理</strong><span class="meta">选择本周展示材料。</span></div></td>
+</tr>
+<tr>
+<td class="time-slot">8:45-11:40</td>
+<td><div class="activity-cell"><div class="activity-title"><strong>屋顶为什么是斜的</strong><button class="lesson-link" data-lesson-link="lesson-roof">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">语言</span></div><span class="meta">观察图片，提出关于斜面和排水的问题。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>幼儿园屋顶和排水口</strong><button class="lesson-link" data-lesson-link="lesson-outdoor-roof">查看教案</button></div><div class="domain-tags"><span class="domain-tag">户外观察</span><span class="domain-tag">科学</span><span class="domain-tag">健康</span></div><span class="meta">带记录板寻找斜面、屋檐和水流路径。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>平屋顶和斜屋顶分类</strong><button class="lesson-link" data-lesson-link="lesson-roof-sort">查看教案</button></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">科学</span></div><span class="meta">按形状、坡度、用途整理图片。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>捏一个斜屋顶</strong><button class="lesson-link" data-lesson-link="lesson-clay-roof">查看教案</button></div><div class="domain-tags"><span class="domain-tag">泥工</span><span class="domain-tag">艺术</span><span class="domain-tag">科学</span></div><span class="meta">用泥片连接屋身与屋顶，体验支撑。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>我的屋顶发现</strong><button class="lesson-link" data-lesson-link="lesson-roof-share">查看教案</button></div><div class="domain-tags"><span class="domain-tag">分享</span><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">用照片、图画和模型讲述发现。</span></div></td>
+</tr>
+<tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr>
+<tr>
+<td class="time-slot">14:50-16:30</td>
+<td><div class="activity-cell"><strong>区域：语言区问题卡</strong><span class="meta">把“为什么”问题贴到主题墙。</span></div></td>
+<td><div class="activity-cell"><strong>建构区：不会漏水的屋</strong><span class="meta">小组搭建并拍照记录。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>我发现的屋顶线条</strong><button class="lesson-link" data-lesson-link="lesson-roof-lines">查看教案</button></div><div class="domain-tags"><span class="domain-tag">美术</span><span class="domain-tag">艺术</span><span class="domain-tag">语言</span></div><span class="meta">用线条表现屋顶、瓦片和屋檐。</span></div></td>
+<td><div class="activity-cell"><strong>家庭访谈准备</strong><span class="meta">共同生成访问长辈的问题。</span></div></td>
+<td><div class="activity-cell"><strong>生成下周问题：屋顶上的花纹</strong><span class="meta">回流到主题网络图。</span></div></td>
+</tr>
+<tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末照片收集任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-4">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 4 周活动计划：花窗纹样</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.3.23 - 3.27</span><span>执教教师：班级教师</span><span class="badge">草稿</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr>
+<td class="time-slot">7:45-8:45</td>
+<td><div class="activity-cell"><strong>晨间自主：花窗照片观察</strong><span class="meta">圈出圆形、方形、重复图案。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：纹样配对</strong><span class="meta">找相同和相似图案。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：压印工具试用</strong><span class="meta">安全使用印章和滚轮。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：家庭纹样分享</strong><span class="meta">介绍上传照片。</span></div></td>
+<td><div class="activity-cell"><strong>晨间自主：作品命名</strong><span class="meta">为泥板花窗取名字。</span></div></td>
+</tr>
+<tr>
+<td class="time-slot">8:45-11:40</td>
+<td><div class="activity-cell"><div class="activity-title"><strong>花窗里藏着什么形状</strong><button class="lesson-link fill" data-lesson-link="lesson-window-shapes">填写教案</button><span class="lesson-status">未填写</span></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">艺术</span></div><span class="meta">识别形状、对称和重复规律。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>拓印门窗纹样</strong><button class="lesson-link" data-lesson-link="lesson-rubbing">查看教案</button></div><div class="domain-tags"><span class="domain-tag">美术</span><span class="domain-tag">艺术</span><span class="domain-tag">科学</span></div><span class="meta">用蜡笔和薄纸拓印可触摸纹理。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>做一块家乡花砖</strong><button class="lesson-link" data-lesson-link="lesson-clay-tile">查看教案</button></div><div class="domain-tags"><span class="domain-tag">泥工</span><span class="domain-tag">艺术</span><span class="domain-tag">科学</span></div><span class="meta">选择工具压出纹样，记录工具效果。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>花纹从哪里来</strong><button class="lesson-link" data-lesson-link="lesson-pattern-story">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">围绕衣物、瓦当、窗格讲述生活经验。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>泥板花窗小展</strong><button class="lesson-link" data-lesson-link="lesson-window-show">查看教案</button></div><div class="domain-tags"><span class="domain-tag">展览</span><span class="domain-tag">艺术</span><span class="domain-tag">社会</span></div><span class="meta">选择作品、命名并布置展示区。</span></div></td>
+</tr>
+<tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr>
+<tr>
+<td class="time-slot">14:50-16:30</td>
+<td><div class="activity-cell"><strong>区域：数学区纹样分类</strong><span class="meta">按形状、方向、重复规律整理。</span></div></td>
+<td><div class="activity-cell"><strong>区域：美工区继续拓印</strong><span class="meta">补充材料，选择喜欢的纹理。</span></div></td>
+<td><div class="activity-cell"><div class="activity-title"><strong>我们的花窗墙</strong><button class="lesson-link" data-lesson-link="lesson-window-wall">查看教案</button></div><div class="domain-tags"><span class="domain-tag">合作拼摆</span><span class="domain-tag">艺术</span><span class="domain-tag">社会</span><span class="domain-tag">数学</span></div><span class="meta">小组拼接泥板，讨论排列。</span></div></td>
+<td><div class="activity-cell"><strong>区域延伸：设计家乡标记</strong><span class="meta">在美工区继续设计个人纹样符号。</span></div></td>
+<td><div class="activity-cell"><strong>回顾：我想继续研究的家乡建筑</strong><span class="meta">教师收集新问题，回流主题网络。</span></div></td>
+</tr>
+<tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品晾晒归位，向家长同步周末观察任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-5">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 5 周活动计划：花窗再观察</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.3.30 - 4.3</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr><td class="time-slot">7:45-8:45</td><td><div class="activity-cell"><strong>晨间自主：花窗照片排序</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：纹样拼图</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：清明节故事</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：家庭观察单</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：照片贴墙</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">8:45-11:40</td><td><div class="activity-cell"><div class="activity-title"><strong>花窗照片里的重复</strong><button class="lesson-link" data-lesson-link="lesson-apr-repeat">查看教案</button></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">艺术</span></div><span class="meta">数清重复单元并记录。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>窗格里的对称</strong><button class="lesson-link" data-lesson-link="lesson-apr-symmetry">查看教案</button></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">科学</span></div><span class="meta">观察左右、上下、旋转对称。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>我家的窗户故事</strong><button class="lesson-link" data-lesson-link="lesson-apr-window-story">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">儿童讲述家中窗户的形状与故事。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>家庭观察：找一扇特别的窗</strong><button class="lesson-link" data-lesson-link="lesson-apr-home-window">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">与家长一起寻找社区里特别的窗。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>家庭观察：说说窗上的图案</strong><button class="lesson-link" data-lesson-link="lesson-apr-window-pattern">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">家长与儿童一起描述窗上图案。</span></div></td></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><td><div class="activity-cell"><strong>区域：图案配对</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：镜像拼摆</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：家庭窗户照片入库</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：假期延伸</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：回传照片和语料</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-6">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 6 周活动计划：街巷纹样</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.4.6 - 4.10</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr><td class="time-slot">7:45-8:45</td><td><div class="activity-cell"><strong>晨间自主：街巷照片墙</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：路线图贴纸</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：采访问题卡</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：纹样速写</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：问题回顾</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">8:45-11:40</td><td><div class="activity-cell"><div class="activity-title"><strong>街巷里的门窗符号</strong><button class="lesson-link" data-lesson-link="lesson-apr-street-symbol">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">认识瓦当、门楣、窗花的符号含义。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>家乡路线小地图</strong><button class="lesson-link" data-lesson-link="lesson-apr-route-map">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">数学</span></div><span class="meta">共同绘制走访路线与节点。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>采访爷爷奶奶</strong><button class="lesson-link" data-lesson-link="lesson-apr-interview">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">提前生成采访问题并演练倾听。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>街巷纹样速写</strong><button class="lesson-link" data-lesson-link="lesson-apr-sketch">查看教案</button></div><div class="domain-tags"><span class="domain-tag">美术</span><span class="domain-tag">艺术</span></div><span class="meta">用速写记录走访中看到的纹样。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>周末任务：带回一段故事</strong><button class="lesson-link" data-lesson-link="lesson-apr-weekend-story">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">请家长协助记录一段家乡街巷故事。</span></div></td></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><td><div class="activity-cell"><strong>区域：照片分类</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：路线拼搭</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：录音回听</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：纹样拓展</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：回流主题网络</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-7">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 7 周活动计划：社区资源</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.4.13 - 4.17</span><span>执教教师：班级教师</span><span class="badge badge-dot success">已提交</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr><td class="time-slot">7:45-8:45</td><td><div class="activity-cell"><strong>晨间自主：资源卡分类</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：访谈照片整理</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：材料触摸箱</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：展板命名</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：作品归档</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">8:45-11:40</td><td><div class="activity-cell"><div class="activity-title"><strong>谁能帮助我们了解老房子</strong><button class="lesson-link" data-lesson-link="lesson-apr-helper">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">梳理可邀请的家长与社区资源。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>材料从哪里来</strong><button class="lesson-link" data-lesson-link="lesson-apr-material">查看教案</button></div><div class="domain-tags"><span class="domain-tag">科学</span><span class="domain-tag">社会</span></div><span class="meta">了解泥、瓦、木等材料来源。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>社区资源地图</strong><button class="lesson-link" data-lesson-link="lesson-apr-resource-map">查看教案</button></div><div class="domain-tags"><span class="domain-tag">数学</span><span class="domain-tag">社会</span></div><span class="meta">把社区资源按位置标在地图上。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>邀请家长讲家乡建筑</strong><button class="lesson-link" data-lesson-link="lesson-apr-parent-talk">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">邀请家长到班级分享家乡建筑故事。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>资源回收：下周怎么用</strong><button class="lesson-link" data-lesson-link="lesson-apr-resource-recap">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">回顾资源，整理月末用得到的素材。</span></div></td></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><td><div class="activity-cell"><strong>区域：资源卡贴墙</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：材料实验</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：路线地图完善</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：访谈录音整理</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：月末整理准备</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="plan-doc stack" id="week-8">
+<div class="weekly-plan-sheet">
+<div class="weekly-title">
+<div>
+<div class="eyebrow">Weekly plan</div>
+<h2>大一班第 8 周活动计划：月末整理与审核修订</h2>
+</div>
+<div class="weekly-meta"><span>时间：2026.4.20 - 4.24</span><span>执教教师：班级教师</span><span class="badge badge-dot warn">进行中</span></div>
+</div>
+<div class="weekly-table-wrap">
+<table class="weekly-table">
+<thead><tr><th>时间</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead>
+<tbody>
+<tr><td class="time-slot">7:45-8:45</td><td><div class="activity-cell"><strong>晨间自主：月末作品初选</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：审核意见卡</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：资料补洞</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：讲述录音</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>晨间自主：展板排版</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">8:45-11:40</td><td><div class="activity-cell"><div class="activity-title"><strong>我的花窗作品说明</strong><button class="lesson-link" data-lesson-link="lesson-apr-work-explain">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">艺术</span></div><span class="meta">用图卡和口述介绍自己的作品。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>我们还缺哪些依据</strong><button class="lesson-link" data-lesson-link="lesson-apr-evidence-gap">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">对照政策、园所、资源、儿童需求补齐依据。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>月末档案整理</strong><button class="lesson-link" data-lesson-link="lesson-apr-archive">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">整理作品照片、录音、家长口述。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>审核意见处理</strong><button class="lesson-link" data-lesson-link="lesson-apr-review-handle">查看教案</button></div><div class="domain-tags"><span class="domain-tag">语言</span><span class="domain-tag">社会</span></div><span class="meta">按 4 月退回意见逐条处理。</span></div></td><td><div class="activity-cell"><div class="activity-title"><strong>月末分享准备</strong><button class="lesson-link" data-lesson-link="lesson-apr-month-share">查看教案</button></div><div class="domain-tags"><span class="domain-tag">社会</span><span class="domain-tag">语言</span></div><span class="meta">准备月末与家长分享的内容。</span></div></td></tr><tr><td class="time-slot">11:40-14:50</td><td colspan="5"><div class="activity-cell"><strong>午餐、午睡、午间散步</strong><span class="meta">餐前准备、安静进餐、午睡观察和自然过渡。</span></div></td></tr><tr><td class="time-slot">14:50-16:30</td><td><div class="activity-cell"><strong>区域：作品说明贴纸</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：证据来源标记</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：主题网络更新</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：生成 5 月问题</strong><span class="meta">入园、签到、桌面材料。</span></div></td><td><div class="activity-cell"><strong>区域：离园前分享</strong><span class="meta">入园、签到、桌面材料。</span></div></td></tr><tr><td class="time-slot">16:30-17:00</td><td colspan="5"><div class="activity-cell"><strong>离园整理</strong><span class="meta">作品归位，向家长提示周末观察任务。</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
 <aside aria-hidden="true" aria-label="提交月计划抽屉" class="month-plan-drawer" id="monthPlanDrawer">
 <div class="month-drawer-head">
 <div class="lesson-peek-title">
@@ -2300,6 +2872,7 @@
 <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
+<div class="eyebrow">Submit month plan</div>
 <h2>提交月计划</h2>
 </div>
 <button aria-label="关闭" class="icon-btn" id="monthPlanCloseBtnTop" type="button">×</button>
@@ -2345,6 +2918,7 @@
 <div class="month-drawer-section">
 <div class="row-between">
 <h2>主题来源</h2>
+<span class="meta">四类依据，教师直接填写</span>
 </div>
 <div class="source-inputs">
 <div class="field">
@@ -2352,11 +2926,11 @@
 <label for="monthPlanPolicyText">指南规范</label>
 <button class="btn btn-small" id="openGuideRefBtn" type="button">查阅指南</button>
 </div>
-<textarea id="monthPlanPolicyText" placeholder="指南领域与目标"></textarea>
+<textarea id="monthPlanPolicyText" placeholder="填写本月呼应的《3-6岁儿童学习与发展指南》领域与目标，可点击「查阅指南」参考。"></textarea>
 </div>
 <div class="field">
 <label for="monthPlanCultureText">园本课程</label>
-<textarea id="monthPlanCultureText" placeholder="园本课程线索"></textarea>
+<textarea id="monthPlanCultureText" placeholder="填写呼应的园本课程线索、近期课题或园所文化。"></textarea>
 </div>
 <div class="field">
 <div class="source-label-row">
@@ -2370,7 +2944,7 @@
 </div>
 <div class="field">
 <label for="monthPlanResourceText">园所资源</label>
-<textarea id="monthPlanResourceText" placeholder="可调用资源"></textarea>
+<textarea id="monthPlanResourceText" placeholder="填写可调用的家长资源、社区资源、园内材料等。"></textarea>
 </div>
 </div>
 </div>
@@ -2378,6 +2952,7 @@
 <div class="month-drawer-section">
 <div class="row-between">
 <h2>每周推进重点</h2>
+<span class="meta">按月计划日期自动切分周次与起止时间</span>
 </div>
 <div class="week-rows" id="weekRows"></div>
 </div>
@@ -2396,11 +2971,12 @@
 <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
+<div class="eyebrow">Reference</div>
 <h2>3-6 岁儿童学习与发展指南</h2>
 </div>
 <button aria-label="关闭" class="icon-btn" id="guideRefCloseBtnTop" type="button">×</button>
 </div>
-<input class="search" id="guideRefSearch" placeholder="检索领域、目标或关键词" type="search"/>
+<input class="search" id="guideRefSearch" placeholder="检索领域、目标或关键词，例如：科学探究 / 情绪 / 阅读" type="search"/>
 </div>
 <div class="guide-ref-body">
 <nav class="guide-ref-toc" id="guideRefToc" aria-label="指南目录"></nav>
@@ -2414,11 +2990,13 @@
 <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
-<h2>儿童语料库</h2>
+<div class="eyebrow">Utterance corpus</div>
+<h2>儿童语料库 · 导入月计划</h2>
 </div>
 <button aria-label="关闭" class="icon-btn" id="childCorpusCloseBtnTop" type="button">×</button>
 </div>
 <div class="child-corpus-toolbar">
+<span class="meta">勾选要导入的本月儿童原话，点击右下角「导入到月计划」</span>
 </div>
 </div>
 <div class="guide-ref-body">
@@ -2436,6 +3014,7 @@
 <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
+<div class="eyebrow">Lesson preview</div>
 <h2 id="lessonPeekTitle">教案预览</h2>
 </div>
 <button aria-label="关闭教案预览" class="icon-btn" id="closeLessonPeek">×</button>
@@ -2448,7 +3027,7 @@
 <div class="lesson-peek-body">
 <div class="lesson-peek-meta">
 <span class="source-type">活动来源</span>
-<p id="lessonPeekSource"></p>
+<p id="lessonPeekSource">从周计划选择活动后显示来源。</p>
 </div>
 <div class="lesson-peek-sections" id="lessonPeekSections"></div>
 <div class="inline-actions">
@@ -2463,6 +3042,7 @@
 <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
+<div class="eyebrow" id="lessonDrawerEyebrow">Lesson editor</div>
 <h2 id="lessonDrawerTitle">教案填写</h2>
 </div>
 <button aria-label="关闭" class="icon-btn" id="lessonDrawerCloseBtn" type="button">×</button>
@@ -2477,11 +3057,12 @@
 <div class="lesson-drawer-card">
 <div class="lesson-drawer-card-head">
 <h3>活动信息</h3>
+<span class="meta">基础字段 · 关联课程依据</span>
 </div>
 <div class="lesson-drawer-grid-2">
 <div class="lesson-drawer-section">
 <label for="lessonDrawerName">活动名称</label>
-<input id="lessonDrawerName" type="text" placeholder="活动名称"/>
+<input id="lessonDrawerName" type="text" placeholder="如：屋顶为什么是斜的"/>
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerType">活动类型</label>
@@ -2492,60 +3073,72 @@
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerDomain">领域归属</label>
-<input id="lessonDrawerDomain" type="text" placeholder="领域归属"/>
+<input id="lessonDrawerDomain" type="text" placeholder="如：科学、语言"/>
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerDuration">活动时长</label>
-<input id="lessonDrawerDuration" type="text" placeholder="活动时长"/>
+<input id="lessonDrawerDuration" type="text" placeholder="如：30 分钟"/>
 </div>
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerSource">活动来源</label>
-<textarea id="lessonDrawerSource" placeholder="活动来源"></textarea>
+<textarea id="lessonDrawerSource" placeholder="说明本活动上承哪一周计划、综合了哪些依据。"></textarea>
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerEvidence">关联课程依据</label>
-<input id="lessonDrawerEvidence" type="text" placeholder="关联课程依据"/>
+<select id="lessonDrawerEvidence">
+<option value="">未选择</option>
+<option value="policy">政策要求：指南中的科学探究与语言表达</option>
+<option value="culture">园所文化：水乡建筑与泥塑园本课程</option>
+<option value="resources">可用资源：社区老屋照片与家长访谈</option>
+<option value="children">儿童需求：3 条儿童语料与作品照片</option>
+<option value="week">周计划引用：第 3 周屋顶形状</option>
+</select>
+<span class="field-hint">主题相关活动在提交时必须至少关联 1 类课程依据。</span>
 </div>
 </div>
 
 <div class="lesson-drawer-card">
 <div class="lesson-drawer-card-head">
 <h3>活动目标</h3>
+<span class="meta">希望幼儿获得的经验</span>
 </div>
 <div class="lesson-drawer-section">
-<textarea id="lessonDrawerGoal" placeholder="希望幼儿获得的经验"></textarea>
+<textarea id="lessonDrawerGoal" placeholder="描述本次活动希望幼儿获得的经验。"></textarea>
 </div>
 </div>
 
 <div class="lesson-drawer-card">
 <div class="lesson-drawer-card-head">
 <h3>活动准备</h3>
+<span class="meta">材料、场地、儿童已有经验</span>
 </div>
 <div class="lesson-drawer-section">
-<textarea id="lessonDrawerPrep" placeholder="材料、场地、已有经验"></textarea>
+<textarea id="lessonDrawerPrep" placeholder="列出材料、场地、照片、儿童已有经验和需要调用的课程依据。"></textarea>
 </div>
 </div>
 
 <div class="lesson-drawer-card">
 <div class="lesson-drawer-card-head">
 <h3>活动流程</h3>
+<span class="meta">导入 · 观察/操作 · 表达记录 · 回流主题网络</span>
 </div>
 <div class="lesson-drawer-section">
-<textarea id="lessonDrawerProcess" placeholder="导入·操作·记录·回流网络"></textarea>
+<textarea id="lessonDrawerProcess" placeholder="按导入、观察/操作、表达记录、回流主题网络等步骤填写。"></textarea>
 </div>
 </div>
 
 <div class="lesson-drawer-card">
 <div class="lesson-drawer-card-head">
 <h3>活动延伸</h3>
+<span class="meta">区域延伸 · 家庭观察 · 作品入库</span>
 </div>
 <div class="lesson-drawer-section">
-<textarea id="lessonDrawerExtend" placeholder="区域·家庭·作品入库"></textarea>
+<textarea id="lessonDrawerExtend" placeholder="填写区域延伸、家庭观察、作品入库或后续周计划衔接。"></textarea>
 </div>
 </div>
 
-<div class="lesson-drawer-validation" id="lessonDrawerValidation"></div>
+<div class="lesson-drawer-validation" id="lessonDrawerValidation">填写活动目标、活动准备、活动流程、活动延伸，并至少关联 1 类课程依据后即可提交。</div>
 </div>
 <div class="lesson-drawer-foot">
 <div class="left">
@@ -2941,25 +3534,519 @@
 </div>
 </article>
 </div>
-<div aria-hidden="true" class="toast" id="toast"></div>
-<script src="../assets/shared.js"></script>
+<section class="screen" data-od-id="screen-review" id="review">
+<div class="page-head">
+<div><div class="eyebrow">Review</div><h1>审阅批注：按来源分类退回意见</h1></div>
+<div class="tabs">
+<button class="chip" data-review-month="review-mar">3 月</button>
+<button class="chip active" data-review-month="review-apr">4 月</button>
+<button class="chip" data-review-month="review-may">5 月</button>
+<button class="chip" data-review-month="review-jun">6 月</button>
+<button class="chip" data-review-month="review-jul">7 月</button>
+</div>
+</div>
+
+<div class="review-month-panel" id="review-mar">
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge badge-dot success">已通过</span>
+<span class="meta">3 月月末审核 · 教研主任·王老师</span>
+</div>
+<h2 style="margin:0;">3 月·泥塑里的家乡</h2>
+<p class="meta">提交批次：3 月主题网络 + 4 周周计划。意见共 2 条，全部已处理。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">对应文档</span><span><strong>3 月月计划</strong>、第 1-4 周周计划、主题网络、教案《泥板拼贴》。</span></li>
+<li><span class="label-mono">审核结论</span><span>主题来源清晰，已能说明儿童语料、园本泥塑课程和社区建筑资源之间的关系。</span></li>
+<li><span class="label-mono">保留意见</span><span>在后续周计划中继续标注每个活动涉及的领域，避免主题网络停留在素材罗列。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-primary" data-plan-link="month-plan">查看 3 月月计划</button>
+<button class="btn" data-screen="themes">查看主题列表</button>
+</div>
+</aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-category="corpus" data-od-id="review-mar-cat-1">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+<span class="cat-sub">可能不够，或挑选内容不够精准反映儿童兴趣或想法</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<div class="annotation-empty">本月语料引用充分，已覆盖兴趣关键词与原话节选，无需补充。</div>
+</section>
+<section class="annotation-category" data-category="month" data-od-id="review-mar-cat-2">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+<span class="cat-sub">含相关主题支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item" data-state="resolved">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">已处理</span><span>月主题 · 园本课程依据</span></div>
+<div class="annotation-title">主题价值</div>
+<div class="annotation-text">已补充园所文化与社区资源依据，主题来源说明完整。</div>
+<div class="annotation-source">来源：月计划《泥塑里的家乡》第一节</div>
+</div>
+</li>
+</ul>
+</section>
+<section class="annotation-category" data-category="week" data-od-id="review-mar-cat-3">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+<span class="cat-sub">含相关支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item" data-state="resolved">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-3">已处理</span><span>周计划 · 活动拆解</span></div>
+<div class="annotation-title">周计划拆解</div>
+<div class="annotation-text">第 3 周、第 4 周均已关联月计划条目；五大领域覆盖完整。</div>
+<div class="annotation-source">来源：3 月第 3-4 周周计划表</div>
+</div>
+</li>
+</ul>
+</section>
+<section class="annotation-category" data-category="lesson" data-od-id="review-mar-cat-4">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+<span class="cat-sub">退回后逐条处理</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条待处理</span>
+</header>
+<div class="annotation-empty">3 月教案全部提交通过，无待处理意见。</div>
+</section>
+</div>
+</div>
+</div>
+
+<div class="review-month-panel active" id="review-apr">
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge badge-dot danger">退回修改</span>
+<span class="meta">4 月月末审核 · 教研主任·王老师</span>
+</div>
+<h2 style="margin:0;">4 月·泥塑里的家乡·屋顶与花窗</h2>
+<p class="meta">提交批次：4 月月计划 + 第 4 周周计划 + 教案《屋顶为什么是斜的》。意见共 10 条，跨 4 类来源。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">对应文档</span><span><strong>4 月月计划</strong>、第 4 周周计划、教案《屋顶为什么是斜的》《我们一起做花窗》。</span></li>
+<li><span class="label-mono">退回原因</span><span>儿童语料偏少；月计划支撑材料未补齐；周计划与教案对齐度不足。</span></li>
+<li><span class="label-mono">处理顺序</span><span>先补儿童语料 → 再补主题网络 → 再对齐周计划 → 最后修订教案。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-primary" data-plan-link="month-apr">返回 4 月月计划</button>
+<button class="btn" data-screen="themes">查看主题列表</button>
+<button class="btn" data-plan-link="week-4">查看第 4 周周计划</button>
+</div>
+</aside>
+<div class="annotation-stack">
+
+<section class="annotation-category" data-category="corpus" data-od-id="review-apr-cat-1">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+<span class="cat-sub">可能不够，或挑选内容不够精准反映儿童兴趣或想法</span>
+</div>
+<span class="annotation-count"><span class="num">3</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-1">儿童语料</span><span>语料覆盖度</span></div>
+<div class="annotation-title">语料数量不足以呈现主题深度</div>
+<div class="annotation-text">4 月主题共引用 3 条儿童语料，主要集中在「我喜欢花窗」一类感受。建议补足 6-8 条，覆盖儿童对屋顶形状、瓦当颜色、邻里砖墙的不同描述。</div>
+<div class="annotation-source">来源：4 月主题网络·探究脉络·参考资料</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-1">儿童语料</span><span>语料代表性</span></div>
+<div class="annotation-title">缺少观察记录与原话节选</div>
+<div class="annotation-text">当前 3 条语料均为儿童发言节选，建议补充教师观察记录（如区域活动中儿童自发对话、建构区作品旁白），让语料能同时反映兴趣与思维。</div>
+<div class="annotation-source">来源：4 月主题网络·参考资料</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-1">儿童语料</span><span>主题词频</span></div>
+<div class="annotation-title">未指向主题核心问题</div>
+<div class="annotation-text">月计划核心问题是「家乡的屋顶为什么是斜的」，但语料多围绕「花窗好看」，主题词频需要重新切分，补充指向屋顶、瓦当、屋脊的儿童原话。</div>
+<div class="annotation-source">来源：4 月主题网络·核心问题</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-small">导入儿童语料库</button>
+</div>
+</section>
+
+<section class="annotation-category" data-category="month" data-od-id="review-apr-cat-2">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+<span class="cat-sub">含相关主题支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">3</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">月主题</span><span>政策依据</span></div>
+<div class="annotation-title">月计划缺少政策依据</div>
+<div class="annotation-text">请在 4 月月计划第一节补充《3-6 岁儿童学习与发展指南》艺术领域目标 1（喜欢自然界与生活中美的事物）与目标 3（具有初步的艺术表现与创造能力）的对应引用。</div>
+<div class="annotation-source">来源：月计划《泥塑里的家乡·屋顶与花窗》第一节</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">主题网络</span><span>园本课程衔接</span></div>
+<div class="annotation-title">与 3 月主题的递进关系未说明</div>
+<div class="annotation-text">主题网络应明确 4 月「屋顶与花窗」如何承接 3 月「泥塑里的家乡·社区街巷」，避免两个月份主题被读成并列关系。</div>
+<div class="annotation-source">来源：主题网络·跨月脉络</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-2">主题支撑</span><span>社区资源</span></div>
+<div class="annotation-title">缺少社区资源实地素材</div>
+<div class="annotation-text">请补充 2-3 张本园周边社区走访照片（屋顶、瓦当、巷门），作为主题网络的实地支撑；可挂在主题网络页面的「家乡建筑」节点下。</div>
+<div class="annotation-source">来源：主题网络·节点「家乡建筑」</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+</section>
+
+<section class="annotation-category" data-category="week" data-od-id="review-apr-cat-3">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+<span class="cat-sub">含相关支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">2</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-3">周计划</span><span>目标对齐</span></div>
+<div class="annotation-title">第 4 周活动目标未对齐月计划核心问题</div>
+<div class="annotation-text">第 4 周主活动《屋顶为什么是斜的》目标仅写「观察屋顶」，未对应月计划核心问题。请把活动目标改为「通过比较不同屋顶，尝试解释家乡屋顶为什么大多是斜的」。</div>
+<div class="annotation-source">来源：第 4 周周计划·周一上午</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-3">周计划</span><span>领域标注</span></div>
+<div class="annotation-title">五大领域覆盖标注不全</div>
+<div class="annotation-text">第 4 周 4 个活动中，仅 2 个标注了领域（艺术、社会）。请在「我们一起做花窗」「花窗里藏着什么形状」后分别补「艺术」与「科学」领域标注。</div>
+<div class="annotation-source">来源：第 4 周周计划表</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-small">查看第 4 周周计划</button>
+</div>
+</section>
+
+<section class="annotation-category" data-category="lesson" data-od-id="review-apr-cat-4">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+<span class="cat-sub">退回后逐条处理</span>
+</div>
+<span class="annotation-count"><span class="num">2</span> 条待处理</span>
+</header>
+<ul class="annotation-list">
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-4">教案</span><span>活动来源</span></div>
+<div class="annotation-title">《屋顶为什么是斜的》来源说明过于简略</div>
+<div class="annotation-text">教案「活动来源」一栏仅写「由第 3 周周计划生成」，未交代是哪句儿童原话触发了这个活动。请补充儿童原话节选与对应的观察记录链接。</div>
+<div class="annotation-source">来源：教案《屋顶为什么是斜的》·活动来源</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+<li class="annotation-item">
+<div class="annotation-body">
+<div class="annotation-meta"><span class="meta-tag cat-4">教案</span><span>活动过程</span></div>
+<div class="annotation-title">《我们一起做花窗》准备材料不全</div>
+<div class="annotation-text">请在「活动准备」中列出教师预操作示例（至少 2 张教师示范泥板照片），并补充低结构材料清单（KT 板、牙签、印花工具）。</div>
+<div class="annotation-source">来源：教案《我们一起做花窗》·活动准备</div>
+</div>
+<div class="annotation-action"><button class="btn btn-small">标记已处理</button></div>
+</li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-small">进入教案详情</button>
+</div>
+</section>
+
+</div>
+</div>
+</div>
+
+<div class="review-month-panel" id="review-may">
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge">尚未提交</span>
+<span class="meta">5 月·预排中</span>
+</div>
+<h2 style="margin:0;">5 月·家乡的桥</h2>
+<p class="meta">5 月月计划仍为预排状态，需等 4 月退回意见处理后再提交审核。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">对应文档</span><span><strong>5 月月计划（预排）</strong>、第 1-2 周周计划草稿、教案占位。</span></li>
+<li><span class="label-mono">前置条件</span><span>4 月退回意见全部「标记已处理」后方可提交。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn btn-primary" data-plan-link="month-may">查看 5 月预排月计划</button>
+</div>
+</aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-od-id="review-may-cat-1" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+<span class="cat-sub">可能不够，或挑选内容不够精准反映儿童兴趣或想法</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">提交审核后，这里会显示园长/教研主任针对语料的批注。</div>
+</section>
+<section class="annotation-category" data-od-id="review-may-cat-2" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+<span class="cat-sub">含相关主题支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-may-cat-3" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+<span class="cat-sub">含相关支撑材料</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-may-cat-4" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+<span class="cat-sub">退回后逐条处理</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+</div>
+</div>
+</div>
+
+<div class="review-month-panel" id="review-jun">
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge">未开始</span>
+<span class="meta">6 月·作品档案整理</span>
+</div>
+<h2 style="margin:0;">6 月·我们的小展·作品整理与讲述</h2>
+<p class="meta">6 月计划用于作品档案整理，尚未生成提交记录。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">当前状态</span><span>计划壳已建立，等待 5 月审阅通过后再展开。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn" data-plan-link="month-jun">查看 6 月计划壳</button>
+</div>
+</aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-od-id="review-jun-cat-1" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jun-cat-2" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jun-cat-3" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jun-cat-4" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+</div>
+</div>
+</div>
+
+<div class="review-month-panel" id="review-jul">
+<div class="review-layout">
+<aside class="card stack review-summary-card">
+<div class="review-status-row">
+<span class="badge">未开始</span>
+<span class="meta">7 月·学期复盘</span>
+</div>
+<h2 style="margin:0;">7 月·学期复盘与成长档案</h2>
+<p class="meta">7 月计划用于学期复盘与成长档案引用，尚未生成提交记录。</p>
+<ul class="review-summary-list">
+<li><span class="label-mono">当前状态</span><span>计划壳已建立，等待 6 月审阅通过后再展开。</span></li>
+</ul>
+<div class="review-actions">
+<button class="btn" data-plan-link="month-jul">查看 7 月计划壳</button>
+</div>
+</aside>
+<div class="annotation-stack">
+<section class="annotation-category" data-od-id="review-jul-cat-1" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">01</span>
+<span class="cat-name">儿童语料库</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jul-cat-2" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">02</span>
+<span class="cat-name">月主题及月计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jul-cat-3" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">03</span>
+<span class="cat-name">周主题及周计划</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+<section class="annotation-category" data-od-id="review-jul-cat-4" data-empty="true">
+<header class="annotation-category-head">
+<div class="annotation-category-title">
+<span class="cat-index">04</span>
+<span class="cat-name">教案内容</span>
+</div>
+<span class="annotation-count"><span class="num">0</span> 条</span>
+</header>
+<div class="annotation-empty">暂无上级意见。</div>
+</section>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<div aria-hidden="true" class="drawer" id="drawer">
+<div class="drawer-panel">
+<div class="row-between">
+<div><div class="eyebrow">New utterance</div><h2>新增儿童语料</h2></div>
+<button class="btn btn-small" id="closeDrawer">关闭</button>
+</div>
+<div class="stack">
+<div class="field">
+<label for="childName">孩子姓名</label>
+<select id="childName">
+<option>孩子1</option>
+<option>孩子2</option>
+<option>孩子3</option>
+<option value="custom">手动输入</option>
+</select>
+</div>
+<div class="field" hidden="" id="customChildField">
+<label for="customChildName">真实姓名或临时称呼</label>
+<input id="customChildName" placeholder="老师记得时再填写"/>
+</div>
+<div class="field">
+<label for="utteranceText">孩子话语（原话）</label>
+<textarea id="utteranceText" placeholder="例如：为什么老房子的屋顶不是平的？"></textarea>
+</div>
+<div class="field">
+<label>话语标签</label>
+<div class="tag-picker" id="tagPicker">
+<label class="tag-option"><input data-label="建筑" type="checkbox" value="建筑"/>建筑</label>
+<label class="tag-option"><input data-label="花朵" type="checkbox" value="花朵"/>花朵</label>
+<label class="tag-option"><input data-label="提出问题" type="checkbox" value="questioning"/>提出问题</label>
+<label class="tag-option"><input data-label="因果推理" type="checkbox" value="causal_reasoning"/>因果推理</label>
+<label class="tag-option"><input data-label="经验迁移" type="checkbox" value="transfer"/>经验迁移</label>
+</div>
+</div>
+<div class="field">
+<label for="newTagInput">新建标签</label>
+<input id="newTagInput" placeholder="输入后保存，将成为后续系统标签"/>
+</div>
+</div>
+<button class="btn btn-primary" id="saveUtterance">保存语料</button>
+</div>
+</div>
+<div class="toast" id="toast" role="status"></div>
 <script>
-
-  // 移动端菜单
-  var sidebar = document.querySelector('#sidebar');
-  var menuBtn = document.getElementById('menuBtn');
-  if (menuBtn) {
-    menuBtn.addEventListener('click', function () { sidebar.classList.toggle('open'); });
-  }
-  document.addEventListener('click', function (event) {
-    if (!event.target.closest('#sidebar') && !event.target.closest('#menuBtn')) {
-      sidebar.classList.remove('open');
-    }
-  });
-
-
     const screens = [...document.querySelectorAll('.screen')];
     const navButtons = [...document.querySelectorAll('[data-screen]')];
+    const sidebar = document.querySelector('#sidebar');
     const toast = document.querySelector('#toast');
 
     function showToast(message) {
@@ -3072,15 +4159,9 @@
     // 点击月切换其展开态，不影响其他月；点击周确保父月展开
     document.querySelectorAll('[data-plan-link]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const targetId = btn.dataset.planLink;
-        // 优先：当前屏有对应 plan-doc 时页内切换；否则跳转到月/周计划屏并定位
-        if (document.getElementById(targetId)) {
-          activateScreen('plans');
-          activatePlanDoc(targetId);
-          document.querySelectorAll('[data-month-node]').forEach(node => node.classList.remove('open'));
-        } else {
-          window.location.href = 'plans.html#' + targetId;
-        }
+        activateScreen('plans');
+        activatePlanDoc(btn.dataset.planLink);
+        document.querySelectorAll('[data-month-node]').forEach(node => node.classList.remove('open'));
       });
     });
     function activateReviewMonth(id) {
@@ -3092,15 +4173,9 @@
     });
     document.querySelectorAll('[data-review-link]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const targetId = btn.dataset.reviewLink;
-        // 优先：当前屏有 review-month-panel，in-page 切换；否则跳转 review.html#hash
-        if (document.querySelector('.review-month-panel')) {
-          activateScreen('review');
-          activateReviewMonth(targetId);
-          document.querySelectorAll('[data-month-node]').forEach(node => node.classList.remove('open'));
-        } else {
-          window.location.href = 'review.html#' + targetId;
-        }
+        activateScreen('review');
+        activateReviewMonth(btn.dataset.reviewLink);
+        document.querySelectorAll('[data-month-node]').forEach(node => node.classList.remove('open'));
       });
     });
     const lessonData = {
@@ -3248,7 +4323,7 @@
       const peek = document.querySelector('#lessonPeek');
       peek.classList.add('open');
       peek.setAttribute('aria-hidden', 'false');
-      document.querySelector('#closeLessonPeek')?.focus({ preventScroll: true });
+      document.querySelector('#closeLessonPeek').focus({ preventScroll: true });
     }
 
     // ============== 教案编辑器抽屉 ==============
@@ -3262,6 +4337,9 @@
       const isView = lessonDrawerMode === 'view';
       const sections = isView || !isDraft ? getLessonSections(currentLessonId) : ['', '', '', ''];
 
+      document.querySelector('#lessonDrawerEyebrow').textContent = isView
+        ? 'Lesson details'
+        : (isDraft ? 'Lesson draft' : 'Lesson editor');
       document.querySelector('#lessonDrawerTitle').textContent = data.name;
 
       const statusBadge = document.querySelector('#lessonDrawerStatusBadge');
@@ -3287,15 +4365,17 @@
       // 只读 vs 编辑：切换 input/select/textarea 的 disabled 状态
       const fields = document.querySelectorAll('#lessonEditorDrawer input, #lessonEditorDrawer select, #lessonEditorDrawer textarea');
       fields.forEach(f => { f.disabled = isView; });
-      document.querySelector('#lessonDrawerDraftBtn')?.classList?.toggle('hidden', isView);
-      document.querySelector('#lessonDrawerSubmitBtn')?.classList?.toggle('hidden', isView);
+      document.querySelector('#lessonDrawerDraftBtn').classList.toggle('hidden', isView);
+      document.querySelector('#lessonDrawerSubmitBtn').classList.toggle('hidden', isView);
       document.querySelector('#lessonDrawerCancelBtn').textContent = isView ? '关闭' : '取消';
 
       const validation = document.querySelector('#lessonDrawerValidation');
       validation.className = 'lesson-drawer-validation';
       validation.textContent = isView
-        ? ''
-        : (isDraft ? '教案尚未填写' : '');
+        ? '这是已完成教案的只读详情。需要修改时，请先点击底部「编辑教案」。'
+        : (isDraft
+          ? '该活动教案尚未填写。请补齐活动目标、活动准备、活动流程和活动延伸，并至少关联 1 类课程依据后提交。'
+          : '正在编辑已完成教案。保存修改前请确认活动目标、准备、流程和延伸仍与课程依据一致。');
 
       // 只读模式下展示底部「编辑教案」入口，编辑模式下隐藏
       const footRight = document.querySelector('#lessonEditorDrawer .lesson-drawer-foot .right');
@@ -3328,20 +4408,20 @@
       const id = currentLessonId;
       if (!id) return false;
       const entry = lessonData[id] || { name: '', domain: '', source: '' };
-      entry.name = document.querySelector('#lessonDrawerName')?.value?.trim() || entry.name || '未命名活动';
-      entry.domain = document.querySelector('#lessonDrawerDomain')?.value?.trim() || entry.domain || '';
-      entry.duration = document.querySelector('#lessonDrawerDuration')?.value?.trim() || '30 分钟';
-      entry.source = document.querySelector('#lessonDrawerSource')?.value?.trim() || entry.source || '';
-      entry.type = document.querySelector('#lessonDrawerType')?.value;
-      entry.evidence = document.querySelector('#lessonDrawerEvidence')?.value;
+      entry.name = document.querySelector('#lessonDrawerName').value.trim() || entry.name || '未命名活动';
+      entry.domain = document.querySelector('#lessonDrawerDomain').value.trim() || entry.domain || '';
+      entry.duration = document.querySelector('#lessonDrawerDuration').value.trim() || '30 分钟';
+      entry.source = document.querySelector('#lessonDrawerSource').value.trim() || entry.source || '';
+      entry.type = document.querySelector('#lessonDrawerType').value;
+      entry.evidence = document.querySelector('#lessonDrawerEvidence').value;
       lessonData[id] = entry;
 
       const panel = document.getElementById(id) || document.querySelector('#lesson-generic');
       const sections = [
-        document.querySelector('#lessonDrawerGoal')?.value?.trim(),
-        document.querySelector('#lessonDrawerPrep')?.value?.trim(),
-        document.querySelector('#lessonDrawerProcess')?.value?.trim(),
-        document.querySelector('#lessonDrawerExtend')?.value?.trim()
+        document.querySelector('#lessonDrawerGoal').value.trim(),
+        document.querySelector('#lessonDrawerPrep').value.trim(),
+        document.querySelector('#lessonDrawerProcess').value.trim(),
+        document.querySelector('#lessonDrawerExtend').value.trim()
       ];
       panel.querySelectorAll('.lesson-block').forEach((block, index) => {
         const paragraph = block.querySelector('p');
@@ -3362,8 +4442,8 @@
       return true;
     }
     function submitLessonFromDrawer({ markSubmitted }) {
-      const type = document.querySelector('#lessonDrawerType')?.value;
-      const evidence = document.querySelector('#lessonDrawerEvidence')?.value;
+      const type = document.querySelector('#lessonDrawerType').value;
+      const evidence = document.querySelector('#lessonDrawerEvidence').value;
       const validation = document.querySelector('#lessonDrawerValidation');
       if (markSubmitted && type.startsWith('theme_') && !evidence) {
         validation.textContent = '校验未通过：主题相关活动提交前必须关联至少 1 类课程依据。';
@@ -3405,10 +4485,10 @@
         openLessonEditorDrawer(btn.dataset.lessonLink, data.status === 'draft' ? 'draft' : 'view');
       });
     });
-    document.querySelector('#closeLessonPeek')?.addEventListener('click', closeLessonPeek);
-    document.querySelector('#lessonPeekCloseBottom')?.addEventListener('click', closeLessonPeek);
+    document.querySelector('#closeLessonPeek').addEventListener('click', closeLessonPeek);
+    document.querySelector('#lessonPeekCloseBottom').addEventListener('click', closeLessonPeek);
     // 原 lessonPeek 的「编辑教案」按钮：跳转至新的编辑抽屉，保持单一交互入口
-    document.querySelector('#lessonPeekEdit')?.addEventListener('click', () => {
+    document.querySelector('#lessonPeekEdit').addEventListener('click', () => {
       closeLessonPeek();
       openLessonEditorDrawer(currentLessonId, 'edit');
     });
@@ -3426,7 +4506,7 @@
     document.querySelector('#lessonDrawerSubmitBtn')?.addEventListener('click', () => {
       submitLessonFromDrawer({ markSubmitted: true });
     });
-    document.querySelector('#menuBtn')?.addEventListener('click', () => sidebar.classList.add('open'));
+    document.querySelector('#menuBtn').addEventListener('click', () => sidebar.classList.add('open'));
 
 
     // ============== 提交月计划 抽屉 ==============
@@ -3504,7 +4584,7 @@
       if (!wrap) return;
       wrap.replaceChildren();
       if (!selectedChildSources.length) {
-        wrap.innerHTML = '<div class="guide-ref-empty">尚未导入儿童语料</div>';
+        wrap.innerHTML = '<div class="guide-ref-empty">尚未导入儿童语料。点击「从儿童语料库导入」开始。</div>';
       } else {
         selectedChildSources.forEach(id => {
           const node = childCorpus.find(c => c.id === id);
@@ -3577,21 +4657,21 @@
       if (!wrap) return;
       wrap.replaceChildren();
       if (!monthPlanWeeks.length) {
-        wrap.innerHTML = '<div class="guide-ref-empty">请选择起止日期</div>';
+        wrap.innerHTML = '<div class="guide-ref-empty">请选择月计划的开始与结束日期，将自动切分周次。</div>';
         return;
       }
       monthPlanWeeks.forEach((week, idx) => {
         const row = document.createElement('div');
         row.className = 'week-row';
-        row.innerHTML = `<div class="week-row-head"><strong>第 ${idx + 1} 周</strong><span class="badge mono">${escapeHtml(week.start)} ~ ${escapeHtml(week.end)}</span></div><div class="field"><label>每周主题</label><input data-week-field="theme" data-week-index="${idx}" value="${escapeHtml(week.theme || '')}" placeholder="每周主题"/></div><div class="field"><label>每周推进重点</label><textarea data-week-field="keyPoints" data-week-index="${idx}" placeholder="本周重点">${escapeHtml(week.keyPoints || '')}</textarea></div>`;
+        row.innerHTML = `<div class="week-row-head"><strong>第 ${idx + 1} 周</strong><span class="badge mono">${escapeHtml(week.start)} ~ ${escapeHtml(week.end)}</span></div><div class="field"><label>每周主题</label><input data-week-field="theme" data-week-index="${idx}" value="${escapeHtml(week.theme || '')}" placeholder="例如：街巷纹样"/></div><div class="field"><label>每周推进重点</label><textarea data-week-field="keyPoints" data-week-index="${idx}" placeholder="描述本周推进重点。">${escapeHtml(week.keyPoints || '')}</textarea></div>`;
         wrap.appendChild(row);
       });
     }
     function collectMonthPlanForm() {
-      const month = document.querySelector('#monthPlanMonth')?.value;
-      const theme = document.querySelector('#monthPlanThemeSelect')?.value;
-      const startDate = document.querySelector('#monthPlanStartDate')?.value;
-      const endDate = document.querySelector('#monthPlanEndDate')?.value;
+      const month = document.querySelector('#monthPlanMonth').value;
+      const theme = document.querySelector('#monthPlanThemeSelect').value;
+      const startDate = document.querySelector('#monthPlanStartDate').value;
+      const endDate = document.querySelector('#monthPlanEndDate').value;
       const weeks = monthPlanWeeks.map((w, idx) => ({
         start: w.start, end: w.end,
         theme: document.querySelector(`[data-week-field="theme"][data-week-index="${idx}"]`)?.value || '',
@@ -3614,7 +4694,7 @@
       return null;
     }
     function syncThemeToMonth() {
-      const month = document.querySelector('#monthPlanMonth')?.value;
+      const month = document.querySelector('#monthPlanMonth').value;
       const themeSelect = document.querySelector('#monthPlanThemeSelect');
       const found = monthThemes.find(t => t.month === month);
       if (found) themeSelect.value = found.value;
@@ -3640,16 +4720,16 @@
       renderWeekRows();
     }
     function recomputeWeeksFromInputs() {
-      const month = document.querySelector('#monthPlanMonth')?.value;
-      const s = document.querySelector('#monthPlanStartDate')?.value;
-      const e = document.querySelector('#monthPlanEndDate')?.value;
+      const month = document.querySelector('#monthPlanMonth').value;
+      const s = document.querySelector('#monthPlanStartDate').value;
+      const e = document.querySelector('#monthPlanEndDate').value;
       monthPlanWeeks = buildWeeks(month, s, e, monthPlanWeeks);
       renderWeekRows();
     }
     function openMonthPlanDrawer(monthFromUrl) {
-      const month = monthFromUrl || (document.querySelector('#monthPlanMonth') && document.querySelector('#monthPlanMonth')?.value) || '4';
+      const month = monthFromUrl || (document.querySelector('#monthPlanMonth') && document.querySelector('#monthPlanMonth').value) || '4';
       loadMonthIntoDrawer(month);
-      document.querySelector('#monthPlanDrawer')?.classList?.add('open');
+      document.querySelector('#monthPlanDrawer').classList.add('open');
     }
     function closeMonthPlanDrawer() { const d = document.querySelector('#monthPlanDrawer'); if (d) d.classList.remove('open'); }
     document.querySelector('#openMonthPlanDrawerBtn')?.addEventListener('click', () => {
@@ -3681,11 +4761,12 @@
       const err = validateMonthPlanForm(data);
       if (err) { showToast(err); return; }
       writeMonthPlanDraft(data.month, data);
-      showToast(`${data.month} 月月计划已提交，共 ${data.weeks.length} 周`);
+      showToast(`${data.month} 月月计划已提交（draft），共 ${data.weeks.length} 周`);
       closeMonthPlanDrawer();
-      // 跳转到 月/周计划 屏并定位到对应月计划（split 文件间用 href+hash 深链）
-      const MONTH_DOC = { '3': 'month-plan', '4': 'month-apr', '5': 'month-may', '6': 'month-jun', '7': 'month-jul' };
-      window.location.href = 'plans.html#' + (MONTH_DOC[data.month] || 'month-plan');
+      const targetPlanId = `month-${data.month}`;
+      activateScreen('plans');
+      document.querySelectorAll('.plan-doc').forEach(doc => doc.classList.toggle('active', doc.id === targetPlanId));
+      document.querySelectorAll('[data-plan-tab]').forEach(btn => btn.classList.toggle('active', btn.dataset.planTab === targetPlanId));
     });
     document.querySelector('#monthPlanCancelBtn')?.addEventListener('click', closeMonthPlanDrawer);
 
@@ -3804,7 +4885,7 @@
     }
     function openGuideRef() {
       renderGuide();
-      document.querySelector('#guideRefDrawer')?.classList?.add('open');
+      document.querySelector('#guideRefDrawer').classList.add('open');
     }
     function closeGuideRef() { const d = document.querySelector('#guideRefDrawer'); if (d) d.classList.remove('open'); }
     document.querySelector('#openGuideRefBtn')?.addEventListener('click', openGuideRef);
@@ -3874,7 +4955,7 @@
       }
     }
 
-    document.querySelector('#promoteBtn')?.addEventListener('click', () => {
+    document.querySelector('#promoteBtn').addEventListener('click', () => {
       const selected = [...document.querySelectorAll('#utteranceList input:checked')];
       if (!selected.length) {
         showToast('请先勾选要提升的儿童语料');
@@ -3891,33 +4972,34 @@
       activityNodes.prepend(node);
       document.querySelector('#newNodeName').textContent = '活动：斜屋顶为什么存在';
       document.querySelector('#newNodeMeta').textContent = `${selected.length} 条过往儿童语料已作为证据关联，并标注领域：科学、语言、艺术`;
-      showToast('已从过往语料生成一个活动节点，并加入当月主题网络');
+      showToast('已从过往语料生成一个活动节点，并加入月主题网络图');
+      activateScreen('map');
     });
 
     const drawer = document.querySelector('#drawer');
     document.querySelectorAll('[data-open-drawer]').forEach(button => button.addEventListener('click', () => {
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
-      document.querySelector('#utteranceText')?.focus();
+      document.querySelector('#utteranceText').focus();
     }));
-    document.querySelector('#closeDrawer')?.addEventListener('click', () => {
+    document.querySelector('#closeDrawer').addEventListener('click', () => {
       drawer.classList.remove('open');
       drawer.setAttribute('aria-hidden', 'true');
     });
-    document.querySelector('#childName')?.addEventListener('change', event => {
+    document.querySelector('#childName').addEventListener('change', event => {
       document.querySelector('#customChildField').hidden = event.target.value !== 'custom';
     });
-    document.querySelector('#saveUtterance')?.addEventListener('click', () => {
+    document.querySelector('#saveUtterance').addEventListener('click', () => {
       const childSelect = document.querySelector('#childName');
       const child = childSelect.value === 'custom'
-        ? document.querySelector('#customChildName')?.value?.trim() || '未命名儿童'
+        ? document.querySelector('#customChildName').value.trim() || '未命名儿童'
         : childSelect.value;
-      const text = document.querySelector('#utteranceText')?.value?.trim();
+      const text = document.querySelector('#utteranceText').value.trim();
       const checkedTags = [...document.querySelectorAll('#tagPicker input:checked')].map(input => ({
         value: input.value.trim(),
         label: input.dataset.label || input.value.trim()
       }));
-      const newTagLabel = document.querySelector('#newTagInput')?.value?.trim();
+      const newTagLabel = document.querySelector('#newTagInput').value.trim();
       const newTagValue = newTagLabel.replace(/\s+/g, '_');
       if (!text) {
         showToast('请先填写孩子说过的原话');
@@ -3937,7 +5019,7 @@
         <span><strong>“${escapeHtml(text)}”</strong><p>${escapeHtml(child)} · 教师提交 · 今天</p>${checkedTags.map(tag => `<span class="badge">${escapeHtml(tag.label)}</span>`).join(' ')}</span>
         <span class="badge badge-dot accent">可提升</span>
       `;
-      document.querySelector('#utteranceList')?.prepend(item);
+      document.querySelector('#utteranceList').prepend(item);
       bindUtteranceSelection(item);
       document.querySelector('#utteranceText').value = '';
       document.querySelector('#newTagInput').value = '';
@@ -3949,7 +5031,6 @@
       drawer.setAttribute('aria-hidden', 'true');
       showToast('语料已提交，新标签已沉淀为系统标签');
     });
-  
-</script>
+  </script>
 </body>
 </html>

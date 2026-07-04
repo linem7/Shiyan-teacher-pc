@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
@@ -215,7 +215,7 @@
       </div>
     </div>
     <nav class="nav-list" id="nav">
-      <a class="nav-btn" href="../index.html">工作台 <span class="meta">1</span></a>
+      <a class="nav-btn" href="dashboard.html">工作台
       <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
       <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
       <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
@@ -224,9 +224,6 @@
       <a class="nav-btn" href="story.html">课程故事 <span class="meta">7</span></a>
       <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
     </nav>
-    <div class="sidebar-foot">
-      <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
-    </div>
   </aside>
   <main class="main">
     <header class="topbar">
@@ -241,8 +238,7 @@
       <section class="screen active" id="materials">
         <div class="page-head">
           <div>
-            <div class="eyebrow">Activity evidence</div>
-            <h1>活动素材：按时间轴记录幼儿在主题活动中的表现</h1>
+            <h1>活动素材</h1>
           </div>
           <div class="tabs">
             <button class="btn btn-primary" id="openUploadBtn">上传素材</button>
@@ -271,7 +267,6 @@
                 <button class="chip" data-filter-month="3">3 月</button>
                 <button class="chip" data-filter-month="4">4 月</button>
               </div>
-              <p class="meta">列表按纵向时间轴展示：摘要只取详细记录的前 10 个字符，点击任意一行展开完整内容。</p>
             </div>
 
             <div class="timeline" id="materialTimeline"></div>
@@ -280,7 +275,6 @@
           <aside class="stack">
             <div class="card stack-sm">
               <div class="row-between"><h2>手机端最近同步</h2><span class="badge badge-dot success">在线</span></div>
-              <p class="meta">协同手机端拍摄的照片和视频会自动带上时间与活动标签，同步到时间轴。</p>
               <div>
                 <div class="sync-item"><span class="sync-icon">📷</span><span>拓印花窗纹样 · 照片 3 张</span><span class="meta">10 分钟前</span></div>
                 <div class="sync-item"><span class="sync-icon">🎬</span><span>斜屋顶滑水实验 · 视频 1 段</span><span class="meta">昨天</span></div>
@@ -289,12 +283,7 @@
             </div>
             <div class="card stack-sm">
               <h2>素材沉淀去向</h2>
-              <p class="meta">「加入课程故事」的素材会按月份进入课程故事的证据池，撰写时可在编辑辅助面板中直接勾选调用。</p>
               <a class="btn" href="story.html">查看课程故事</a>
-            </div>
-            <div class="card stack-sm">
-              <h2>记录小提示</h2>
-              <p class="meta">一段好的行为记录 = 情境（在哪个活动）＋ 行为（幼儿做了什么）＋ 原话（幼儿说了什么）。避免只存照片不写情境。</p>
             </div>
           </aside>
         </div>
@@ -306,11 +295,11 @@
 <div aria-hidden="true" class="drawer" id="uploadDrawer">
   <div class="drawer-panel">
     <div class="row-between">
-      <div><div class="eyebrow">New material</div><h2>上传活动素材</h2></div>
+      <div><h2>上传活动素材</h2></div>
       <button class="btn btn-small" id="closeUploadBtn">关闭</button>
     </div>
     <div class="stack">
-      <div class="upload-dropzone" id="uploadDropzone">拖拽或点击选择照片 / 视频文件<br /><span class="meta">也可以只填写下方文字观察，不附文件</span></div>
+      <div class="upload-dropzone" id="uploadDropzone">拖拽或点击选择照片 / 视频文件</div>
       <div class="field">
         <label for="materialType">素材类型</label>
         <select id="materialType">
@@ -341,8 +330,8 @@
         </select>
       </div>
       <div class="field">
-        <label for="materialDesc">幼儿行为描述（详细记录）</label>
-        <textarea id="materialDesc" placeholder="情境 + 行为 + 原话：孩子在什么活动里做了什么、说了什么。列表中将展示前 10 个字符。"></textarea>
+        <label for="materialDesc">幼儿行为描述</label>
+        <textarea id="materialDesc" placeholder="记录孩子做了什么、说了什么"></textarea>
       </div>
       <div class="field">
         <label>涉及幼儿（标签）</label>
@@ -356,7 +345,7 @@
         </div>
       </div>
       <div class="row-between">
-        <span class="meta">保存后会插入时间轴对应周次</span>
+        <span class="meta"></span>
         <button class="btn btn-primary" id="submitMaterialBtn">保存素材</button>
       </div>
     </div>
@@ -568,7 +557,7 @@
     if (event.target === uploadDrawer) closeUpload();
   });
   document.getElementById('uploadDropzone').addEventListener('click', function () {
-    showToast('原型阶段：文件选择留待后端接入');
+    showToast('请选择文件');
   });
 
   var matSeq = 100;
@@ -581,7 +570,7 @@
     document.querySelectorAll('#uploadDrawer .tag-option input:checked').forEach(function (input) {
       children.push(input.value);
     });
-    if (!desc) { showToast('请填写幼儿行为描述（列表将展示前 10 个字符）'); return; }
+    if (!desc) { showToast('请填写幼儿行为描述'); return; }
     var group = weekGroups.find(function (g) { return g.key === week; });
     var m = {
       id: 'mat-new-' + (matSeq++),

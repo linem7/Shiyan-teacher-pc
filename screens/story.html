@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
@@ -381,7 +381,7 @@
       </div>
     </div>
     <nav class="nav-list" id="nav">
-      <a class="nav-btn" href="../index.html">工作台 <span class="meta">1</span></a>
+      <a class="nav-btn" href="dashboard.html">工作台
       <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
       <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
       <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
@@ -390,9 +390,6 @@
       <a class="nav-btn active" href="story.html">课程故事 <span class="meta">7</span></a>
       <a class="nav-btn" href="review.html">审阅批注 <span class="meta">8</span></a>
     </nav>
-    <div class="sidebar-foot">
-      <div class="mono">状态机 draft → submitted → reviewing → approved / returned</div>
-    </div>
   </aside>
   <main class="main">
     <header class="topbar">
@@ -407,8 +404,7 @@
       <section class="screen active" id="story">
         <div class="page-head">
           <div>
-            <div class="eyebrow">Curriculum story</div>
-            <h1>课程故事：梳理起点、过程与反思，形成当月汇报</h1>
+            <h1>课程故事</h1>
           </div>
           <div class="tabs">
             <button class="btn btn-primary" id="generateReportBtn">自动生成图文报告</button>
@@ -508,7 +504,6 @@
             <aside class="stack">
               <div class="card stack-sm">
                 <div class="row-between"><h2>素材调用</h2><span class="badge badge-dot accent">自动汇聚</span></div>
-                <p class="meta">生成图文报告时，系统按当月主题自动调用以下过往信息：</p>
                 <div>
                   <div class="source-row"><span><span class="source-type">语料</span> 儿童语料库</span><span class="mono">18 条</span></div>
                   <div class="source-row"><span><span class="source-type">素材</span> 活动素材（证据池）</span><span class="mono">6 份</span></div>
@@ -525,7 +520,7 @@
               <div class="card stack-sm">
                 <div class="row-between"><h2>图文报告</h2><span class="badge" id="reportStatusBadge">未生成</span></div>
                 <div class="report-preview" id="reportPreview">
-                  <p class="meta" id="reportHint">点击「自动生成图文报告」，系统将按 起点 → 过程 → 反思 结构，把上方素材整合成当月汇报初稿。</p>
+                  <p class="meta" id="reportHint">点击上方按钮自动生成当月报告</p>
                 </div>
                 <div class="tabs">
                   <button class="btn btn-small" data-preview-story="apr" id="previewAprBtn">预览草稿（HTML）</button>
@@ -534,10 +529,6 @@
                 </div>
               </div>
 
-              <div class="card stack-sm">
-                <h2>写作小提示</h2>
-                <p class="meta">课程故事不是活动流水账：起点讲“兴趣与依据”，过程讲“关键转折与证据”，反思讲“儿童的发展与教师的调整”。</p>
-              </div>
             </aside>
           </div>
         </div>
@@ -631,7 +622,6 @@
                   <button class="btn btn-small btn-primary" data-preview-story="mar">预览 3 月故事（HTML）</button>
                   <button class="btn btn-small" data-archived-action>查看归档</button>
                 </div>
-                <p class="meta">课程故事始终以 HTML 网页版式呈现与分享，不提供 PDF 导出。</p>
               </div>
               <div class="card stack-sm">
                 <h2>审核记录</h2>
@@ -668,7 +658,6 @@
     <button class="btn btn-small" id="storyViewerCloseBtn" type="button">← 关闭</button>
     <span class="doc-name" id="storyViewerName">课程故事预览.html</span>
     <span class="spacer"></span>
-    <span class="badge">HTML 版式 · 不提供 PDF 导出</span>
     <button class="btn btn-small" id="storyViewerShareBtn" type="button">复制分享链接</button>
   </div>
   <div class="story-viewer-scroll" id="storyViewerScroll">
@@ -724,7 +713,6 @@
         <span class="meta">实验幼儿园 · 中一班 · 2026 春</span>
         <h1>泥塑里的家乡 · 社区街巷</h1>
         <p class="meta">4 月课程故事（草稿预览）</p>
-        <span class="meta">草稿由「自动生成图文报告」汇聚，提交审阅前可继续逐节编辑</span>
       </div>
       <h2>一、起点 · 主题从哪里来</h2>
       <p>3 月“泥塑里的家乡”推进到月末时，儿童的兴趣从屋顶坡度自然延伸到门窗纹样与街巷布局。4 月的探究起点来自持续出现的儿童原话。</p>
@@ -749,7 +737,7 @@
 <aside aria-hidden="true" class="assist-panel" id="assistPanel" aria-label="编辑辅助面板">
   <div class="assist-head">
     <div class="row-between">
-      <div><div class="eyebrow">Writing assist</div><h2>调用本月计划素材，勾选即用</h2></div>
+      <div><h2>素材调用</h2></div>
       <button class="btn btn-small" id="assistCloseBtn" type="button">收起</button>
     </div>
     <div class="assist-tabs">
@@ -863,11 +851,11 @@
   var assistData = {
     corpus: {
       groups: [
-        { title: '主题来源（已写好的来源与价值分析，可直接调用）', items: [
+        { title: '主题来源', items: [
           { id: 'src-1', text: '本主题源于儿童对家乡老房子的持续兴趣：泥工区高热度 + 晨谈中反复出现的屋顶、花窗话题，对应《指南》科学探究与艺术表现领域的目标。', meta: '主题来源 · 月计划引用', tags: ['政策要求', '儿童需求'] },
           { id: 'src-2', text: '园本“家乡文化与泥塑材料”课程线索为本主题提供了材料与文化依据；社区老屋、家长访谈与老照片是可直接调用的在地资源。', meta: '主题来源 · 月计划引用', tags: ['园所文化', '可用资源'] }
         ] },
-        { title: '儿童语料（勾选后以引用格式插入）', items: [
+        { title: '儿童语料', items: [
           { id: 'q-1', text: '辰辰：“为什么老房子的屋顶不是平的？”（3月12日）', meta: '集体讨论', tags: ['建筑', '提出问题'] },
           { id: 'q-2', text: '安安：“下雨会从斜斜的地方滑下来。”（3月13日）', meta: '区角活动', tags: ['建筑', '因果推理'] },
           { id: 'q-3', text: '小禾：“泥花可以种在墙上，像奶奶家门口。”（3月14日）', meta: '美工区', tags: ['花朵', '想象联想'] },
@@ -950,7 +938,7 @@
       if (group.material && !group.items.length) {
         var empty = document.createElement('div');
         empty.className = 'assist-empty-month';
-        empty.textContent = '本月暂无该类素材，可到「活动素材」上传。';
+        empty.textContent = '本月暂无该类素材';
         body.appendChild(empty);
         return;
       }

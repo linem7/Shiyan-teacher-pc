@@ -1,11 +1,10 @@
 <!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8" />
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
 <title>儿童语料库 · 主题探究教师工作台</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="../assets/tokens.css" />
-<link rel="stylesheet" href="../assets/shared.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/shared.css">
 <style>
 
     :root {
@@ -335,8 +334,15 @@
     }
     .field textarea { min-height: 60px; resize: vertical; }
 
-    /* 抽屉内字段间紧凑间距（覆盖 .stack 通用 16px） */
-    .drawer-panel .stack { gap: var(--space-3); }
+    /* 孩子姓名 / 临时称呼：抽屉内 .stack 网格会把整块 .field 拉伸到满高，
+       进而把裸的 select/input 沿纵向撑到 ~78px。用 align-self: start 取消纵向拉伸，
+       让它们回到自然高度（~36px），与下方“话语标签”窗口的 tag-controls 一致。 */
+    #childName, #customChildName { align-self: start; }
+
+    /* 抽屉内字段间紧凑间距（覆盖 .stack 通用 16px）。
+       .stack 是 display:grid，默认会把各行拉伸铺满整个抽屉高度，导致板块之间
+       被撑开很远；align-content: start 让各行回到自然高度、按 12px 间距从顶部依次排列。 */
+    .drawer-panel .stack { gap: var(--space-3); align-content: start; }
 
 
     .tag-picker {
@@ -2186,7 +2192,7 @@
     </div>
     <nav class="nav-list" id="nav">
         <a class="nav-btn" href="dashboard.html">工作台
-        <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
+        </a><a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
         <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
         <a class="nav-btn active" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
         <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">5</span></a>
@@ -2198,7 +2204,7 @@
 <main class="main">
 <header class="topbar">
       <button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
-      <input class="search" placeholder="检索主题、儿童语料、计划或批注" type="search" />
+      <input class="search" placeholder="检索主题、儿童语料、计划或批注" type="search">
       <div class="row-between">
         <span class="badge badge-dot success">当前主题进行中</span>
         <button class="btn btn-primary btn-small" data-open-drawer="">新增语料</button>
@@ -2226,22 +2232,22 @@
 </div>
 <div class="stack" id="utteranceList">
 <label class="utterance-item" data-tags="建筑 questioning">
-<input type="checkbox" value="u1"/>
+<input type="checkbox" value="u1">
 <span><strong>“为什么老房子的屋顶不是平的？”</strong><p>辰辰 · 集体讨论 · 2026-03-12</p><span class="badge">建筑</span> <span class="badge">提出问题</span></span>
 <span class="badge badge-dot accent">可提升</span>
 </label>
 <label class="utterance-item" data-tags="建筑 causal_reasoning">
-<input type="checkbox" value="u2"/>
+<input type="checkbox" value="u2">
 <span><strong>“下雨会从斜斜的地方滑下来。”</strong><p>安安 · 区角活动 · 2026-03-13</p><span class="badge">建筑</span> <span class="badge">因果推理</span></span>
 <span class="badge badge-dot accent">可提升</span>
 </label>
 <label class="utterance-item" data-tags="花朵 imagination">
-<input type="checkbox" value="u3"/>
+<input type="checkbox" value="u3">
 <span><strong>“泥花可以种在墙上，像奶奶家门口。”</strong><p>小禾 · 美工区 · 2026-03-14</p><span class="badge">花朵</span> <span class="badge">想象联想</span></span>
 <span class="badge">已关联</span>
 </label>
 <label class="utterance-item" data-tags="建筑 transfer">
-<input type="checkbox" value="u4"/>
+<input type="checkbox" value="u4">
 <span><strong>“我见过祠堂门口也有这个尖尖。”</strong><p>佑佑 · 户外散步 · 2026-03-15</p><span class="badge">建筑</span> <span class="badge">经验迁移</span></span>
 <span class="badge badge-dot accent">可提升</span>
 </label>
@@ -2282,10 +2288,7 @@
 <option value="custom">手动输入</option>
 </select>
 </div>
-<div class="field" hidden="" id="customChildField">
-<label for="customChildName">真实姓名或临时称呼</label>
-<input id="customChildName" placeholder="选填"/>
-</div>
+
 <div class="field">
 <label>原话对话</label>
 <span class="meta">可以只记一句，也可以记下多轮，甚至加入教师的追问</span>
@@ -2297,7 +2300,7 @@
 <div class="tag-selected" id="tagSelected"></div>
 <div class="tag-controls">
 <select id="tagSelect"><option value="">选择已有标签…</option></select>
-<input type="text" id="newTagInput" placeholder="新建标签…" />
+<input type="text" id="newTagInput" placeholder="新建标签…">
 <button class="btn btn-small" id="addTagBtn" type="button">添加</button>
 </div>
 </div>
@@ -2314,7 +2317,7 @@
 <div class="month-drawer-head">
 <div class="lesson-peek-title">
 <button aria-label="返回月计划" class="icon-btn" id="monthPlanCloseBtn" title="返回月计划" type="button">
-<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
+<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
 <h2>提交月计划</h2>
@@ -2350,11 +2353,11 @@
 <div class="grid grid-2" style="margin-top: var(--space-3);">
 <div class="field">
 <label for="monthPlanStartDate">月计划开始日期</label>
-<input id="monthPlanStartDate" type="date"/>
+<input id="monthPlanStartDate" type="date">
 </div>
 <div class="field">
 <label for="monthPlanEndDate">月计划结束日期</label>
-<input id="monthPlanEndDate" type="date"/>
+<input id="monthPlanEndDate" type="date">
 </div>
 </div>
 </div>
@@ -2410,14 +2413,14 @@
 <div class="guide-ref-head">
 <div class="lesson-peek-title">
 <button aria-label="返回月计划" class="icon-btn" id="guideRefCloseBtn" title="返回" type="button">
-<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
+<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
 <h2>3-6 岁儿童学习与发展指南</h2>
 </div>
 <button aria-label="关闭" class="icon-btn" id="guideRefCloseBtnTop" type="button">×</button>
 </div>
-<input class="search" id="guideRefSearch" placeholder="检索领域、目标或关键词" type="search"/>
+<input class="search" id="guideRefSearch" placeholder="检索领域、目标或关键词" type="search">
 </div>
 <div class="guide-ref-body">
 <nav class="guide-ref-toc" id="guideRefToc" aria-label="指南目录"></nav>
@@ -2428,7 +2431,7 @@
 <div class="guide-ref-head">
 <div class="lesson-peek-title">
 <button aria-label="返回月计划" class="icon-btn" id="childCorpusCloseBtn" title="返回" type="button">
-<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
+<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
 <h2>儿童语料库</h2>
@@ -2450,7 +2453,7 @@
 <div class="lesson-peek-head">
 <div class="lesson-peek-title">
 <button aria-label="返回周计划" class="icon-btn" id="lessonPeekCloseBottom" title="返回周计划" type="button">
-<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
+<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
 <h2 id="lessonPeekTitle">教案预览</h2>
@@ -2477,7 +2480,7 @@
 <div class="lesson-drawer-head">
 <div class="lesson-drawer-title">
 <button aria-label="返回周计划" class="icon-btn" id="lessonDrawerBackBtn" title="返回周计划" type="button">
-<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
+<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 18 18" width="18"><path d="M11 4 L5 9 L11 14"></path></svg>
 </button>
 <div>
 <h2 id="lessonDrawerTitle">教案填写</h2>
@@ -2498,7 +2501,7 @@
 <div class="lesson-drawer-grid-2">
 <div class="lesson-drawer-section">
 <label for="lessonDrawerName">活动名称</label>
-<input id="lessonDrawerName" type="text" placeholder="活动名称"/>
+<input id="lessonDrawerName" type="text" placeholder="活动名称">
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerType">活动类型</label>
@@ -2509,11 +2512,11 @@
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerDomain">领域归属</label>
-<input id="lessonDrawerDomain" type="text" placeholder="领域归属"/>
+<input id="lessonDrawerDomain" type="text" placeholder="领域归属">
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerDuration">活动时长</label>
-<input id="lessonDrawerDuration" type="text" placeholder="活动时长"/>
+<input id="lessonDrawerDuration" type="text" placeholder="活动时长">
 </div>
 </div>
 <div class="lesson-drawer-section">
@@ -2522,7 +2525,7 @@
 </div>
 <div class="lesson-drawer-section">
 <label for="lessonDrawerEvidence">关联课程依据</label>
-<input id="lessonDrawerEvidence" type="text" placeholder="关联课程依据"/>
+<input id="lessonDrawerEvidence" type="text" placeholder="关联课程依据">
 </div>
 </div>
 
@@ -2574,7 +2577,7 @@
 </div>
 </div>
 </aside>
-<div id="lessonDataStore" hidden aria-hidden="true">
+<div id="lessonDataStore" hidden="" aria-hidden="true">
 <article class="lesson-detail-panel" id="lesson-roof">
 <div class="lesson-outline">
 <section class="lesson-block"><h3>活动目标</h3><p>观察不同屋顶形状，能说出斜屋顶和平屋顶的差异；尝试用“斜、流下、挡雨”等词表达自己的发现。</p></section>
@@ -4071,5 +4074,6 @@
     });
   
 </script>
-</body>
-</html>
+
+
+</body></html>

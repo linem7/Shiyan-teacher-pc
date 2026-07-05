@@ -1,11 +1,10 @@
-﻿<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8" />
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
 <title>课程故事 · 主题探究教师工作台</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="../assets/tokens.css" />
-<link rel="stylesheet" href="../assets/shared.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/shared.css">
 <style>
   /* ── 课程故事屏特有样式 ─────────────────────────────── */
   .source-type {
@@ -149,6 +148,11 @@
     background: color-mix(in oklab, var(--accent), transparent 92%);
     font-size: var(--text-lg);
   }
+  /* 整张预览卡片可点击直接打开预览页（不再单独放按钮） */
+  .report-preview.clickable { cursor: pointer; transition: border-color var(--motion-fast) var(--ease-standard); }
+  .report-preview.clickable:hover { border-color: var(--accent); }
+  .report-preview.clickable:focus-visible { outline: none; border-color: var(--accent); box-shadow: var(--focus-ring); }
+  .report-hint { text-align: right; color: var(--accent); font-size: var(--text-xs); margin: 0; }
 
   .story-empty {
     border: 1px dashed var(--border);
@@ -157,6 +161,47 @@
     text-align: center;
     color: var(--muted);
   }
+
+  /* ── 本月辅助材料（主题网络 + 审核意见）───────────────── */
+  .aux-block + .aux-block { margin-top: var(--space-1); }
+  /* 侧栏两张卡（图文预览 / 相关信息）间距收紧 */
+  .story-month-panel aside.stack { gap: var(--space-3); }
+  /* 图文预览标题 icon */
+  .pv-emoji { margin-right: var(--space-2); }
+  .aux-title {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+  .aux-net { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  .aux-net li {
+    font-size: var(--text-sm);
+    color: var(--fg);
+    line-height: var(--leading-body);
+    padding-left: var(--space-3);
+    border-left: 2px solid color-mix(in oklab, var(--accent), transparent 55%);
+  }
+  .aux-net .aux-week {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent);
+    margin-right: var(--space-2);
+  }
+  .aux-review { display: grid; gap: var(--space-2); }
+  .aux-review p {
+    margin: 0;
+    border-left: 3px solid color-mix(in oklab, var(--warn), transparent 35%);
+    background: color-mix(in oklab, var(--warn), transparent 92%);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    font-style: italic;
+    color: var(--fg);
+  }
+  .aux-review .aux-review-src { display: block; font-style: normal; font-size: var(--text-xs); color: var(--muted); margin-top: 2px; }
 
   /* ── 课程故事 HTML 预览器（连续网页排版，不再分页/导出 PDF） ── */
   .story-viewer {
@@ -382,7 +427,7 @@
     </div>
     <nav class="nav-list" id="nav">
       <a class="nav-btn" href="dashboard.html">工作台
-      <a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
+      </a><a class="nav-btn" href="training.html">教研培训 <span class="meta">2</span></a>
       <a class="nav-btn" href="themes.html">主题列表 <span class="meta">3</span></a>
       <a class="nav-btn" href="corpus.html">儿童语料库 <span class="meta">4</span></a>
       <a class="nav-btn" href="plans.html">月/周计划 <span class="meta">5</span></a>
@@ -394,7 +439,7 @@
   <main class="main">
     <header class="topbar">
       <button aria-label="打开导航" class="btn mobile-menu" id="menuBtn">菜单</button>
-      <input class="search" placeholder="检索课程故事、活动或反思关键词" type="search" />
+      <input class="search" placeholder="检索课程故事、活动或反思关键词" type="search">
       <div class="row-between">
         <span class="badge badge-dot accent" id="storyStatusBadge">4 月故事 · 草稿</span>
         <span class="meta">2026 春 · 中一班</span>
@@ -427,7 +472,7 @@
               <section class="story-section">
                 <div class="story-section-head">
                   <div><span class="step-mark">1</span><h2>起点 · 主题从哪里来</h2></div>
-                  <button class="btn btn-small" data-edit-section>编辑</button>
+                  <button class="btn btn-small" data-edit-section="">编辑</button>
                 </div>
                 <p>3 月“泥塑里的家乡”推进到月末时，儿童的兴趣从屋顶坡度自然延伸到门窗纹样与街巷布局。4 月的探究起点来自持续出现的儿童原话：</p>
                 <div class="quote-list">
@@ -441,7 +486,7 @@
               <section class="story-section">
                 <div class="story-section-head">
                   <div><span class="step-mark">2</span><h2>过程 · 探究如何推进</h2></div>
-                  <button class="btn btn-small" data-edit-section>编辑</button>
+                  <button class="btn btn-small" data-edit-section="">编辑</button>
                 </div>
                 <div class="story-timeline">
                   <div class="story-week">
@@ -484,7 +529,7 @@
               <section class="story-section">
                 <div class="story-section-head">
                   <div><span class="step-mark">3</span><h2>反思 · 我们看见了什么</h2></div>
-                  <button class="btn btn-small" data-edit-section>编辑</button>
+                  <button class="btn btn-small" data-edit-section="">编辑</button>
                 </div>
                 <div class="reflect-block">
                   <strong>儿童的学习</strong>
@@ -503,32 +548,32 @@
 
             <aside class="stack">
               <div class="card stack-sm">
-                <div class="row-between"><h2>素材调用</h2><span class="badge badge-dot accent">自动汇聚</span></div>
-                <div>
-                  <div class="source-row"><span><span class="source-type">语料</span> 儿童语料库</span><span class="mono">18 条</span></div>
-                  <div class="source-row"><span><span class="source-type">素材</span> 活动素材（证据池）</span><span class="mono">6 份</span></div>
-                  <div class="source-row"><span><span class="source-type">计划</span> 月计划 + 周计划</span><span class="mono">3 份</span></div>
-                  <div class="source-row"><span><span class="source-type">批注</span> 审核意见</span><span class="mono">5 条</span></div>
-                </div>
-                <div class="tabs">
-                  <a class="btn btn-small" href="corpus.html">语料库</a>
-                  <a class="btn btn-small" href="materials.html">活动素材</a>
-                  <a class="btn btn-small" href="plans.html#month-apr">月计划</a>
+                <div class="row-between"><h2><span class="pv-emoji">📖</span>图文预览</h2><span class="badge" id="reportStatusBadge">草稿</span></div>
+                <div class="report-preview clickable" id="reportPreview" data-preview-story="apr" role="button" tabindex="0" aria-label="打开 4 月课程故事图文预览">
+                  <div class="report-img-row"><span class="report-img">🏘️</span><span class="report-img">🎬</span><span class="report-img">🏮</span></div>
+                  <p class="meta" id="reportHint">默认 HTML 连续排版；点击上方「自动生成图文报告」可刷新当月图文</p>
+                  <p class="report-hint">点击卡片查看图文预览 →</p>
                 </div>
               </div>
 
               <div class="card stack-sm">
-                <div class="row-between"><h2>图文报告</h2><span class="badge" id="reportStatusBadge">未生成</span></div>
-                <div class="report-preview" id="reportPreview">
-                  <p class="meta" id="reportHint">点击上方按钮自动生成当月报告</p>
+                <h2>相关信息</h2>
+                <div class="aux-block">
+                  <div class="aux-title">主题网络 · 4 月社区街巷</div>
+                  <ul class="aux-net">
+                    <li><span class="aux-week">第1周</span>屋顶问题延续与验证 · 斜坡滑水实验</li>
+                    <li><span class="aux-week">第2周</span>从屋顶到纹样 · 我发现的屋顶线条</li>
+                    <li><span class="aux-week">第3周</span>拓印与花砖创作 · 拓印门窗纹样 / 做一块家乡花砖</li>
+                  </ul>
                 </div>
-                <div class="tabs">
-                  <button class="btn btn-small" data-preview-story="apr" id="previewAprBtn">预览草稿（HTML）</button>
-                  <button class="btn btn-small" id="shareBtn">分享给园长</button>
-                  <button class="btn btn-small" id="submitStoryBtn">提交审阅</button>
+                <div class="aux-block">
+                  <div class="aux-title">审核意见</div>
+                  <div class="aux-review">
+                    <p>“花砖分类里的数学机会捕捉偏晚，建议在活动过程中即时回应。”</p>
+                    <p>“社区街巷相关的儿童语料略少，可再补充街巷布局、店铺分布的原话。”</p>
+                  </div>
                 </div>
               </div>
-
             </aside>
           </div>
         </div>
@@ -540,7 +585,7 @@
               <section class="story-section">
                 <div class="story-section-head">
                   <div><span class="step-mark">1</span><h2>起点 · 主题从哪里来</h2></div>
-                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section>编辑</button></div>
+                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section="">编辑</button></div>
                 </div>
                 <p>春季开学后，泥工区持续高热度。教师在晨谈中投放家乡老房子照片，孩子们的话题从“我家住几楼”转向“老房子长什么样”。结合园本泥塑课程与社区老屋资源，“泥塑里的家乡 · 屋顶与花窗”正式启动，主题网络由儿童语料生成 7 个子探究点。</p>
                 <div class="quote-list">
@@ -552,7 +597,7 @@
               <section class="story-section">
                 <div class="story-section-head">
                   <div><span class="step-mark">2</span><h2>过程 · 探究如何推进（第 1-4 周）</h2></div>
-                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section>编辑</button></div>
+                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section="">编辑</button></div>
                 </div>
                 <div class="story-timeline">
                   <div class="story-week" data-story-week="w1">
@@ -600,7 +645,7 @@
               <section class="story-section">
                 <div class="story-section-head">
                   <div><span class="step-mark">3</span><h2>反思 · 我们看见了什么</h2></div>
-                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section>编辑</button></div>
+                  <div class="tabs"><span class="badge badge-dot success">已通过</span><button class="btn btn-small" data-edit-section="">编辑</button></div>
                 </div>
                 <div class="reflect-block">
                   <strong>月度小结</strong>
@@ -610,23 +655,35 @@
             </div>
             <aside class="stack">
               <div class="card stack-sm">
-                <div class="row-between"><h2>图文报告</h2><span class="badge badge-dot success">已生成</span></div>
-                <div class="report-preview">
+                <div class="row-between"><h2><span class="pv-emoji">📖</span>图文预览</h2><span class="badge badge-dot success">已生成</span></div>
+                <div class="report-preview clickable" data-preview-story="mar" role="button" tabindex="0" aria-label="打开 3 月课程故事图文预览">
                   <div class="report-line"></div>
                   <div class="report-line short"></div>
                   <div class="report-img-row"><span class="report-img">🏠</span><span class="report-img">🎬</span><span class="report-img">🏮</span></div>
                   <div class="report-line"></div>
                   <div class="report-line short"></div>
-                </div>
-                <div class="tabs">
-                  <button class="btn btn-small btn-primary" data-preview-story="mar">预览 3 月故事（HTML）</button>
-                  <button class="btn btn-small" data-archived-action>查看归档</button>
+                  <p class="report-hint">点击卡片查看图文预览 →</p>
                 </div>
               </div>
+
               <div class="card stack-sm">
-                <h2>审核记录</h2>
-                <p class="meta">3 月课程故事随月计划一并通过审阅，园长批注 1 条：“过程部分的证据链完整，建议保留原话引用格式。”</p>
-                <a class="btn btn-small" href="review.html#review-mar">查看 3 月审核意见</a>
+                <h2>相关信息</h2>
+                <div class="aux-block">
+                  <div class="aux-title">主题网络 · 3 月屋顶与花窗</div>
+                  <ul class="aux-net">
+                    <li><span class="aux-week">第1周</span>启动探究 · 一起看老房子 / 主题网络图共绘</li>
+                    <li><span class="aux-week">第2周</span>泥塑材料初识 · 泥土是什么 / 介绍我的泥塑</li>
+                    <li><span class="aux-week">第3周</span>屋顶形状 · 屋顶为什么是斜的 / 捏一个斜屋顶</li>
+                    <li><span class="aux-week">第4周</span>花窗纹样 · 拓印门窗纹样 / 做一块家乡花砖</li>
+                  </ul>
+                </div>
+                <div class="aux-block">
+                  <div class="aux-title">审核意见</div>
+                  <div class="aux-review">
+                    <p>“过程部分的证据链完整，建议保留原话引用格式。”</p>
+                    <p>“请在周计划中持续标注五大领域。”</p>
+                  </div>
+                </div>
               </div>
             </aside>
           </div>
@@ -658,12 +715,13 @@
     <button class="btn btn-small" id="storyViewerCloseBtn" type="button">← 关闭</button>
     <span class="doc-name" id="storyViewerName">课程故事预览.html</span>
     <span class="spacer"></span>
+    <button class="btn btn-small btn-primary" id="storyViewerExportBtn" type="button">导出 PDF</button>
     <button class="btn btn-small" id="storyViewerShareBtn" type="button">复制分享链接</button>
   </div>
   <div class="story-viewer-scroll" id="storyViewerScroll">
 
     <!-- 3 月 · 已通过的完整故事 -->
-    <article class="story-doc" id="story-doc-mar" hidden>
+    <article class="story-doc" id="story-doc-mar" hidden="">
       <div class="doc-cover">
         <span class="meta">实验幼儿园 · 中一班 · 2026 春</span>
         <h1>泥塑里的家乡 · 屋顶与花窗</h1>
@@ -708,7 +766,7 @@
     </article>
 
     <!-- 4 月 · 草稿预览 -->
-    <article class="story-doc" id="story-doc-apr" hidden>
+    <article class="story-doc" id="story-doc-apr" hidden="">
       <div class="doc-cover">
         <span class="meta">实验幼儿园 · 中一班 · 2026 春</span>
         <h1>泥塑里的家乡 · 社区街巷</h1>
@@ -830,19 +888,11 @@
     }, 1400);
   });
 
-  // ============== 其他动作（原型演示） ==============
-  document.getElementById('shareBtn').addEventListener('click', function () {
-    showToast('已生成分享链接（模拟），园长可在线查看');
-  });
-  document.getElementById('submitStoryBtn').addEventListener('click', function () {
-    var badge = document.getElementById('reportStatusBadge');
-    if (badge.textContent === '未生成') {
-      showToast('请先生成图文报告，再提交审阅');
-      return;
-    }
-    badge.textContent = '已提交（submitted）';
-    document.getElementById('storyStatusBadge').textContent = '4 月故事 · 审阅中';
-    showToast('4 月课程故事已提交审阅');
+  // ============== 预览卡片键盘可达（Enter / 空格打开预览）==============
+  document.querySelectorAll('.report-preview[data-preview-story]').forEach(function (card) {
+    card.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); card.click(); }
+    });
   });
   // ============== 分节编辑 + 编辑辅助面板（抓取就用） ==============
   var escapeHtml = window.workbenchShared.escapeHtml;
@@ -1058,7 +1108,9 @@
     mar: '泥塑里的家乡·屋顶与花窗_3月课程故事.html',
     apr: '泥塑里的家乡·社区街巷_4月课程故事（草稿）.html'
   };
+  var currentViewerMonth = null;
   function openStoryViewer(month) {
+    currentViewerMonth = month;
     document.querySelectorAll('.story-doc').forEach(function (doc) {
       doc.hidden = doc.id !== 'story-doc-' + month;
     });
@@ -1091,6 +1143,10 @@
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && storyViewer.classList.contains('open')) closeStoryViewer();
   });
+  document.getElementById('storyViewerExportBtn').addEventListener('click', function () {
+    var name = (currentViewerMonth === 'mar' ? '3 月' : '4 月') + '课程故事';
+    showToast('正在导出《' + name + '》为 PDF（模拟），排版与当前 HTML 预览一致');
+  });
   document.getElementById('storyViewerShareBtn').addEventListener('click', function () {
     showToast('已复制 HTML 分享链接（模拟），园长可直接在线查看');
   });
@@ -1100,5 +1156,6 @@
     });
   });
 </script>
-</body>
-</html>
+
+
+</body></html>

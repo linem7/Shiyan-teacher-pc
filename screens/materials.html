@@ -197,6 +197,30 @@
   }
   .upload-dropzone:hover { border-color: var(--accent); color: var(--accent); }
 
+  /* 涉及幼儿：合并到一个框里方便点选，取消一颗颗独立胶囊卡片 */
+  .tag-checklist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface);
+  }
+  .tag-checklist label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+  .tag-checklist input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
   @media (max-width: 920px) {
     .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .timeline { padding-left: 18px; }
@@ -246,46 +270,22 @@
           </div>
         </div>
 
-        <div class="stat-strip">
-          <div class="card stat"><span class="source-type">全部素材</span><strong id="statTotal">13</strong><p class="meta">3-4 月累计</p></div>
-          <div class="card stat"><span class="source-type">照片</span><strong id="statPhoto">6</strong><p class="meta">PC + 手机</p></div>
-          <div class="card stat"><span class="source-type">视频</span><strong id="statVideo">3</strong><p class="meta">手机端上传</p></div>
-          <div class="card stat"><span class="source-type">文字观察</span><strong id="statText">4</strong><p class="meta">教师随手记</p></div>
-        </div>
-
-        <div class="grid grid-main">
-          <div class="stack">
-            <div class="card stack-sm">
-              <div class="filters" id="typeFilters">
-                <button class="chip active" data-filter-type="all">全部类型</button>
-                <button class="chip" data-filter-type="photo">照片</button>
-                <button class="chip" data-filter-type="video">视频</button>
-                <button class="chip" data-filter-type="text">文字</button>
-              </div>
-              <div class="filters" id="monthFilters">
-                <button class="chip active" data-filter-month="all">全部月份</button>
-                <button class="chip" data-filter-month="3">3 月</button>
-                <button class="chip" data-filter-month="4">4 月</button>
-              </div>
+        <div class="stack">
+          <div class="card stack-sm">
+            <div class="filters" id="typeFilters">
+              <button class="chip active" data-filter-type="all">全部类型</button>
+              <button class="chip" data-filter-type="photo">照片</button>
+              <button class="chip" data-filter-type="video">视频</button>
+              <button class="chip" data-filter-type="text">文字</button>
             </div>
-
-            <div class="timeline" id="materialTimeline"></div>
+            <div class="filters" id="monthFilters">
+              <button class="chip active" data-filter-month="all">全部月份</button>
+              <button class="chip" data-filter-month="3">3 月</button>
+              <button class="chip" data-filter-month="4">4 月</button>
+            </div>
           </div>
 
-          <aside class="stack">
-            <div class="card stack-sm">
-              <div class="row-between"><h2>手机端最近同步</h2><span class="badge badge-dot success">在线</span></div>
-              <div>
-                <div class="sync-item"><span class="sync-icon">📷</span><span>拓印花窗纹样 · 照片 3 张</span><span class="meta">10 分钟前</span></div>
-                <div class="sync-item"><span class="sync-icon">🎬</span><span>斜屋顶滑水实验 · 视频 1 段</span><span class="meta">昨天</span></div>
-                <div class="sync-item"><span class="sync-icon">📝</span><span>晨谈语音转文字 · 1 条</span><span class="meta">昨天</span></div>
-              </div>
-            </div>
-            <div class="card stack-sm">
-              <h2>素材沉淀去向</h2>
-              <a class="btn" href="story.html">查看课程故事</a>
-            </div>
-          </aside>
+          <div class="timeline" id="materialTimeline"></div>
         </div>
       </section>
     </div>
@@ -335,13 +335,13 @@
       </div>
       <div class="field">
         <label>涉及幼儿（标签）</label>
-        <div class="tag-picker">
-          <label class="tag-option"><input type="checkbox" value="辰辰" />辰辰</label>
-          <label class="tag-option"><input type="checkbox" value="安安" />安安</label>
-          <label class="tag-option"><input type="checkbox" value="小禾" />小禾</label>
-          <label class="tag-option"><input type="checkbox" value="佑佑" />佑佑</label>
-          <label class="tag-option"><input type="checkbox" value="乐乐" />乐乐</label>
-          <label class="tag-option"><input type="checkbox" value="全班" />全班</label>
+        <div class="tag-checklist">
+          <label><input type="checkbox" value="辰辰" />辰辰</label>
+          <label><input type="checkbox" value="安安" />安安</label>
+          <label><input type="checkbox" value="小禾" />小禾</label>
+          <label><input type="checkbox" value="佑佑" />佑佑</label>
+          <label><input type="checkbox" value="乐乐" />乐乐</label>
+          <label><input type="checkbox" value="全班" />全班</label>
         </div>
       </div>
       <div class="row-between">
@@ -426,7 +426,25 @@
       activity: '拓印门窗纹样', source: '手机端', tags: ['小禾', '佑佑'], used: 1 },
     { id: 'mat-w5-03', week: 'w5', type: 'photo', icon: '🖌️', date: '04-14',
       desc: '“我发现的屋顶线条”活动中，安安把瓦片画成一排排弧线并数了数量，说“一共十一条，像波浪”。',
-      activity: '我发现的屋顶线条', source: 'PC 端', tags: ['安安'], used: 0 }
+      activity: '我发现的屋顶线条', source: 'PC 端', tags: ['安安'], used: 0 },
+    { id: 'mat-w5-04', week: 'w5', type: 'text', icon: '📝', date: '04-01',
+      desc: '社区散步回来，乐乐画了一条弯弯的小巷，边画边数“我一共数了七家店，卖菜的在最前面，最后一家是修车的”。',
+      activity: '我们的社区地图', source: 'PC 端', tags: ['乐乐'], used: 1 },
+    { id: 'mat-w5-05', week: 'w5', type: 'text', icon: '📝', date: '04-21',
+      desc: '安安在建构区把积木排成一条街，坚持给每家店都留出门口，说“人要能走进去才算街，不然就是墙”。',
+      activity: '搭一条街', source: 'PC 端', tags: ['安安'], used: 0 },
+    { id: 'mat-w5-06', week: 'w5', type: 'photo', icon: '📏', date: '04-07',
+      desc: '测量巷口石板路时，小禾一步一步地量，和安安一起记录“从这头到那头走了十九步”，还争论要不要把脚并拢再量一次。',
+      activity: '街巷有多长', source: '手机端', tags: ['小禾', '安安'], used: 0 },
+    { id: 'mat-w5-07', week: 'w5', type: 'photo', icon: '🚪', date: '04-18',
+      desc: '全班把收集来的老门牌拓片贴在墙上，自发按数字大小排队，讨论“为什么有的门牌会跳号、中间的去哪了”。',
+      activity: '门牌上的秘密', source: 'PC 端', tags: ['全班'], used: 2 },
+    { id: 'mat-w5-08', week: 'w5', type: 'video', icon: '🎬', duration: '01:05', date: '04-03',
+      desc: '佑佑带着乐乐在沙水区搭“过河的桥”，试了两种桥墩间距，发现“墩子放太远，积木就会掉下去”，随后主动把桥墩挪近。',
+      activity: '街角的小桥', source: '手机端', tags: ['佑佑', '乐乐'], used: 1 },
+    { id: 'mat-w5-09', week: 'w5', type: 'video', icon: '🎬', duration: '00:58', date: '04-22',
+      desc: '角色游戏里安安学卖菜阿婆吆喝，和辰辰把角色区布置成“街口小店”，为了给顾客找零，两人反复数了好几遍硬币。',
+      activity: '街口小店角色游戏', source: '手机端', tags: ['安安', '辰辰'], used: 0 }
   ];
 
   // ============== 渲染时间轴 ==============
@@ -567,7 +585,7 @@
     var activity = document.getElementById('materialActivity').value;
     var desc = document.getElementById('materialDesc').value.trim();
     var children = [];
-    document.querySelectorAll('#uploadDrawer .tag-option input:checked').forEach(function (input) {
+    document.querySelectorAll('#uploadDrawer .tag-checklist input:checked').forEach(function (input) {
       children.push(input.value);
     });
     if (!desc) { showToast('请填写幼儿行为描述'); return; }
@@ -590,13 +608,8 @@
         badge.textContent = badge.textContent.replace(/\d+ 条/, count + ' 条');
       }
     }
-    var totalEl = document.getElementById('statTotal');
-    totalEl.textContent = String(Number(totalEl.textContent) + 1);
-    var byType = { photo: 'statPhoto', video: 'statVideo', text: 'statText' };
-    var el = document.getElementById(byType[type]);
-    if (el) el.textContent = String(Number(el.textContent) + 1);
     document.getElementById('materialDesc').value = '';
-    document.querySelectorAll('#uploadDrawer .tag-option input:checked').forEach(function (input) { input.checked = false; });
+    document.querySelectorAll('#uploadDrawer .tag-checklist input:checked').forEach(function (input) { input.checked = false; });
     closeUpload();
     applyFilters();
     showToast('素材已插入时间轴：' + (group ? group.title : ''));

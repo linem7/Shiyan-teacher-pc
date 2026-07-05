@@ -359,6 +359,35 @@
       accent-color: var(--accent);
     }
 
+    /* 新建主题抽屉：取消 .stack 网格的纵向拉伸，控件保持常规高度 */
+    #newThemeDrawer .stack { align-content: start; }
+    #newThemeDrawer .field input,
+    #newThemeDrawer .field select { min-height: 36px; padding: 6px 10px; }
+    #newThemeDrawer .field textarea { min-height: 60px; }
+    /* 涉及领域：五个勾选项放进同一个方框，方便点选 */
+    .domain-checklist {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3) var(--space-5);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: var(--space-3) var(--space-4);
+    }
+    .domain-checklist label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      cursor: pointer;
+    }
+    .domain-checklist input {
+      width: 15px;
+      height: 15px;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+
     .hero-workbench {
       min-height: 260px;
       display: grid;
@@ -2255,7 +2284,7 @@
 <section class="screen active" data-od-id="screen-themes" id="themes">
           <div class="page-head">
             <div><h1>本学期主题探究 · 3-6 月</h1></div>
-            <button class="btn btn-primary">新建主题</button>
+            <button class="btn btn-primary" id="newThemeBtn">新建主题</button>
           </div>
           <div class="theme-stack">
 
@@ -2488,6 +2517,71 @@
 <div class="row-between" style="margin-top: var(--space-5);">
 <button class="btn" id="closeDrawer2">取消</button>
 <button class="btn btn-primary" id="saveUtterance">保存语料</button>
+</div>
+</div>
+</div>
+
+<div aria-hidden="true" class="drawer" id="newThemeDrawer">
+<div class="drawer-panel">
+<div class="row-between">
+<div><h2>新建主题</h2></div>
+<button class="btn btn-small" id="closeNewTheme">关闭</button>
+</div>
+<div class="stack">
+<div class="grid grid-2">
+<div class="field">
+<label for="newThemeMonth">月份</label>
+<select id="newThemeMonth">
+<option value="5">5 月</option>
+<option value="6">6 月</option>
+<option value="7" selected>7 月</option>
+</select>
+</div>
+<div class="field">
+<label for="newThemeRange">起止日期</label>
+<input id="newThemeRange" placeholder="如 2026-07-01 至 2026-07-24"/>
+</div>
+</div>
+<div class="field">
+<label for="newThemeName">主题名称</label>
+<input id="newThemeName" placeholder="如 家乡的味道"/>
+</div>
+<div class="field">
+<label for="newThemeThread">探究脉络</label>
+<textarea id="newThemeThread" placeholder="主题从哪里来、往哪里去，如：老屋照片、屋顶形状、花窗纹样"></textarea>
+</div>
+<div class="field">
+<label>涉及领域</label>
+<div class="domain-checklist" id="newThemeDomains">
+<label><input type="checkbox" value="健康"/>健康</label>
+<label><input type="checkbox" value="语言"/>语言</label>
+<label><input type="checkbox" value="社会"/>社会</label>
+<label><input type="checkbox" value="科学"/>科学</label>
+<label><input type="checkbox" value="艺术"/>艺术</label>
+</div>
+</div>
+<div class="grid grid-2">
+<div class="field">
+<label for="newThemeEvPolicy">政策</label>
+<input id="newThemeEvPolicy" placeholder="选填，如《指南》科学探究"/>
+</div>
+<div class="field">
+<label for="newThemeEvCulture">文化</label>
+<input id="newThemeEvCulture" placeholder="选填，如园本泥塑课程"/>
+</div>
+<div class="field">
+<label for="newThemeEvResource">资源</label>
+<input id="newThemeEvResource" placeholder="选填，如社区走访路线"/>
+</div>
+<div class="field">
+<label for="newThemeEvChild">儿童</label>
+<input id="newThemeEvChild" placeholder="选填，如相关语料若干条"/>
+</div>
+</div>
+</div>
+<div class="row-between" style="margin-top: var(--space-5);">
+<button class="btn" id="cancelNewTheme">取消</button>
+<button class="btn btn-primary" id="saveNewTheme">创建主题</button>
 </div>
 </div>
 </div>
@@ -4104,6 +4198,83 @@
     document.querySelector('#closeDrawer')?.addEventListener('click', () => {
       drawer.classList.remove('open');
       drawer.setAttribute('aria-hidden', 'true');
+    });
+
+    // ============== 新建主题抽屉 ==============
+    const newThemeDrawer = document.querySelector('#newThemeDrawer');
+    function openNewTheme() {
+      newThemeDrawer.classList.add('open');
+      newThemeDrawer.setAttribute('aria-hidden', 'false');
+      document.querySelector('#newThemeName')?.focus();
+    }
+    function closeNewTheme() {
+      newThemeDrawer.classList.remove('open');
+      newThemeDrawer.setAttribute('aria-hidden', 'true');
+    }
+    document.querySelector('#newThemeBtn')?.addEventListener('click', openNewTheme);
+    document.querySelector('#closeNewTheme')?.addEventListener('click', closeNewTheme);
+    document.querySelector('#cancelNewTheme')?.addEventListener('click', closeNewTheme);
+    newThemeDrawer?.addEventListener('click', event => {
+      if (event.target === newThemeDrawer) closeNewTheme();
+    });
+    document.querySelector('#saveNewTheme')?.addEventListener('click', () => {
+      const name = document.querySelector('#newThemeName')?.value?.trim();
+      if (!name) { showToast('请填写主题名称'); return; }
+      const month = document.querySelector('#newThemeMonth')?.value || '7';
+      const range = document.querySelector('#newThemeRange')?.value?.trim() || `2026-0${month}-01 至 2026-0${month}-28`;
+      const thread = document.querySelector('#newThemeThread')?.value?.trim();
+      const domains = [...document.querySelectorAll('#newThemeDomains input:checked')].map(i => i.value);
+      const evidence = [
+        { type: '政策', text: document.querySelector('#newThemeEvPolicy')?.value?.trim() },
+        { type: '文化', text: document.querySelector('#newThemeEvCulture')?.value?.trim() },
+        { type: '资源', text: document.querySelector('#newThemeEvResource')?.value?.trim() },
+        { type: '儿童', text: document.querySelector('#newThemeEvChild')?.value?.trim() }
+      ].filter(ev => ev.text);
+      const card = document.createElement('article');
+      card.className = 'theme-card';
+      card.id = `theme-new-${Date.now()}`;
+      card.innerHTML = `
+        <header class="theme-card-head">
+          <div class="theme-month"><strong>${month}月</strong><span>预排 · 新建</span></div>
+          <div>
+            <h2>${escapeHtml(name)}</h2>
+            <p class="meta">大一班 · ${escapeHtml(range)}</p>
+          </div>
+          <span class="badge">预排</span>
+        </header>
+        <div class="theme-grid">
+          <section class="theme-block">
+            <h3>探究脉络</h3>
+            <p>${thread ? escapeHtml(thread) : '待与儿童共同生成。'}</p>
+            ${domains.length ? `<div class="theme-domains">${domains.map(d => `<span class="domain-tag">${escapeHtml(d)}</span>`).join('')}</div>` : ''}
+          </section>
+          <section class="theme-block">
+            <h3>课程依据</h3>
+            <div class="theme-evidence">
+              ${evidence.length
+                ? evidence.map(ev => `<span class="evidence-chip"><span class="source-type">${ev.type}</span>${escapeHtml(ev.text)}</span>`).join('')
+                : '<span class="meta">待补充政策 / 文化 / 资源 / 儿童四类依据</span>'}
+            </div>
+          </section>
+        </div>
+        <section class="theme-block">
+          <h3>相关文档</h3>
+          <div class="plan-summary">
+            <div><span class="source-type">月计划</span><strong>0 份</strong><p>待创建</p></div>
+            <div><span class="source-type">周计划</span><strong>0 份</strong><p>待创建</p></div>
+            <div><span class="source-type">教案</span><strong>0 份</strong><p>待创建</p></div>
+          </div>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="plans.html">去创建月计划</a>
+            <a class="btn" href="corpus.html">提取儿童语料</a>
+          </div>
+        </section>`;
+      document.querySelector('.theme-stack')?.appendChild(card);
+      ['newThemeName', 'newThemeRange', 'newThemeThread', 'newThemeEvPolicy', 'newThemeEvCulture', 'newThemeEvResource', 'newThemeEvChild']
+        .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      document.querySelectorAll('#newThemeDomains input:checked').forEach(i => { i.checked = false; });
+      closeNewTheme();
+      showToast(`主题「${name}」已创建（预排），可继续完善主题网络与月计划`);
     });
     document.querySelector('#childName')?.addEventListener('change', event => {
       document.querySelector('#customChildField').hidden = event.target.value !== 'custom';

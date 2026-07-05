@@ -211,6 +211,79 @@
   }
   .tag-list-add input:focus { outline: none; border-color: var(--accent); box-shadow: var(--focus-ring); }
 
+  /* ── 反思正文：逐条「教研观点 + 反思回应」（审稿意见式）─────────── */
+  .review-list { display: grid; gap: var(--space-3); }
+  .review-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    padding: var(--space-3) var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+  }
+  .review-item .ri-head { display: flex; align-items: center; gap: var(--space-2); }
+  .ri-no {
+    display: inline-grid; place-items: center;
+    width: 22px; height: 22px; border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--accent), transparent 88%);
+    color: var(--accent); font-family: var(--font-mono); font-size: var(--text-xs);
+  }
+  .ri-label { font-weight: 600; font-size: var(--text-sm); }
+  .ri-head .icon-btn { margin-left: auto; }
+  .review-item textarea {
+    width: 100%; font: inherit; font-size: var(--text-sm);
+    line-height: var(--leading-body);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 8px 10px; background: var(--bg); color: var(--fg);
+    resize: vertical;
+  }
+  .review-item textarea:focus { outline: none; border-color: var(--accent); box-shadow: var(--focus-ring); }
+  .review-item .ri-comment { min-height: 44px; }
+  .review-item .ri-response { min-height: 56px; }
+  .ri-response-label { font-size: var(--text-xs); color: var(--muted); }
+  /* 标签统一放在同一个方框里，彼此靠近（小间距） */
+  .ri-tagbox {
+    display: flex; flex-wrap: wrap; gap: var(--space-2);
+    align-items: center;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg); padding: var(--space-2) var(--space-3);
+  }
+  .ri-tagbox .ri-tagbox-label { font-size: var(--text-xs); color: var(--muted); margin-right: var(--space-1); }
+  .ri-tag {
+    font-size: var(--text-xs); padding: 3px 10px;
+    border: 1px solid var(--border); border-radius: var(--radius-pill);
+    background: var(--surface); color: var(--muted); cursor: pointer;
+    transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+  }
+  .ri-tag.active { background: var(--accent); border-color: var(--accent); color: var(--accent-on); }
+  .ri-tag[data-ri-tag="skip"].active { background: var(--muted); border-color: var(--muted); color: var(--surface); }
+  .review-item.skip .ri-response { opacity: 0.5; }
+
+  /* ── 已提交的教研反思记录（只读，观点 + 反思 + 标签）───────────── */
+  .review-record-list { display: grid; gap: var(--space-3); }
+  .review-record {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    padding: var(--space-3) var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  .review-record .rr-head { display: flex; gap: var(--space-2); align-items: baseline; }
+  .review-record .rr-comment { color: var(--fg); font-weight: 600; }
+  .review-record .rr-response {
+    margin: 0;
+    border-left: 3px solid color-mix(in oklab, var(--accent), transparent 55%);
+    padding: var(--space-1) 0 var(--space-1) var(--space-3);
+    color: var(--fg);
+  }
+  .review-record .rr-label {
+    font-family: var(--font-mono); font-size: var(--text-xs);
+    color: var(--muted); margin-right: var(--space-2);
+  }
+  .review-record .rr-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
   .upload-dropzone {
     border: 2px dashed var(--border);
     border-radius: var(--radius-md);
@@ -418,8 +491,7 @@
           </div>
         </div>
 
-        <div class="grid grid-main">
-          <div class="stack">
+        <div class="stack">
             <div class="card stack-sm">
               <div class="filters" id="statusFilters">
                 <button class="chip active" data-filter-status="all">全部</button>
@@ -542,68 +614,29 @@
               </div>
               <div>
                 <div class="row-between">
-                  <h3>教研成果 · 活动修改建议</h3>
-                  <span class="badge">线下审议生成 · 3 条</span>
+                  <h3>教研反思记录</h3>
+                  <span class="badge">教师撰写 · 3 条</span>
                 </div>
-                <div class="outcome-list">
-                  <div class="outcome-item done" data-outcome>
-                    <span class="outcome-no">1</span>
-                    <div class="outcome-body">
-                      <strong>周计划需持续标注五大领域，避免只写活动名</strong>
-                      <span class="meta">来源：审议结论第 2 条</span>
-                      <span class="outcome-actions">
-                        <span class="badge">周计划</span>
-                        <button class="btn btn-small" data-outcome-toggle>已处理 ✓</button>
-                      </span>
-                    </div>
+                <div class="review-record-list">
+                  <div class="review-record">
+                    <div class="rr-head"><span class="ri-no">1</span><span class="rr-comment">周计划需持续标注五大领域，不能只写活动名。</span></div>
+                    <p class="rr-response"><span class="rr-label">反思</span>已从 4 月起在每个活动格补标五大领域，并在月计划「每周推进重点」里写清该周主推的领域组合。</p>
+                    <div class="rr-tags"><span class="badge">周计划</span><span class="badge">月计划</span></div>
                   </div>
-                  <div class="outcome-item" data-outcome>
-                    <span class="outcome-no">2</span>
-                    <div class="outcome-body">
-                      <strong>主题网络补充「社区资源」分支，与走访活动对应</strong>
-                      <span class="meta">来源：审议结论第 3 条</span>
-                      <span class="outcome-actions">
-                        <span class="badge">月计划</span>
-                        <span class="badge">周计划</span>
-                        <button class="btn btn-small" data-outcome-toggle>标记已处理</button>
-                      </span>
-                    </div>
+                  <div class="review-record">
+                    <div class="rr-head"><span class="ri-no">2</span><span class="rr-comment">主题网络应补充「社区资源」分支，与走访活动对应。</span></div>
+                    <p class="rr-response"><span class="rr-label">反思</span>已在 4 月主题网络新增「社区资源」分支，串联街巷走访与家长职业资源，并落到对应的周活动。</p>
+                    <div class="rr-tags"><span class="badge">月计划</span><span class="badge">周计划</span></div>
                   </div>
-                  <div class="outcome-item" data-outcome>
-                    <span class="outcome-no">3</span>
-                    <div class="outcome-body">
-                      <strong>课程故事保留儿童原话引用格式，证据链到活动素材</strong>
-                      <span class="meta">来源：审议结论第 5 条</span>
-                      <span class="outcome-actions">
-                        <span class="badge">课程故事</span>
-                        <span class="badge">活动素材</span>
-                        <button class="btn btn-small" data-outcome-toggle>标记已处理</button>
-                      </span>
-                    </div>
+                  <div class="review-record">
+                    <div class="rr-head"><span class="ri-no">3</span><span class="rr-comment">课程故事应保留儿童原话的引用格式，证据链回指活动素材。</span></div>
+                    <p class="rr-response"><span class="rr-label">反思</span>已恢复原话的引号格式并标注说话人与场景，证据链逐条回指到活动素材中的具体条目。</p>
+                    <div class="rr-tags"><span class="badge">课程故事</span><span class="badge">活动素材</span></div>
                   </div>
                 </div>
               </div>
             </article>
           </div>
-
-          <aside class="stack">
-            <div class="card stack-sm">
-              <div class="row-between"><h2>培训日历</h2><span class="meta">本月 2 项</span></div>
-              <div class="calendar-list">
-                <article class="calendar-item">
-                  <div class="cal-date"><strong>10</strong><span class="meta">07 月</span></div>
-                  <div class="cal-body"><strong>主题网络图工作坊</strong><span class="meta">园本教研 · 4 课时</span></div>
-                  <span class="badge badge-dot warn">待报名</span>
-                </article>
-                <article class="calendar-item">
-                  <div class="cal-date"><strong>17</strong><span class="meta">07 月</span></div>
-                  <div class="cal-body"><strong>行为观察进阶（线上）</strong><span class="meta">区级培训 · 2 课时</span></div>
-                  <span class="badge badge-dot accent">已报名</span>
-                </article>
-              </div>
-            </div>
-          </aside>
-        </div>
         </div><!-- /viewOngoing -->
 
         <!-- ============ 教研档案视图 ============ -->
@@ -772,47 +805,68 @@
         </select>
       </div>
       <div class="field">
-        <label for="reflectText">反思正文</label>
-        <textarea id="reflectText" placeholder="填写你的反思"></textarea>
+        <label>反思正文</label>
+        <div class="review-list" id="reviewList">
+          <div class="review-item" data-review-item>
+            <div class="ri-head">
+              <span class="ri-no">1</span>
+              <span class="ri-label">教研观点</span>
+              <button class="icon-btn" type="button" data-review-remove aria-label="移除该条">×</button>
+            </div>
+            <textarea class="ri-comment" placeholder="教研提出的观点">课程故事的过程部分应保留儿童原话的引用格式，不要转述成教师语言。</textarea>
+            <div class="ri-tagbox">
+              <span class="ri-tagbox-label">应用到</span>
+              <button type="button" class="ri-tag" data-ri-tag>儿童语料库</button>
+              <button type="button" class="ri-tag" data-ri-tag>月计划</button>
+              <button type="button" class="ri-tag" data-ri-tag>周计划</button>
+              <button type="button" class="ri-tag" data-ri-tag>教案</button>
+              <button type="button" class="ri-tag" data-ri-tag>活动素材</button>
+              <button type="button" class="ri-tag active" data-ri-tag>课程故事</button>
+            </div>
+            <textarea class="ri-response" placeholder="反思回应（可留空）">回看 3 月故事确有多处把原话改写成了转述，已按原话恢复引号格式，并在句末标注说话人与场景。</textarea>
+          </div>
+          <div class="review-item" data-review-item>
+            <div class="ri-head">
+              <span class="ri-no">2</span>
+              <span class="ri-label">教研观点</span>
+              <button class="icon-btn" type="button" data-review-remove aria-label="移除该条">×</button>
+            </div>
+            <textarea class="ri-comment" placeholder="教研提出的观点">3 月故事的证据链没有回指到活动素材，读者难以追溯到具体的活动与记录。</textarea>
+            <div class="ri-tagbox">
+              <span class="ri-tagbox-label">应用到</span>
+              <button type="button" class="ri-tag" data-ri-tag>儿童语料库</button>
+              <button type="button" class="ri-tag" data-ri-tag>月计划</button>
+              <button type="button" class="ri-tag" data-ri-tag>周计划</button>
+              <button type="button" class="ri-tag" data-ri-tag>教案</button>
+              <button type="button" class="ri-tag active" data-ri-tag>活动素材</button>
+              <button type="button" class="ri-tag active" data-ri-tag>课程故事</button>
+            </div>
+            <textarea class="ri-response" placeholder="反思回应（可留空）"></textarea>
+          </div>
+          <div class="review-item" data-review-item>
+            <div class="ri-head">
+              <span class="ri-no">3</span>
+              <span class="ri-label">教研观点</span>
+              <button class="icon-btn" type="button" data-review-remove aria-label="移除该条">×</button>
+            </div>
+            <textarea class="ri-comment" placeholder="教研提出的观点">肯定了反思部分对「家乡的桥」主题迁移的设想。</textarea>
+            <div class="ri-tagbox">
+              <span class="ri-tagbox-label">应用到</span>
+              <button type="button" class="ri-tag" data-ri-tag>儿童语料库</button>
+              <button type="button" class="ri-tag active" data-ri-tag>月计划</button>
+              <button type="button" class="ri-tag" data-ri-tag>周计划</button>
+              <button type="button" class="ri-tag" data-ri-tag>教案</button>
+              <button type="button" class="ri-tag" data-ri-tag>活动素材</button>
+              <button type="button" class="ri-tag" data-ri-tag>课程故事</button>
+            </div>
+            <textarea class="ri-response" placeholder="反思回应（可留空）"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-small" id="addReviewItemBtn" type="button">+ 添加一条观点</button>
       </div>
       <div class="field">
         <label>相关材料</label>
         <div class="upload-dropzone" id="reflectDropzone">拖拽或点击选择文件</div>
-      </div>
-      <div class="field">
-        <label>反思将应用到</label>
-        <div class="tag-list-card">
-          <ul class="tag-list" id="reflectTagList">
-            <li class="tag-list-row">
-              <label class="tag-list-check"><input type="checkbox" value="儿童语料库" /><span>儿童语料库</span></label>
-              <button class="icon-btn" type="button" data-tag-remove="儿童语料库" aria-label="移除儿童语料库">×</button>
-            </li>
-            <li class="tag-list-row">
-              <label class="tag-list-check"><input type="checkbox" value="月计划" /><span>月计划</span></label>
-              <button class="icon-btn" type="button" data-tag-remove="月计划" aria-label="移除月计划">×</button>
-            </li>
-            <li class="tag-list-row">
-              <label class="tag-list-check"><input type="checkbox" value="周计划" /><span>周计划</span></label>
-              <button class="icon-btn" type="button" data-tag-remove="周计划" aria-label="移除周计划">×</button>
-            </li>
-            <li class="tag-list-row">
-              <label class="tag-list-check"><input type="checkbox" value="教案" /><span>教案</span></label>
-              <button class="icon-btn" type="button" data-tag-remove="教案" aria-label="移除教案">×</button>
-            </li>
-            <li class="tag-list-row">
-              <label class="tag-list-check"><input type="checkbox" value="活动素材" /><span>活动素材</span></label>
-              <button class="icon-btn" type="button" data-tag-remove="活动素材" aria-label="移除活动素材">×</button>
-            </li>
-            <li class="tag-list-row">
-              <label class="tag-list-check"><input type="checkbox" value="课程故事" checked /><span>课程故事</span></label>
-              <button class="icon-btn" type="button" data-tag-remove="课程故事" aria-label="移除课程故事">×</button>
-            </li>
-          </ul>
-          <div class="tag-list-add">
-            <input type="text" id="newReflectTagInput" placeholder="新标签名，例如：环境创设" />
-            <button class="btn btn-small" id="addReflectTagBtn" type="button">+ 添加</button>
-          </div>
-        </div>
       </div>
       <div class="row-between">
         <span class="meta"></span>
@@ -1004,13 +1058,18 @@
     showToast('请选择文件');
   });
   document.getElementById('submitReflectBtn').addEventListener('click', function () {
-    var text = document.getElementById('reflectText').value.trim();
-    if (!text) { showToast('请先填写反思正文'); return; }
-    var tags = Array.prototype.map.call(
-      document.querySelectorAll('#reflectTagList input:checked'),
-      function (input) { return input.value; }
-    );
-    if (!tags.length) { showToast('请至少选择 1 个应用标签'); return; }
+    var reviewItems = collectReviewItems();
+    if (!reviewItems.length) { showToast('请至少填写一条教研观点'); return; }
+    var text = reviewItems.map(function (it, i) {
+      var tagPart = it.tags.length ? '【' + it.tags.join(' / ') + '】' : '';
+      var respPart = it.response ? ' 反思：' + it.response : ' （暂未反思）';
+      return (i + 1) + '. ' + tagPart + '观点：' + it.comment + respPart;
+    }).join('\n');
+    var tags = [];
+    reviewItems.forEach(function (it) {
+      it.tags.forEach(function (t) { if (tags.indexOf(t) < 0) tags.push(t); });
+    });
+    if (!tags.length) { showToast('请至少给一条观点打上应用标签'); return; }
     var card = document.getElementById('training-story');
     card.dataset.status = 'done';
     var badge = card.querySelector('[data-status-badge]');
@@ -1062,9 +1121,69 @@
     });
   })();
 
+  // ============== 反思正文 · 逐条观点（审稿意见式）==============
+  function collectReviewItems() {
+    var out = [];
+    document.querySelectorAll('#reviewList [data-review-item]').forEach(function (item) {
+      var comment = item.querySelector('.ri-comment').value.trim();
+      if (!comment) return;
+      var tags = Array.prototype.map.call(item.querySelectorAll('.ri-tag.active'), function (b) { return b.textContent.trim(); });
+      out.push({
+        comment: comment,
+        tags: tags,
+        response: item.querySelector('.ri-response').value.trim(),
+        skip: item.classList.contains('skip')
+      });
+    });
+    return out;
+  }
+  (function setupReviewList() {
+    var reviewList = document.getElementById('reviewList');
+    var addBtn = document.getElementById('addReviewItemBtn');
+    if (!reviewList || !addBtn) return;
+    function renumber() {
+      var i = 0;
+      reviewList.querySelectorAll('[data-review-item] .ri-no').forEach(function (el) { el.textContent = String(++i); });
+    }
+    function itemHTML() {
+      return '<div class="review-item" data-review-item>' +
+        '<div class="ri-head"><span class="ri-no">1</span><span class="ri-label">教研观点</span>' +
+        '<button class="icon-btn" type="button" data-review-remove aria-label="移除该条">×</button></div>' +
+        '<textarea class="ri-comment" placeholder="教研提出的观点"></textarea>' +
+        '<div class="ri-tagbox"><span class="ri-tagbox-label">应用到</span>' +
+          '<button type="button" class="ri-tag" data-ri-tag>儿童语料库</button>' +
+          '<button type="button" class="ri-tag" data-ri-tag>月计划</button>' +
+          '<button type="button" class="ri-tag" data-ri-tag>周计划</button>' +
+          '<button type="button" class="ri-tag" data-ri-tag>教案</button>' +
+          '<button type="button" class="ri-tag" data-ri-tag>活动素材</button>' +
+          '<button type="button" class="ri-tag" data-ri-tag>课程故事</button>' +
+        '</div>' +
+        '<textarea class="ri-response" placeholder="反思回应（可留空）"></textarea>' +
+      '</div>';
+    }
+    addBtn.addEventListener('click', function () {
+      var wrap = document.createElement('div');
+      wrap.innerHTML = itemHTML();
+      reviewList.appendChild(wrap.firstChild);
+      renumber();
+    });
+    reviewList.addEventListener('click', function (event) {
+      var tagBtn = event.target.closest('.ri-tag');
+      if (tagBtn) { tagBtn.classList.toggle('active'); return; }
+      var rm = event.target.closest('[data-review-remove]');
+      if (rm) {
+        if (reviewList.querySelectorAll('[data-review-item]').length <= 1) { showToast('至少保留一条观点'); return; }
+        var it = rm.closest('[data-review-item]');
+        if (it) it.parentNode.removeChild(it);
+        renumber();
+      }
+    });
+  })();
+
   // ============== 教研成果 · 已处理标记（同步档案证据链） ==============
   function refreshOutcomeStats() {
     var items = document.querySelectorAll('[data-outcome]');
+    if (!items.length) return; // 4 月审议已改为只读反思记录，成果转化统计保持 HTML 静态值
     var done = document.querySelectorAll('[data-outcome].done').length;
     var ratio = document.getElementById('outcomeRatio');
     if (ratio) ratio.textContent = items.length ? (done + ' / ' + items.length) : '0 / 0';
